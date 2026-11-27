@@ -1,0 +1,227 @@
+================================================================================
+MEGACINE MALAYSIA - PHASE 1 DATA DICTIONARY (15 TABLES, POSTGRESQL / 3NF)
+================================================================================
+Document Version : 1.0 (Aligned with Phase 1 Architecture Snapshot v1.1)
+Database Engine  : Supabase PostgreSQL 15+
+Last Updated     : 2026-11-27
+
+GLOBAL CONVENTIONS:
+- Primary Keys : UUID (gen_random_uuid()), except users.id which mirrors Supabase auth.users.id.
+- Monetary     : NUMERIC(10, 2) in MYR (Malaysian Ringgit), non-negative CHECK (>= 0).
+- Timestamps   : TIMESTAMPTZ (stored in UTC, rendered in Asia/Kuala_Lumpur on clients).
+- Status Enums : VARCHAR(30) with explicit CHECK constraints for clean Alembic evolution.
+
+--------------------------------------------------------------------------------
+1. TABLE: users (Identity & Multi-Cinema RBAC Domain)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | None | PK | Mirrors Supabase Auth user UUID (JWT sub claim). |
+| email | VARCHAR(255) | NO | None | UNIQUE | User login email address. |
+| full_name | VARCHAR(120) | YES | NULL | - | Display name of the user. |
+| phone | VARCHAR(20) | YES | NULL | - | Contact phone number (E.164 format recommended). |
+| is_active | BOOLEAN | NO | TRUE | - | Account activation flag; FALSE blocks API access. |
+| created_at | TIMESTAMPTZ | NO | NOW() | - | Record creation timestamp (UTC). |
+| updated_at | TIMESTAMPTZ | NO | NOW() | - | Last profile update timestamp (UTC). |
+
+--------------------------------------------------------------------------------
+2. TABLE: roles (Identity & Multi-Cinema RBAC Domain)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | gen_random_uuid() | PK | Unique role identifier. |
+| code | VARCHAR(30) | NO | None | UNIQUE, CHECK IN ('CUSTOMER','CINEMA_ADMIN','PLATFORM_ADMIN') | Machine-readable role code. |
+| name | VARCHAR(60) | NO | None | - | Human-readable role title. |
+| created_at | TIMESTAMPTZ | NO | NOW() | - | Record creation timestamp (UTC). |
+
+--------------------------------------------------------------------------------
+3. TABLE: user_roles (Identity & Multi-Cinema RBAC Domain)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | gen_random_uuid() | PK | Unique role assignment identifier. |
+| user_id | UUID | NO | None | FK -> users.id (ON DELETE CASCADE) | Assigned user reference. |
+| role_id | UUID | NO | None | FK -> roles.id (ON DELETE RESTRICT) | Assigned role reference. |
+| cinema_id | UUID | YES | NULL | FK -> cinemas.id (ON DELETE CASCADE) | Scope boundary for CINEMA_ADMIN; NULL for global roles. |
+| created_at | TIMESTAMPTZ | NO | NOW() | - | Assignment timestamp (UTC). |
+* Table Constraint: UNIQUE NULLS NOT DISTINCT (user_id, role_id, cinema_id)
+
+--------------------------------------------------------------------------------
+4. TABLE: movies (Movie, Cinema & Showtime Domain)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | gen_random_uuid() | PK | Unique movie identifier. |
+| title | VARCHAR(200) | NO | None | - | Official movie title. |
+| synopsis | TEXT | YES | NULL | - | Movie plot summary / description. |
+| duration_minutes | SMALLINT | NO | None | CHECK (> 0 AND <= 600) | Runtime in minutes used to compute showtime end_time. |
+| rating | VARCHAR(15) | YES | NULL | - | Classification rating (e.g., U, P12, 13, 16, 18). |
+| language | VARCHAR(50) | NO | 'English' | - | Primary spoken language. |
+| poster_url | VARCHAR(500) | YES | NULL | - | Public URL to movie poster image. |
+| release_date | DATE | YES | NULL | - | Scheduled theatrical release date. |
+| status | VARCHAR(20) | NO | 'COMING_SOON' | CHECK IN ('COMING_SOON','NOW_SHOWING','ARCHIVED') | Publishing lifecycle status. |
+| created_at | TIMESTAMPTZ | NO | NOW() | - | Record creation timestamp (UTC). |
+| updated_at | TIMESTAMPTZ | NO | NOW() | - | Last update timestamp (UTC). |
+
+--------------------------------------------------------------------------------
+5. TABLE: cinemas (Movie, Cinema & Showtime Domain)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | gen_random_uuid() | PK | Unique cinema branch identifier. |
+| name | VARCHAR(150) | NO | None | - | Cinema branch name (e.g., Megacine KLCC). |
+| address | VARCHAR(300) | NO | None | - | Full street address. |
+| city | VARCHAR(80) | NO | None | - | City name. |
+| state | VARCHAR(80) | NO | None | - | Malaysian state / federal territory. |
+| is_active | BOOLEAN | NO | TRUE | - | Operational status flag. |
+| created_at | TIMESTAMPTZ | NO | NOW() | - | Record creation timestamp (UTC). |
+| updated_at | TIMESTAMPTZ | NO | NOW() | - | Last update timestamp (UTC). |
+
+--------------------------------------------------------------------------------
+6. TABLE: auditoriums (Movie, Cinema & Showtime Domain)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | gen_random_uuid() | PK | Unique auditorium identifier. |
+| cinema_id | UUID | NO | None | FK -> cinemas.id (ON DELETE CASCADE) | Parent cinema reference. |
+| name | VARCHAR(60) | NO | None | - | Hall name or number (e.g., Hall 1, IMAX Hall). |
+| total_rows | SMALLINT | NO | None | CHECK (> 0 AND <= 50) | Number of seat rows in the hall. |
+| total_cols | SMALLINT | NO | None | CHECK (> 0 AND <= 50) | Number of seats per row. |
+| created_at | TIMESTAMPTZ | NO | NOW() | - | Record creation timestamp (UTC). |
+| updated_at | TIMESTAMPTZ | NO | NOW() | - | Last update timestamp (UTC). |
+* Table Constraint: UNIQUE (cinema_id, name)
+
+--------------------------------------------------------------------------------
+7. TABLE: seats (Movie, Cinema & Showtime Domain)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | gen_random_uuid() | PK | Unique physical seat identifier. |
+| auditorium_id | UUID | NO | None | FK -> auditoriums.id (ON DELETE CASCADE) | Parent auditorium reference. |
+| row_label | VARCHAR(5) | NO | None | - | Row code (e.g., A, B, ..., AA). |
+| seat_number | SMALLINT | NO | None | CHECK (> 0) | Seat sequence number within the row. |
+| seat_zone | VARCHAR(20) | NO | 'STANDARD' | CHECK IN ('STANDARD','VIP') | Pricing tier zone. |
+| seat_type | VARCHAR(20) | NO | 'STANDARD' | CHECK IN ('STANDARD','TWIN','WHEELCHAIR') | Physical seat category (reserved for Phase 2 UX). |
+| created_at | TIMESTAMPTZ | NO | NOW() | - | Record creation timestamp (UTC). |
+* Table Constraint: UNIQUE (auditorium_id, row_label, seat_number)
+
+--------------------------------------------------------------------------------
+8. TABLE: showtimes (Movie, Cinema & Showtime Domain)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | gen_random_uuid() | PK | Unique showtime identifier. |
+| movie_id | UUID | NO | None | FK -> movies.id (ON DELETE RESTRICT) | Screened movie reference. |
+| auditorium_id | UUID | NO | None | FK -> auditoriums.id (ON DELETE RESTRICT) | Assigned screening hall reference. |
+| start_time | TIMESTAMPTZ | NO | None | - | Screening start timestamp (UTC). |
+| end_time | TIMESTAMPTZ | NO | None | CHECK (end_time > start_time) | Screening end timestamp (includes cleaning buffer). |
+| base_price | NUMERIC(10,2) | NO | None | CHECK (>= 0) | Base ticket price for STANDARD zone in MYR. |
+| status | VARCHAR(20) | NO | 'SCHEDULED' | CHECK IN ('SCHEDULED','CANCELLED','COMPLETED') | Showtime lifecycle status. |
+| created_at | TIMESTAMPTZ | NO | NOW() | - | Record creation timestamp (UTC). |
+| updated_at | TIMESTAMPTZ | NO | NOW() | - | Last update timestamp (UTC). |
+* Index: idx_showtimes_auditorium_time (auditorium_id, start_time, end_time) for overlap validation.
+
+--------------------------------------------------------------------------------
+9. TABLE: showtime_seats (Movie, Cinema & Showtime Domain - Anti-Oversell Core)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | gen_random_uuid() | PK | Unique per-showtime seat inventory identifier. |
+| showtime_id | UUID | NO | None | FK -> showtimes.id (ON DELETE CASCADE) | Parent showtime reference. |
+| seat_id | UUID | NO | None | FK -> seats.id (ON DELETE RESTRICT) | Physical seat reference. |
+| price | NUMERIC(10,2) | NO | None | CHECK (>= 0) | Snapshotted seat price for this showtime in MYR. |
+| status | VARCHAR(20) | NO | 'AVAILABLE' | CHECK IN ('AVAILABLE','HELD','SOLD','BLOCKED') | Real-time inventory status. |
+| held_by_order_id | UUID | YES | NULL | FK -> orders.id (ON DELETE SET NULL) | Order currently holding or owning this seat. |
+| hold_expires_at | TIMESTAMPTZ | YES | NULL | - | Expiration timestamp for HELD status (NULL otherwise). |
+| version | INTEGER | NO | 1 | CHECK (>= 1) | Optimistic concurrency control version counter. |
+| updated_at | TIMESTAMPTZ | NO | NOW() | - | Last status transition timestamp (UTC). |
+* Table Constraint: UNIQUE (showtime_id, seat_id)
+* Index: idx_showtime_seats_hold_expiry (status, hold_expires_at) WHERE status = 'HELD'
+
+--------------------------------------------------------------------------------
+10. TABLE: orders (Order, E-Ticket, Payment & Refund Domain)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | gen_random_uuid() | PK | Unique order identifier. |
+| order_no | VARCHAR(32) | NO | None | UNIQUE | Human-readable order reference (e.g., MC20261127-XXXXXX). |
+| user_id | UUID | NO | None | FK -> users.id (ON DELETE RESTRICT) | Customer who placed the order. |
+| showtime_id | UUID | NO | None | FK -> showtimes.id (ON DELETE RESTRICT) | Target showtime reference. |
+| status | VARCHAR(25) | NO | 'PENDING_PAYMENT' | CHECK IN ('PENDING_PAYMENT','CONFIRMED','USED','CANCELLED','EXPIRED','REFUND_PENDING','PARTIALLY_REFUNDED','REFUNDED') | Strict 8-state order lifecycle status. |
+| subtotal_amount | NUMERIC(10,2) | NO | None | CHECK (>= 0) | Sum of seat prices before discounts. |
+| discount_amount | NUMERIC(10,2) | NO | 0.00 | CHECK (>= 0) | Discount amount (always 0.00 in Phase 1; reserved for Phase 2). |
+| total_amount | NUMERIC(10,2) | NO | None | CHECK (>= 0) | Final payable amount (subtotal_amount - discount_amount). |
+| hold_expires_at | TIMESTAMPTZ | NO | None | - | Payment deadline matching held seats expiration. |
+| idempotency_key | VARCHAR(128) | NO | None | UNIQUE | Client-supplied key preventing duplicate order creation. |
+| created_at | TIMESTAMPTZ | NO | NOW() | - | Order creation timestamp (UTC). |
+| updated_at | TIMESTAMPTZ | NO | NOW() | - | Last order status update timestamp (UTC). |
+
+--------------------------------------------------------------------------------
+11. TABLE: order_items (Order, E-Ticket, Payment & Refund Domain)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | gen_random_uuid() | PK | Unique order line-item identifier. |
+| order_id | UUID | NO | None | FK -> orders.id (ON DELETE CASCADE) | Parent order reference. |
+| showtime_seat_id | UUID | NO | None | FK -> showtime_seats.id (ON DELETE RESTRICT) | Reserved showtime seat reference. |
+| unit_price | NUMERIC(10,2) | NO | None | CHECK (>= 0) | Snapshotted seat price at order creation time. |
+| created_at | TIMESTAMPTZ | NO | NOW() | - | Record creation timestamp (UTC). |
+* Table Constraint: UNIQUE (order_id, showtime_seat_id)
+
+--------------------------------------------------------------------------------
+12. TABLE: tickets (Order, E-Ticket, Payment & Refund Domain)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | gen_random_uuid() | PK | Unique e-ticket identifier. |
+| order_id | UUID | NO | None | FK -> orders.id (ON DELETE CASCADE) | Parent order reference. |
+| order_item_id | UUID | NO | None | UNIQUE, FK -> order_items.id (ON DELETE CASCADE) | 1-to-1 link to the purchased order seat item. |
+| ticket_code | VARCHAR(40) | NO | None | UNIQUE | Human-readable ticket code (e.g., TKT-XXXXXXXX). |
+| qr_payload | VARCHAR(255) | NO | None | - | Signed/encoded payload rendered as QR code on Flutter app. |
+| status | VARCHAR(20) | NO | 'VALID' | CHECK IN ('VALID','USED','CANCELLED','REFUNDED') | E-ticket verification status. |
+| issued_at | TIMESTAMPTZ | NO | NOW() | - | Ticket issuance timestamp upon payment success. |
+| used_at | TIMESTAMPTZ | YES | NULL | - | Check-in / admission scan timestamp. |
+
+--------------------------------------------------------------------------------
+13. TABLE: payments (Order, E-Ticket, Payment & Refund Domain)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | gen_random_uuid() | PK | Unique payment attempt identifier. |
+| order_id | UUID | NO | None | FK -> orders.id (ON DELETE RESTRICT) | Associated order reference. |
+| provider | VARCHAR(30) | NO | 'MOCK_PAY' | - | Payment gateway adapter identifier. |
+| provider_tx_id | VARCHAR(100) | NO | None | UNIQUE | External or simulated gateway transaction ID. |
+| amount | NUMERIC(10,2) | NO | None | CHECK (>= 0) | Charged payment amount in MYR. |
+| status | VARCHAR(20) | NO | 'PENDING' | CHECK IN ('PENDING','SUCCEEDED','FAILED','UNKNOWN') | Payment transaction state. |
+| idempotency_key | VARCHAR(128) | NO | None | UNIQUE | Prevents duplicate payment charges or callbacks. |
+| created_at | TIMESTAMPTZ | NO | NOW() | - | Payment attempt timestamp (UTC). |
+| updated_at | TIMESTAMPTZ | NO | NOW() | - | Last callback/status update timestamp (UTC). |
+
+--------------------------------------------------------------------------------
+14. TABLE: refunds (Order, E-Ticket, Payment & Refund Domain)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | gen_random_uuid() | PK | Unique refund record identifier. |
+| order_id | UUID | NO | None | FK -> orders.id (ON DELETE RESTRICT) | Refunded order reference. |
+| payment_id | UUID | NO | None | FK -> payments.id (ON DELETE RESTRICT) | Original succeeded payment reference. |
+| amount | NUMERIC(10,2) | NO | None | CHECK (>= 0) | Refunded amount in MYR. |
+| reason | VARCHAR(255) | YES | NULL | - | Customer or admin refund reason. |
+| status | VARCHAR(20) | NO | 'PENDING' | CHECK IN ('PENDING','SUCCEEDED','FAILED') | Refund execution status. |
+| created_at | TIMESTAMPTZ | NO | NOW() | - | Refund request timestamp (UTC). |
+| updated_at | TIMESTAMPTZ | NO | NOW() | - | Last refund status update timestamp (UTC). |
+
+--------------------------------------------------------------------------------
+15. TABLE: audit_logs (System Governance Domain)
+--------------------------------------------------------------------------------
+| Column Name | Data Type & Length | Nullable | Default | Constraints | Description |
+|---|---|---|---|---|---|
+| id | UUID | NO | gen_random_uuid() | PK | Unique audit log identifier. |
+| actor_user_id | UUID | YES | NULL | FK -> users.id (ON DELETE SET NULL) | User performing the action (NULL for system/cron jobs). |
+| action | VARCHAR(60) | NO | None | - | Action code (e.g., SHOWTIME_CANCELLED, ORDER_REFUNDED, ROLE_GRANTED). |
+| entity_type | VARCHAR(40) | NO | None | - | Target table/domain entity (e.g., showtime, order, user_role). |
+| entity_id | UUID | NO | None | - | Target entity UUID. |
+| metadata_json | JSONB | NO | '{}'::jsonb | - | Sanitized before/after context (strictly NO passwords/tokens). |
+| created_at | TIMESTAMPTZ | NO | NOW() | - | Immutable event timestamp (UTC). |
+* Index: idx_audit_logs_entity (entity_type, entity_id, created_at DESC)
+================================================================================

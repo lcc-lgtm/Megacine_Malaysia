@@ -1,0 +1,45 @@
+sequenceDiagram
+    actor Customer as Customer (Flutter App)
+    participant Auth as Supabase Auth
+    participant API as FastAPI Backend (Render)
+    participant DB as Supabase PostgreSQL
+    participant Pay as Mock Payment Adapter
+    participant Cron as UptimeRobot (5-min Ping)
+
+    Customer->>Auth: Login / Sign Up
+    Auth-->>Customer: Return ES256 JWT
+    Customer->>API: GET /api/v1/auth/me (Bearer JWT)
+    API->>Auth: Fetch & Cache JWKS (ES256)
+    API->>DB: Lazy Upsert public.users & Default CUSTOMER Role
+    API-->>Customer: User Profile & Roles
+
+    Customer->>API: GET /api/v1/showtimes/{id}/seats
+    API->>DB: Query showtime_seats (Project Expired HELD as AVAILABLE)
+    API-->>Customer: Real-Time Seat Map
+
+    Customer->>API: POST /api/v1/orders (Idempotency-Key, seat_ids <= 6)
+    API->>DB: BEGIN TX & Atomic UPDATE (AVAILABLE or Expired HELD -> HELD, +5 min)
+    alt Seat Conflict / Already Held
+        DB-->>API: Updated Rows < Requested Seats (ROLLBACK)
+        API-->>Customer: 409 Conflict (Seat Unavailable)
+    else Seats Locked Successfully
+        API->>DB: INSERT orders (PENDING_PAYMENT) & order_items (COMMIT)
+        API-->>Customer: 201 Created (Order + 5-min Countdown)
+    end
+
+    Customer->>API: POST /api/v1/orders/{id}/pay (Idempotency-Key, scenario)
+    API->>DB: Verify Order PENDING_PAYMENT & hold_expires_at > NOW()
+    API->>Pay: Execute Mock Payment (SUCCEEDED / FAILED / TIMEOUT)
+    alt Payment SUCCEEDED
+        Pay-->>API: Payment Confirmed (provider_tx_id)
+        API->>DB: UPDATE orders -> CONFIRMED, seats -> SOLD, INSERT tickets (QR)
+        API-->>Customer: 200 OK (Confirmed Order + E-Tickets)
+    else Payment FAILED / TIMEOUT
+        Pay-->>API: Payment Failed / Unknown
+        API->>DB: INSERT payments (FAILED / UNKNOWN)
+        API-->>Customer: 402 / 504 Payment Retryable Until Hold Expires
+    end
+
+    Cron->>API: GET /internal/jobs/cleanup-holds?token=CRON_SECRET
+    API->>DB: Batch Expire Unpaid Orders -> EXPIRED & Release Stale HELD Seats
+    API-->>Cron: 200 OK (Keep-Alive & Cleanup Summary)

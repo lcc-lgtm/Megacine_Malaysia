@@ -1,0 +1,37 @@
+flowchart TD
+    Start(("Start")) --> Login["User Logs In via Supabase Auth (ES256 JWT)"]
+    Login --> Browse["Browse Movies, Cinemas & Showtimes"]
+    Browse --> ViewSeats["View Real-Time Seat Map<br/>(Expired Holds Shown as AVAILABLE)"]
+    ViewSeats --> SelectSeats["Select Seats (1 to 6 Seats)"]
+    SelectSeats --> SubmitOrder["Submit Order with Idempotency-Key"]
+    SubmitOrder --> CheckLock{"Atomic DB Lock Succeeded?<br/>(AVAILABLE or Expired HELD)"}
+
+    CheckLock -->|"No (Conflict 409)"| ShowConflict["Display Seat Unavailable Error"]
+    ShowConflict --> ViewSeats
+
+    CheckLock -->|"Yes"| HoldCreated["Seats Marked HELD (5-min Timer)<br/>Order Created (PENDING_PAYMENT)"]
+    HoldCreated --> PayAction{"User Completes Payment<br/>Before 5-min Expiry?"}
+
+    PayAction -->|"No (Timeout)"| ExpireOrder["Order Marked EXPIRED &<br/>Seats Released (Lazy / UptimeRobot)"]
+    ExpireOrder --> EndFail((("End")))
+
+    PayAction -->|"Yes"| MockPay["Invoke Mock Payment Adapter"]
+    MockPay --> PayResult{"Payment Status?"}
+
+    PayResult -->|"FAILED / TIMEOUT"| RetryCheck{"Within 5-min Hold Window?"}
+    RetryCheck -->|"Yes"| PayAction
+    RetryCheck -->|"No"| ExpireOrder
+
+    PayResult -->|"SUCCEEDED"| ConfirmTx["Atomic TX: Order -> CONFIRMED<br/>Seats -> SOLD, Generate QR E-Tickets"]
+    ConfirmTx --> ViewTicket["Customer Views E-Ticket & QR Code"]
+    ViewTicket --> RefundChoice{"Customer Requests Refund?"}
+
+    RefundChoice -->|"No"| Attend["Attend Showtime (Ticket Scanned -> USED)"]
+    Attend --> EndOk((("End")))
+
+    RefundChoice -->|"Yes"| CheckCutoff{"Showtime Start >= 60 Mins Away?"}
+    CheckCutoff -->|"No"| RejectRefund["Reject Refund (Past 60-min Cutoff)"]
+    RejectRefund --> ViewTicket
+
+    CheckCutoff -->|"Yes"| ProcessRefund["Atomic TX: Record Refund, Order -> REFUNDED,<br/>Tickets -> REFUNDED, Seats -> AVAILABLE, Write Audit Log"]
+    ProcessRefund --> EndRefund((("End")))

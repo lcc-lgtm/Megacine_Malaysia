@@ -1,0 +1,25 @@
+erDiagram
+    USERS ||--o{ USER_ROLES : "assigned"
+    ROLES ||--o{ USER_ROLES : "defines"
+    CINEMAS |o--o{ USER_ROLES : "scopes"
+
+    CINEMAS ||--|{ AUDITORIUMS : "contains"
+    AUDITORIUMS ||--|{ SEATS : "has"
+    MOVIES ||--o{ SHOWTIMES : "scheduled_in"
+    AUDITORIUMS ||--o{ SHOWTIMES : "hosts"
+    SHOWTIMES ||--|{ SHOWTIME_SEATS : "generates"
+    SEATS ||--o{ SHOWTIME_SEATS : "mapped_to"
+
+    USERS ||--o{ ORDERS : "places"
+    SHOWTIMES ||--o{ ORDERS : "booked_for"
+    ORDERS ||--|{ ORDER_ITEMS : "contains"
+    SHOWTIME_SEATS ||--o{ ORDER_ITEMS : "reserved_in"
+    ORDERS |o--o{ SHOWTIME_SEATS : "holds"
+
+    ORDERS ||--o{ TICKETS : "issues"
+    ORDER_ITEMS ||--o| TICKETS : "generates"
+    ORDERS ||--o{ PAYMENTS : "paid_via"
+    ORDERS ||--o{ REFUNDS : "refunded_by"
+    PAYMENTS ||--o{ REFUNDS : "reverses"
+
+    USERS |o--o{ AUDIT_LOGS : "triggers"

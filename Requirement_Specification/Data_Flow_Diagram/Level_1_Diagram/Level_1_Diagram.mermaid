@@ -1,0 +1,44 @@
+flowchart TD
+    Customer["Customer"]
+    MockPay["Mock Payment Gateway"]
+
+    P41(["4.1<br/>Validate JWT, Role<br/>& Idempotency Key"])
+    P42(["4.2<br/>Atomic Reclaim Expired<br/>Holds & Lock Seats"])
+    P43(["4.3<br/>Calculate Pricing &<br/>Create Order Record"])
+    P51(["5.1<br/>Verify Order Window &<br/>Invoke Mock Payment"])
+    P52(["5.2<br/>Confirm Order, Mark SOLD<br/>& Generate QR E-Tickets"])
+    P53(["5.3<br/>Handle Payment Failure<br/>or Timeout"])
+
+    D1[("D1 Users & Roles")]
+    D3[("D3 Showtime Seats")]
+    D4[("D4 Orders & Order Items")]
+    D4T[("D4 Tickets")]
+    D5[("D5 Payments")]
+
+    Customer -->|"Order Request (seat_ids, Idempotency-Key)"| P41
+    D1 -->|"Verified Customer Identity"| P41
+    D4 -->|"Existing Idempotent Order Check"| P41
+    P41 -->|"Validated Seat List (<= 6)"| P42
+
+    P42 <-->|"SQL Atomic UPDATE + Optimistic Lock"| D3
+    P42 -->|"Seat Conflict Error (409)"| Customer
+    P42 -->|"Locked Seats Snapshot"| P43
+
+    P43 -->|"Insert Order & Order Items"| D4
+    P43 -->|"Order Summary + 5-min Timer"| Customer
+
+    Customer -->|"Pay Request (order_id, scenario)"| P51
+    D4 -->|"Order Status & hold_expires_at"| P51
+    P51 <-->|"Mock Charge Call"| MockPay
+    P51 -->|"Log Payment Attempt"| D5
+
+    P51 -->|"Payment SUCCEEDED"| P52
+    P51 -->|"Payment FAILED / TIMEOUT"| P53
+
+    P52 -->|"Update Order CONFIRMED"| D4
+    P52 -->|"Update Seats SOLD"| D3
+    P52 -->|"Insert QR E-Tickets"| D4T
+    P52 -->|"Confirmed Order & QR E-Tickets"| Customer
+
+    P53 -->|"Update Payment FAILED / UNKNOWN"| D5
+    P53 -->|"Retryable Error Response"| Customer

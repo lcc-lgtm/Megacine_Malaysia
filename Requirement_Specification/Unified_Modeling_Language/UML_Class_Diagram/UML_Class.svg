@@ -1,0 +1,338 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 958.9373333333333 2557.8" width="958.9373333333333" height="2557.8" style="--bg:#2c2c2c;--fg:#e3e3e3;--line:#9c9c9c;--accent:#3c90ff;--muted:hsla(0,0%,100%,.55);--border:#373737">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  .mono { font-family: 'JetBrains Mono', 'SF Mono', 'Fira Code', ui-monospace, monospace; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="cls-inherit" markerWidth="12" markerHeight="10" refX="12" refY="5" orient="auto-start-reverse">
+    <polygon points="0 0, 12 5, 0 10" fill="var(--bg)" stroke="var(--_arrow)" stroke-width="1.5" />
+  </marker>
+  <marker id="cls-composition" markerWidth="12" markerHeight="10" refX="0" refY="5" orient="auto-start-reverse">
+    <polygon points="6 0, 12 5, 6 10, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="1" />
+  </marker>
+  <marker id="cls-aggregation" markerWidth="12" markerHeight="10" refX="0" refY="5" orient="auto-start-reverse">
+    <polygon points="6 0, 12 5, 6 10, 0 5" fill="var(--bg)" stroke="var(--_arrow)" stroke-width="1.5" />
+  </marker>
+  <marker id="cls-arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto-start-reverse">
+    <polyline points="0 0, 8 3, 0 6" fill="none" stroke="var(--_arrow)" stroke-width="1.5" />
+  </marker>
+</defs>
+<polyline class="class-relationship" data-from="User" data-to="UserRole" data-type="association" data-marker-at="to" data-label="assigned" data-from-cardinality="1" data-to-cardinality="0..*" points="787.0373333333332,248 787.0373333333332,258 692.7433333333332,258 692.7433333333332,338.3 649.6353333333333,338.3 649.6353333333333,388.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Role" data-to="UserRole" data-type="association" data-marker-at="to" data-label="defines" data-from-cardinality="1" data-to-cardinality="0..*" points="626.1373333333332,248 626.1373333333332,338.3 609.3353333333333,338.3 609.3353333333333,388.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Cinema" data-to="UserRole" data-type="association" data-marker-at="to" data-label="scopes" data-from-cardinality="0..1" data-to-cardinality="0..*" points="204.49999999999997,248 204.49999999999997,258 569.0353333333333,258 569.0353333333333,388.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Cinema" data-to="Auditorium" data-type="association" data-marker-at="to" data-label="contains" data-from-cardinality="1" data-to-cardinality="1..*" points="150.76666666666665,248 150.76666666666665,441.6333333333333" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Auditorium" data-to="Seat" data-type="association" data-marker-at="to" data-label="has" data-from-cardinality="1" data-to-cardinality="1..*" points="123.89999999999998,629.6333333333333 123.89999999999999,816.5999999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Movie" data-to="Showtime" data-type="association" data-marker-at="to" data-label="scheduled_in" data-from-cardinality="1" data-to-cardinality="0..*" points="388.3353333333333,656.3 388.3353333333333,746.5999999999999 355.26666666666665,746.5999999999999 355.26666666666665,796.5999999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Auditorium" data-to="Showtime" data-type="association" data-marker-at="to" data-label="hosts" data-from-cardinality="1" data-to-cardinality="0..*" points="177.63333333333333,629.6333333333333 177.63333333333333,666.3 301.5333333333333,666.3 301.5333333333333,796.5999999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Showtime" data-to="ShowtimeSeat" data-type="association" data-marker-at="to" data-label="generates" data-from-cardinality="1" data-to-cardinality="1..*" points="301.5333333333333,1024.6 301.5333333333333,1543.1999999999998 172.45,1543.1999999999998 172.45,1593.1999999999998" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Seat" data-to="ShowtimeSeat" data-type="association" data-marker-at="to" data-label="mapped_to" data-from-cardinality="1" data-to-cardinality="0..*" points="123.89999999999999,1004.5999999999999 123.89999999999999,1593.1999999999998" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="User" data-to="Order" data-type="association" data-marker-at="to" data-label="places" data-from-cardinality="1" data-to-cardinality="0..*" points="867.6373333333332,248 867.6373333333332,258 917.9373333333333,258 917.9373333333333,1114.8999999999999 532.358,1114.8999999999999 532.358,1164.8999999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Showtime" data-to="Order" data-type="association" data-marker-at="to" data-label="booked_for" data-from-cardinality="1" data-to-cardinality="0..*" points="355.26666666666665,1024.6 355.26666666666665,1034.6 467.6246666666666,1034.6 467.6246666666666,1164.8999999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Order" data-to="OrderItem" data-type="association" data-marker-at="to" data-label="consists_of" data-from-cardinality="1" data-to-cardinality="1..*" points="467.6246666666666,1452.8999999999999 467.6246666666666,1472.8999999999999 375.84799999999996,1472.8999999999999 375.84799999999996,1911.4999999999998 230.58333333333331,1911.4999999999998 230.58333333333331,1981.4999999999998" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="ShowtimeSeat" data-to="OrderItem" data-type="association" data-marker-at="to" data-label="referenced_by" data-from-cardinality="1" data-to-cardinality="0..*" points="172.45,1821.1999999999998 172.45,1981.4999999999998" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Order" data-to="ShowtimeSeat" data-type="association" data-marker-at="to" data-label="holds" data-from-cardinality="0..1" data-to-cardinality="0..*" points="435.2579999999999,1452.8999999999999 435.2579999999999,1462.8999999999999 350.3193333333333,1462.8999999999999 350.3193333333333,1553.1999999999998 220.99999999999997,1553.1999999999998 220.99999999999997,1593.1999999999998" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Order" data-to="Ticket" data-type="association" data-marker-at="to" data-label="issues" data-from-cardinality="1" data-to-cardinality="0..*" points="499.9913333333332,1452.8999999999999 499.9913333333333,2259.8 253.04999999999998,2259.8 253.04999999999998,2309.8" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="OrderItem" data-to="Ticket" data-type="association" data-marker-at="to" data-label="generates" data-from-cardinality="1" data-to-cardinality="0..1" points="201.51666666666665,2129.5 201.51666666666665,2309.8" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Order" data-to="Payment" data-type="association" data-marker-at="to" data-label="paid_via" data-from-cardinality="1" data-to-cardinality="0..*" points="532.358,1452.8999999999999 532.358,1472.8999999999999 601.4913333333333,1472.8999999999999 601.4913333333333,1593.1999999999998" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Order" data-to="Refund" data-type="association" data-marker-at="to" data-label="refunded_by" data-from-cardinality="1" data-to-cardinality="0..*" points="564.7246666666665,1452.8999999999999 564.7246666666665,1462.8999999999999 731.9913333333333,1462.8999999999999 731.9913333333333,1911.4999999999998 655.2246666666666,1911.4999999999998 655.2246666666666,1961.4999999999998" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="Payment" data-to="Refund" data-type="association" data-marker-at="to" data-label="reverses" data-from-cardinality="1" data-to-cardinality="0..*" points="601.4913333333333,1821.1999999999998 601.4913333333333,1961.4999999999998" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<polyline class="class-relationship" data-from="User" data-to="AuditLog" data-type="association" data-marker-at="to" data-label="triggers" data-from-cardinality="0..1" data-to-cardinality="0..*" points="827.3373333333333,248 827.3373333333333,388.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#cls-arrow)" />
+<g class="class-node" data-id="User" data-label="User">
+  <rect x="746.7373333333333" y="60" width="161.2" height="188" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="746.7373333333333" y="60" width="161.2" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="827.3373333333333" y="76" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">User</text>
+  <line x1="746.7373333333333" y1="92" x2="907.9373333333333" y2="92" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="754.7373333333333" y="106" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="754.7373333333333" y="126" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">email</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="754.7373333333333" y="146" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">full_name</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="754.7373333333333" y="166" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">phone</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="754.7373333333333" y="186" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">is_active</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Boolean</tspan></text>
+  <text x="754.7373333333333" y="206" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">created_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <text x="754.7373333333333" y="226" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">updated_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="746.7373333333333" y1="240" x2="907.9373333333333" y2="240" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="Role" data-label="Role">
+  <rect x="545.5373333333332" y="120" width="161.2" height="128" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="545.5373333333332" y="120" width="161.2" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="626.1373333333332" y="136" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">Role</text>
+  <line x1="545.5373333333332" y1="152" x2="706.7373333333333" y2="152" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="553.5373333333332" y="166" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="553.5373333333332" y="186" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">code</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="553.5373333333332" y="206" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">name</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="553.5373333333332" y="226" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">created_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="545.5373333333332" y1="240" x2="706.7373333333333" y2="240" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="UserRole" data-label="UserRole">
+  <rect x="528.7353333333333" y="388.3" width="161.2" height="148" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="528.7353333333333" y="388.3" width="161.2" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="609.3353333333333" y="404.3" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">UserRole</text>
+  <line x1="528.7353333333333" y1="420.3" x2="689.9353333333333" y2="420.3" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="536.7353333333333" y="434.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="536.7353333333333" y="454.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">user_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="536.7353333333333" y="474.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">role_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="536.7353333333333" y="494.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">cinema_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="536.7353333333333" y="514.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">created_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="528.7353333333333" y1="528.3" x2="689.9353333333333" y2="528.3" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="Movie" data-label="Movie">
+  <rect x="287.93533333333335" y="388.3" width="200.79999999999998" height="268" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="287.93533333333335" y="388.3" width="200.79999999999998" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="388.3353333333333" y="404.3" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">Movie</text>
+  <line x1="287.93533333333335" y1="420.3" x2="488.7353333333333" y2="420.3" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="295.93533333333335" y="434.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="295.93533333333335" y="454.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">title</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="295.93533333333335" y="474.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">synopsis</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="295.93533333333335" y="494.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">duration_minutes</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">SmallInt</tspan></text>
+  <text x="295.93533333333335" y="514.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">rating</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="295.93533333333335" y="534.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">language</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="295.93533333333335" y="554.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">poster_url</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="295.93533333333335" y="574.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">release_date</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Date</tspan></text>
+  <text x="295.93533333333335" y="594.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">status</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="295.93533333333335" y="614.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">created_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <text x="295.93533333333335" y="634.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">updated_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="287.93533333333335" y1="648.3" x2="488.7353333333333" y2="648.3" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="Cinema" data-label="Cinema">
+  <rect x="97.03333333333333" y="40" width="161.2" height="208" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="97.03333333333333" y="40" width="161.2" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="177.63333333333333" y="56" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">Cinema</text>
+  <line x1="97.03333333333333" y1="72" x2="258.23333333333335" y2="72" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="105.03333333333333" y="86" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="105.03333333333333" y="106" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">name</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="105.03333333333333" y="126" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">address</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="105.03333333333333" y="146" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">city</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="105.03333333333333" y="166" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">state</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="105.03333333333333" y="186" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">is_active</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Boolean</tspan></text>
+  <text x="105.03333333333333" y="206" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">created_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <text x="105.03333333333333" y="226" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">updated_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="97.03333333333333" y1="240" x2="258.23333333333335" y2="240" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="Auditorium" data-label="Auditorium">
+  <rect x="70.16666666666666" y="441.6333333333333" width="161.2" height="188" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="70.16666666666666" y="441.6333333333333" width="161.2" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="150.76666666666665" y="457.6333333333333" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">Auditorium</text>
+  <line x1="70.16666666666666" y1="473.6333333333333" x2="231.36666666666665" y2="473.6333333333333" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="78.16666666666666" y="487.6333333333333" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="78.16666666666666" y="507.6333333333333" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">cinema_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="78.16666666666666" y="527.6333333333333" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">name</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="78.16666666666666" y="547.6333333333333" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">total_rows</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">SmallInt</tspan></text>
+  <text x="78.16666666666666" y="567.6333333333333" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">total_cols</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">SmallInt</tspan></text>
+  <text x="78.16666666666666" y="587.6333333333333" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">created_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <text x="78.16666666666666" y="607.6333333333333" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">updated_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="70.16666666666666" y1="621.6333333333333" x2="231.36666666666665" y2="621.6333333333333" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="Seat" data-label="Seat">
+  <rect x="40" y="816.5999999999999" width="167.79999999999998" height="188" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="40" y="816.5999999999999" width="167.79999999999998" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="123.89999999999999" y="832.5999999999999" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">Seat</text>
+  <line x1="40" y1="848.5999999999999" x2="207.79999999999998" y2="848.5999999999999" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="48" y="862.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="48" y="882.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">auditorium_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="48" y="902.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">row_label</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="48" y="922.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">seat_number</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">SmallInt</tspan></text>
+  <text x="48" y="942.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">seat_zone</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="48" y="962.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">seat_type</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="48" y="982.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">created_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="40" y1="996.5999999999999" x2="207.79999999999998" y2="996.5999999999999" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="Showtime" data-label="Showtime">
+  <rect x="247.79999999999998" y="796.5999999999999" width="161.2" height="228" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="247.79999999999998" y="796.5999999999999" width="161.2" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="328.4" y="812.5999999999999" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">Showtime</text>
+  <line x1="247.79999999999998" y1="828.5999999999999" x2="409" y2="828.5999999999999" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="255.79999999999998" y="842.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="255.79999999999998" y="862.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">movie_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="255.79999999999998" y="882.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">auditorium_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="255.79999999999998" y="902.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">start_time</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <text x="255.79999999999998" y="922.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">end_time</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <text x="255.79999999999998" y="942.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">base_price</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Decimal</tspan></text>
+  <text x="255.79999999999998" y="962.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">status</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="255.79999999999998" y="982.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">created_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <text x="255.79999999999998" y="1002.5999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">updated_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="247.79999999999998" y1="1016.5999999999999" x2="409" y2="1016.5999999999999" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="ShowtimeSeat" data-label="ShowtimeSeat">
+  <rect x="75.35" y="1593.1999999999998" width="194.2" height="228" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="75.35" y="1593.1999999999998" width="194.2" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="172.45" y="1609.1999999999998" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">ShowtimeSeat</text>
+  <line x1="75.35" y1="1625.1999999999998" x2="269.54999999999995" y2="1625.1999999999998" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="83.35" y="1639.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="83.35" y="1659.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">showtime_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="83.35" y="1679.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">seat_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="83.35" y="1699.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">price</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Decimal</tspan></text>
+  <text x="83.35" y="1719.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">status</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="83.35" y="1739.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">held_by_order_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="83.35" y="1759.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">hold_expires_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <text x="83.35" y="1779.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">version</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Integer</tspan></text>
+  <text x="83.35" y="1799.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">updated_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="75.35" y1="1813.1999999999998" x2="269.54999999999995" y2="1813.1999999999998" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="Order" data-label="Order">
+  <rect x="402.89133333333325" y="1164.8999999999999" width="194.2" height="288" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="402.89133333333325" y="1164.8999999999999" width="194.2" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="499.9913333333333" y="1180.8999999999999" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">Order</text>
+  <line x1="402.89133333333325" y1="1196.8999999999999" x2="597.0913333333333" y2="1196.8999999999999" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="410.89133333333325" y="1210.8999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="410.89133333333325" y="1230.8999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">order_no</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="410.89133333333325" y="1250.8999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">user_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="410.89133333333325" y="1270.8999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">showtime_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="410.89133333333325" y="1290.8999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">status</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="410.89133333333325" y="1310.8999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">subtotal_amount</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Decimal</tspan></text>
+  <text x="410.89133333333325" y="1330.8999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">discount_amount</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Decimal</tspan></text>
+  <text x="410.89133333333325" y="1350.8999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">total_amount</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Decimal</tspan></text>
+  <text x="410.89133333333325" y="1370.8999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">hold_expires_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <text x="410.89133333333325" y="1390.8999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">idempotency_key</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="410.89133333333325" y="1410.8999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">created_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <text x="410.89133333333325" y="1430.8999999999999" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">updated_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="402.89133333333325" y1="1444.8999999999999" x2="597.0913333333333" y2="1444.8999999999999" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="OrderItem" data-label="OrderItem">
+  <rect x="114.31666666666665" y="1981.4999999999998" width="174.4" height="148" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="114.31666666666665" y="1981.4999999999998" width="174.4" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="201.51666666666665" y="1997.4999999999998" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">OrderItem</text>
+  <line x1="114.31666666666665" y1="2013.4999999999998" x2="288.71666666666664" y2="2013.4999999999998" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="122.31666666666665" y="2027.4999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="122.31666666666665" y="2047.4999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">order_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="122.31666666666665" y="2067.5" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">showtime_seat_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="122.31666666666665" y="2087.5" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">unit_price</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Decimal</tspan></text>
+  <text x="122.31666666666665" y="2107.5" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">created_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="114.31666666666665" y1="2121.5" x2="288.71666666666664" y2="2121.5" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="Ticket" data-label="Ticket">
+  <rect x="149.98333333333332" y="2309.8" width="154.6" height="208" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="149.98333333333332" y="2309.8" width="154.6" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="227.2833333333333" y="2325.8" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">Ticket</text>
+  <line x1="149.98333333333332" y1="2341.8" x2="304.5833333333333" y2="2341.8" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="157.98333333333332" y="2355.8" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="157.98333333333332" y="2375.8" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">order_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="157.98333333333332" y="2395.8" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">order_item_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="157.98333333333332" y="2415.8" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">ticket_code</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="157.98333333333332" y="2435.8" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">qr_payload</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="157.98333333333332" y="2455.8" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">status</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="157.98333333333332" y="2475.8" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">issued_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <text x="157.98333333333332" y="2495.8" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">used_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="149.98333333333332" y1="2509.8" x2="304.5833333333333" y2="2509.8" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="Payment" data-label="Payment">
+  <rect x="510.9913333333333" y="1593.1999999999998" width="181" height="228" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="510.9913333333333" y="1593.1999999999998" width="181" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="601.4913333333333" y="1609.1999999999998" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">Payment</text>
+  <line x1="510.9913333333333" y1="1625.1999999999998" x2="691.9913333333333" y2="1625.1999999999998" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="518.9913333333333" y="1639.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="518.9913333333333" y="1659.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">order_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="518.9913333333333" y="1679.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">provider</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="518.9913333333333" y="1699.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">provider_tx_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="518.9913333333333" y="1719.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">amount</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Decimal</tspan></text>
+  <text x="518.9913333333333" y="1739.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">status</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="518.9913333333333" y="1759.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">idempotency_key</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="518.9913333333333" y="1779.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">created_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <text x="518.9913333333333" y="1799.1999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">updated_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="510.9913333333333" y1="1813.1999999999998" x2="691.9913333333333" y2="1813.1999999999998" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="Refund" data-label="Refund">
+  <rect x="547.7579999999999" y="1961.4999999999998" width="161.2" height="208" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="547.7579999999999" y="1961.4999999999998" width="161.2" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="628.358" y="1977.4999999999998" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">Refund</text>
+  <line x1="547.7579999999999" y1="1993.4999999999998" x2="708.9579999999999" y2="1993.4999999999998" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="555.7579999999999" y="2007.4999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="555.7579999999999" y="2027.4999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">order_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="555.7579999999999" y="2047.4999999999998" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">payment_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="555.7579999999999" y="2067.5" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">amount</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">Decimal</tspan></text>
+  <text x="555.7579999999999" y="2087.5" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">reason</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="555.7579999999999" y="2107.5" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">status</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="555.7579999999999" y="2127.5" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">created_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <text x="555.7579999999999" y="2147.5" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">updated_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="547.7579999999999" y1="2161.5" x2="708.9579999999999" y2="2161.5" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<g class="class-node" data-id="AuditLog" data-label="AuditLog">
+  <rect x="746.7373333333333" y="388.3" width="161.2" height="188" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <rect x="746.7373333333333" y="388.3" width="161.2" height="32" rx="0" ry="0" fill="var(--_group-hdr)" stroke="var(--_node-stroke)" stroke-width="1" />
+  <text x="827.3373333333333" y="404.3" text-anchor="middle" font-size="13" font-weight="700" fill="var(--_text)" dy="4.55">AuditLog</text>
+  <line x1="746.7373333333333" y1="420.3" x2="907.9373333333333" y2="420.3" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="754.7373333333333" y="434.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="754.7373333333333" y="454.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">actor_user_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="754.7373333333333" y="474.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">action</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="754.7373333333333" y="494.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">entity_type</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">String</tspan></text>
+  <text x="754.7373333333333" y="514.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">entity_id</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">UUID</tspan></text>
+  <text x="754.7373333333333" y="534.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">metadata_json</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">JSONB</tspan></text>
+  <text x="754.7373333333333" y="554.3" class="mono" dy="0.35em" font-size="11" font-weight="400"><tspan fill="var(--_text-faint)">+ </tspan><tspan fill="var(--_text-sec)">created_at</tspan><tspan fill="var(--_text-faint)">: </tspan><tspan fill="var(--_text-muted)">DateTime</tspan></text>
+  <line x1="746.7373333333333" y1="568.3" x2="907.9373333333333" y2="568.3" stroke="var(--_node-stroke)" stroke-width="0.75" />
+</g>
+<text x="663.9403333333332" y="310.15" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">assigned</text>
+<text x="773.0373333333332" y="262" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="635.6353333333333" y="374.3" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+<text x="602.0863333333333" y="310.15" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">defines</text>
+<text x="612.1373333333332" y="262" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="595.3353333333333" y="374.3" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+<text x="544.3903333333333" y="310.15" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">scopes</text>
+<text x="190.49999999999997" y="262" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..1</text>
+<text x="555.0353333333333" y="374.3" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+<text x="123.74566666666665" y="310.15" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">contains</text>
+<text x="136.76666666666665" y="262" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="136.76666666666665" y="427.6333333333333" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1..*</text>
+<text x="108.16499999999999" y="718.4499999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">has</text>
+<text x="109.89999999999998" y="643.6333333333333" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="109.89999999999999" y="802.5999999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1..*</text>
+<text x="349.4343333333333" y="718.4499999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">scheduled_in</text>
+<text x="374.3353333333333" y="670.3" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="341.26666666666665" y="782.5999999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+<text x="281.6403333333333" y="718.4499999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">hosts</text>
+<text x="163.63333333333333" y="643.6333333333333" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="287.5333333333333" y="782.5999999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+<text x="333.7123333333333" y="1300.8999999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">generates</text>
+<text x="287.5333333333333" y="1038.6" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="158.45" y="1579.1999999999998" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1..*</text>
+<text x="91.53299999999997" y="1300.8999999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">mapped_to</text>
+<text x="109.89999999999999" y="1018.5999999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="109.89999999999999" y="1579.1999999999998" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+<text x="895.0743333333334" y="718.4499999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">places</text>
+<text x="853.6373333333332" y="262" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="518.358" y="1150.8999999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+<text x="433.4756666666666" y="1086.75" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">booked_for</text>
+<text x="341.26666666666665" y="1038.6" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="453.6246666666666" y="1150.8999999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+<text x="341.69899999999996" y="1699.1999999999998" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">consists_of</text>
+<text x="453.6246666666666" y="1466.8999999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="216.58333333333331" y="1967.4999999999998" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1..*</text>
+<text x="129.98499999999999" y="1883.35" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">referenced_by</text>
+<text x="158.45" y="1835.1999999999998" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="158.45" y="1967.4999999999998" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+<text x="330.42633333333333" y="1515.05" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">holds</text>
+<text x="421.2579999999999" y="1466.8999999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..1</text>
+<text x="206.99999999999997" y="1579.1999999999998" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+<text x="477.1283333333333" y="1883.35" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">issues</text>
+<text x="485.9913333333332" y="1466.8999999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="239.04999999999998" y="2295.8" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+<text x="170.33766666666665" y="2231.65" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">generates</text>
+<text x="187.51666666666665" y="2143.5" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="187.51666666666665" y="2295.8" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..1</text>
+<text x="574.4703333333332" y="1515.05" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">paid_via</text>
+<text x="518.358" y="1466.8999999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="587.4913333333333" y="1579.1999999999998" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+<text x="770.1103333333333" y="1699.1999999999998" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">refunded_by</text>
+<text x="550.7246666666665" y="1466.8999999999999" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="641.2246666666666" y="1947.4999999999998" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+<text x="572.0943333333333" y="1883.35" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">reverses</text>
+<text x="587.4913333333333" y="1835.1999999999998" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">1</text>
+<text x="587.4913333333333" y="1947.4999999999998" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+<text x="801.5043333333332" y="310.15" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">triggers</text>
+<text x="813.3373333333333" y="262" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..1</text>
+<text x="813.3373333333333" y="374.3" font-size="11" text-anchor="middle" font-weight="400" fill="var(--_text-muted)" dy="3.8499999999999996">0..*</text>
+</svg>

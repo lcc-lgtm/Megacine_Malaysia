@@ -1,0 +1,96 @@
+================================================================================
+MEGACINE MALAYSIA - PHASE 1 SOFTWARE TEST PLAN & TEST CASES SNAPSHOT
+================================================================================
+Document Version : 1.0 (Aligned with Phase 1 Schema v1.1 & API Contract)
+Last Updated     : 2026-11-28
+Purpose          : Module-categorized test case specification and UAT template
+                   for Pytest automated verification and AMCS2194 Chapter 4
+                   Software Testing & Validation documentation.
+
+--------------------------------------------------------------------------------
+0. TEST ENVIRONMENT & BASELINE THRESHOLDS
+--------------------------------------------------------------------------------
+- Application Tier     : FastAPI on Render.com (Local: pytest + httpx.AsyncClient)
+- Data Tier            : Supabase PostgreSQL 15+ (3NF, 15 Tables)
+- Auth Provider        : Supabase Auth (ECC P-256 / ES256 JWKS)
+- Payment Adapter      : Mock Payment Adapter (SUCCEEDED / FAILED / TIMEOUT)
+- Seat Hold Timeout    : SEAT_HOLD_SECONDS=300 (5 mins; overridable to 5s in test)
+- Refund Cutoff        : REFUND_CUTOFF_MINUTES=60 (>= 60 mins prior to showtime)
+- Max Seats Per Order  : 6 seats
+- Test Pyramid Target  : 70% Unit (Service/Domain) | 20% Integration (DB/API) | 10% E2E
+
+--------------------------------------------------------------------------------
+1. MODULE COVERAGE SUMMARY TABLE
+--------------------------------------------------------------------------------
+| Module ID | Module Name | Test Case IDs | Total Cases | Focus Areas |
+|---|---|---|---|---|
+| M1 | Authentication & Multi-Cinema RBAC | TC-AUTH-01 to TC-AUTH-04 | 4 | ES256 JWKS verification, Lazy Upsert, cinema data isolation |
+| M2 | Movie, Auditorium & Showtime Admin | TC-ADM-01 to TC-ADM-05 | 5 | CRUD validation, overlap prevention, destructive-edit guard, cancel cascade |
+| M3 | Seat Map, Atomic Hold & Anti-Oversell | TC-SEAT-01 to TC-SEAT-05 | 5 | Lazy reclamation, 6-seat limit, 100-seat concurrency, optimistic lock |
+| M4 | Order Idempotency & Mock Payment | TC-PAY-01 to TC-PAY-05 | 5 | Idempotency-Key replay, SUCCEEDED/FAILED/TIMEOUT, expired-hold guard |
+| M5 | E-Ticket, Refund & Audit Governance | TC-REF-01 to TC-REF-04 | 4 | QR payload issuance, 60-min refund cutoff, seat release, audit log sanitization |
+| M6 | Operations Keep-Alive & Cleanup Job | TC-OPS-01 to TC-OPS-03 | 3 | Render /health, UptimeRobot CRON_SECRET auth, batch EXPIRED transition |
+
+--------------------------------------------------------------------------------
+2. DETAILED TEST CASES BY MODULE
+--------------------------------------------------------------------------------
+
+[MODULE 1: AUTHENTICATION & MULTI-CINEMA RBAC]
+| Test ID | Scenario / Flow | Test Input Data | Expected Output / System State | Actual Result | Status |
+|---|---|---|---|---|---|
+| TC-AUTH-01 | Valid ES256 JWT & First-Time Lazy Upsert | `GET /api/v1/auth/me` with valid Supabase ES256 Bearer token for brand-new user `sub=U1` | HTTP `200 OK`; row auto-created in `public.users` (`id=U1`); default `CUSTOMER` role assigned in `user_roles`; profile & roles returned. | [Pending] | [Pending] |
+| TC-AUTH-02 | Invalid / Expired / Missing JWT | 1) No Authorization header; 2) Tampered JWT signature; 3) Expired JWT | HTTP `401 Unauthorized` with standard error code; zero writes to `public.users`. | [Pending] | [Pending] |
+| TC-AUTH-03 | Role Authorization Guard (Customer -> Admin Endpoint) | `CUSTOMER` JWT calls `POST /api/v1/admin/movies` with valid payload | HTTP `403 Forbidden`; movie record is NOT created. | [Pending] | [Pending] |
+| TC-AUTH-04 | Cinema-Level Data Isolation (`CINEMA_ADMIN`) | `CINEMA_ADMIN` scoped to `Cinema_A` calls `GET /api/v1/admin/orders?cinema_id=Cinema_B` and `POST /api/v1/admin/showtimes` for `Cinema_B` | HTTP `403 Forbidden` (or strictly filtered to `Cinema_A` only); zero leakage of `Cinema_B` orders or schedules. | [Pending] | [Pending] |
+
+[MODULE 2: MOVIE, AUDITORIUM & SHOWTIME ADMIN]
+| Test ID | Scenario / Flow | Test Input Data | Expected Output / System State | Actual Result | Status |
+|---|---|---|---|---|---|
+| TC-ADM-01 | Create Movie & Input Boundary Validation | 1) Valid: `title="Dune 3", duration_minutes=150`; 2) Invalid: `duration_minutes=0` or `700`, invalid `status="UNKNOWN"` | 1) HTTP `201 Created`, row persisted in `movies`; 2) HTTP `422 Unprocessable Entity` with field validation errors. | [Pending] | [Pending] |
+| TC-ADM-02 | Create Auditorium & Batch Seat Generation | `POST /api/v1/admin/cinemas/{id}/auditoriums` with `name="Hall 1", total_rows=5, total_cols=10`, Row E=`VIP` | HTTP `201 Created`; 1 `auditoriums` row + 50 `seats` rows generated (`A1..E10`, Row E marked `seat_zone=VIP`). Duplicate hall name returns `409 Conflict`. | [Pending] | [Pending] |
+| TC-ADM-03 | Create Showtime & Auto-Generate `showtime_seats` | `POST /api/v1/admin/showtimes` for Hall 1 (`14:00-16:30`, `base_price=20.00`, VIP surcharge `5.00`) | HTTP `201 Created`; 50 `showtime_seats` created (`status=AVAILABLE`, STANDARD=`20.00`, VIP=`25.00`). | [Pending] | [Pending] |
+| TC-ADM-04 | Auditorium Time-Overlap Prevention | Create second showtime in Hall 1 (`16:00-18:30`, overlaps `14:00-16:30`) | HTTP `409 Conflict` (`SHOWTIME_OVERLAP`); no overlapping showtime or seats created. | [Pending] | [Pending] |
+| TC-ADM-05 | Showtime Destructive Edit Block & Cancel Cascade | 1) `PATCH` time on showtime with `CONFIRMED` order; 2) `POST /api/v1/admin/showtimes/{id}/cancel` | 1) HTTP `409 Conflict` blocking destructive edit; 2) HTTP `200 OK`, showtime -> `CANCELLED`, affected orders -> `REFUNDED`, tickets -> `REFUNDED`, `audit_logs` entry written (`SHOWTIME_CANCELLED`). | [Pending] | [Pending] |
+
+[MODULE 3: REAL-TIME SEAT MAP, ATOMIC HOLD & ANTI-OVERSELLING]
+| Test ID | Scenario / Flow | Test Input Data | Expected Output / System State | Actual Result | Status |
+|---|---|---|---|---|---|
+| TC-SEAT-01 | Real-Time Seat Map with Expired Hold Projection | Seat `A1` is `HELD` with `hold_expires_at = NOW() - 10s`; call `GET /api/v1/showtimes/{id}/seats` | HTTP `200 OK`; `A1` is projected as `AVAILABLE` in response (no stale lock shown to users). | [Pending] | [Pending] |
+| TC-SEAT-02 | Seat Selection Limit Boundary (1 to 6 Seats) | 1) `POST /api/v1/orders` with `0` seats; 2) `6` seats; 3) `7` seats | 1) HTTP `422`; 2) HTTP `201 Created` (6 seats `HELD` for 5 mins); 3) HTTP `422` (`MAX_SEATS_EXCEEDED`). | [Pending] | [Pending] |
+| TC-SEAT-03 | SQL Atomic Lazy Reclamation on Hold Creation | User B requests `POST /api/v1/orders` for Seat `A1` whose previous `HELD` by User A expired 5s ago (before UptimeRobot ping) | HTTP `201 Created`; atomic `UPDATE` reclaims `A1` to User B's order, increments `version`, sets new `hold_expires_at = NOW() + 300s`. | [Pending] | [Pending] |
+| TC-SEAT-04 | Concurrent Seat Contention (Anti-Overselling Stress) | 20 concurrent async requests attempt to book the exact same seat `B5` simultaneously | Exactly `1` request succeeds (`201 Created`); `19` requests fail cleanly (`409 Conflict`); DB has only 1 active order holding `B5` (`version` incremented once). | [Pending] | [Pending] |
+| TC-SEAT-05 | Attempt to Book `SOLD` or `BLOCKED` Seat | `POST /api/v1/orders` targeting 1 `AVAILABLE` seat + 1 `SOLD` (or `BLOCKED`) seat | HTTP `409 Conflict`; entire transaction rolls back so the `AVAILABLE` seat remains `AVAILABLE` (all-or-nothing atomicity). | [Pending] | [Pending] |
+
+[MODULE 4: ORDER IDEMPOTENCY & MOCK PAYMENT ADAPTER]
+| Test ID | Scenario / Flow | Test Input Data | Expected Output / System State | Actual Result | Status |
+|---|---|---|---|---|---|
+| TC-PAY-01 | Order Creation Idempotency Replay | Send `POST /api/v1/orders` twice with identical `Idempotency-Key: ord-key-001` | Both requests return the exact same `order_id` & `order_no`; only 1 `orders` row exists in DB. | [Pending] | [Pending] |
+| TC-PAY-02 | Mock Payment `SUCCEEDED` & E-Ticket Issuance | `POST /api/v1/orders/{id}/pay` with `scenario="SUCCEEDED"`, `Idempotency-Key: pay-key-001` (valid 5-min window) | HTTP `200 OK`; `payments.status=SUCCEEDED`, `orders.status=CONFIRMED`, `showtime_seats.status=SOLD`, `tickets` rows created with unique `ticket_code` & `qr_payload`. | [Pending] | [Pending] |
+| TC-PAY-03 | Duplicate Payment Callback / Replay Idempotency | Repeat `POST /api/v1/orders/{id}/pay` with same `Idempotency-Key: pay-key-001` | HTTP `200 OK` returning existing payment & tickets; zero duplicate `payments` or `tickets` rows. | [Pending] | [Pending] |
+| TC-PAY-04 | Mock Payment `FAILED` / `TIMEOUT` & Retry | 1) Pay with `scenario="FAILED"`; 2) Pay with `scenario="TIMEOUT"`; 3) Retry with `scenario="SUCCEEDED"` within 5-min hold | 1) `payments.status=FAILED`, order stays `PENDING_PAYMENT`; 2) `payments.status=UNKNOWN`, order stays `PENDING_PAYMENT`; 3) Retry succeeds (`CONFIRMED`, 3 payment ledger rows linked to 1 order). | [Pending] | [Pending] |
+| TC-PAY-05 | Payment Attempt After Hold Expiration | Wait until `hold_expires_at < NOW()`, then call `POST /api/v1/orders/{id}/pay` with `scenario="SUCCEEDED"` | HTTP `409 Conflict` (`ORDER_EXPIRED`); payment rejected, order marked `EXPIRED`, zero tickets issued. | [Pending] | [Pending] |
+
+[MODULE 5: E-TICKET, REFUND & AUDIT GOVERNANCE]
+| Test ID | Scenario / Flow | Test Input Data | Expected Output / System State | Actual Result | Status |
+|---|---|---|---|---|---|
+| TC-REF-01 | View E-Ticket & Ownership Isolation | 1) Owner calls `GET /api/v1/orders/{id}`; 2) Different customer calls `GET /api/v1/orders/{id}` | 1) HTTP `200 OK` with `tickets` (`ticket_code`, `qr_payload`, `status=VALID`); 2) HTTP `404 Not Found` or `403 Forbidden`. | [Pending] | [Pending] |
+| TC-REF-02 | Eligible Pre-Showtime Refund (>= 60 Mins) | `POST /api/v1/orders/{id}/refund` for `CONFIRMED` order whose showtime starts in 90 mins | HTTP `200 OK`; `refunds.status=SUCCEEDED`, `orders.status=REFUNDED`, `tickets.status=REFUNDED`, `showtime_seats` atomically released to `AVAILABLE` (`held_by_order_id=NULL`). | [Pending] | [Pending] |
+| TC-REF-03 | Refund Rejected Inside 60-Min Cutoff | `POST /api/v1/orders/{id}/refund` when showtime starts in 45 mins (or already started) | HTTP `400 Bad Request` / `409 Conflict` (`REFUND_CUTOFF_PASSED`); order remains `CONFIRMED`, seats stay `SOLD`. | [Pending] | [Pending] |
+| TC-REF-04 | Audit Log Integrity & Credential Sanitization | Inspect `audit_logs` after `TC-REF-02` and `TC-ADM-05` | Immutable rows exist with valid `actor_user_id`, `action`, `entity_type`, `entity_id`, and `metadata_json`; zero passwords, JWTs, or payment secrets stored. | [Pending] | [Pending] |
+
+[MODULE 6: OPERATIONS KEEP-ALIVE & UPTIMEROBOT CLEANUP JOB]
+| Test ID | Scenario / Flow | Test Input Data | Expected Output / System State | Actual Result | Status |
+|---|---|---|---|---|---|
+| TC-OPS-01 | Render Health Check Endpoint | `GET /health` | HTTP `200 OK`, `{"status": "ok"}`, response time < 500ms. | [Pending] | [Pending] |
+| TC-OPS-02 | Cleanup Endpoint Token Protection | `GET /internal/jobs/cleanup-holds?token=wrong-secret` (and missing token) | HTTP `401 Unauthorized` / `403 Forbidden`; no DB updates performed. | [Pending] | [Pending] |
+| TC-OPS-03 | UptimeRobot Batch Expiration Execution | Seed 2 expired `PENDING_PAYMENT` orders + 1 active `PENDING_PAYMENT` order; call `GET /internal/jobs/cleanup-holds?token=<CRON_SECRET>` | HTTP `200 OK` with `expired_orders_count=2`; only the 2 expired orders transition to `EXPIRED` and their `HELD` seats revert to `AVAILABLE`; active order untouched. | [Pending] | [Pending] |
+
+--------------------------------------------------------------------------------
+3. TEST EXECUTION & UAT SIGN-OFF TEMPLATE (AMCS2194 CHAPTER 4)
+--------------------------------------------------------------------------------
+| Execution Phase | Total Cases | Passed | Failed | Pass Rate (%) | Executed By | Verification Date |
+|---|---|---|---|---|---|---|
+| Automated Pytest (Unit & Integration) | 26 | [TBD] | [TBD] | [TBD] | Kelvin | [YYYY-MM-DD] |
+| Render + Supabase Cloud Smoke Test | 26 | [TBD] | [TBD] | [TBD] | Kelvin | [YYYY-MM-DD] |
+| Multi-Client UAT (Flutter + Admin Web) | 26 | [TBD] | [TBD] | [TBD] | Kelvin | [YYYY-MM-DD] |
+================================================================================

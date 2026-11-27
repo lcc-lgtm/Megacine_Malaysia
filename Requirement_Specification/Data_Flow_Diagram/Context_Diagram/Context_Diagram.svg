@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100.2379999999998 412.9" width="1100.2379999999998" height="412.9" style="--bg:#2c2c2c;--fg:#e3e3e3;--line:#9c9c9c;--accent:#3c90ff;--muted:hsla(0,0%,100%,.55);--border:#373737">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<polyline class="edge" data-from="Customer" data-to="System" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Browse Requests, Seat Selection,
+Order &amp; Refund Requests" points="904.915,186.11666666666667 892.915,186.11666666666667 892.915,200.95000000000002 677.855,200.95000000000002 677.855,210.98000000000002 641.855,210.98000000000002" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="System" data-to="Customer" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Movie/Showtime Info, Seat Map,
+Order Status, QR E-Tickets" points="641.855,196.84 677.855,196.84 677.855,153.35000000000002 892.915,153.35000000000002 892.915,168.18333333333334 904.915,168.18333333333334" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="CinemaAdmin" data-to="System" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Hall/Seat Config, Showtime Schedule,
+Showtime Cancel, Order Queries" points="196.7165,73.76222222222225 237.947,73.76222222222225 237.947,58 442.669,58 442.669,190.55555555555557 454.669,190.55555555555557" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="System" data-to="CinemaAdmin" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Cinema-Scoped Orders,
+Schedule &amp; Operation Status" points="454.669,198.41111111111113 430.669,198.41111111111113 430.669,105.60000000000001 264.557,105.60000000000001 264.557,91.69555555555559 196.7165,91.69555555555559" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="PlatformAdmin" data-to="System" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Movie Catalog Updates,
+Role &amp; Cinema Assignments" points="196.7165,164.53333333333333 257.30899999999997,164.53333333333333 257.30899999999997,153.20000000000002 418.669,153.20000000000002 418.669,206.26666666666668 454.669,206.26666666666668" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="System" data-to="PlatformAdmin" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Platform Catalog &amp; Audit Logs" points="454.669,214.12222222222223 406.669,214.12222222222223 406.669,193.8 237.587,193.8 237.587,182.46666666666667 196.7165,182.46666666666667" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="System" data-to="SupabaseAuth" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="JWKS Public Key Request" points="641.855,225.12000000000003 677.855,225.12000000000003 677.855,245.5 859.057,245.5 859.057,253.18333333333334 871.057,253.18333333333334" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="SupabaseAuth" data-to="System" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="ES256 Public Keys (JWKS)" points="871.057,271.1166666666667 859.057,271.1166666666667 859.057,278.8 665.855,278.8 665.855,239.26000000000002 641.855,239.26000000000002" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="System" data-to="MockPay" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Simulated Charge &amp; Refund Request" points="454.669,229.83333333333334 418.669,229.83333333333334 418.669,271.95000000000005 218.69899999999996,271.95000000000005 218.69899999999996,264.26666666666665 187.8245,264.26666666666665" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="MockPay" data-to="System" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Payment / Refund Result Callback" points="187.8245,246.33333333333334 217.985,246.33333333333334 217.985,238.65 406.669,238.65 406.669,221.9777777777778 454.669,221.9777777777778" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="UptimeRobot" data-to="System" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="5-min Cleanup &amp; Keep-Alive Trigger" points="190.0475,328.1333333333333 231.887,328.1333333333333 231.887,320.45000000000005 430.669,320.45000000000005 430.669,237.6888888888889 454.669,237.6888888888889" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="System" data-to="UptimeRobot" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Health &amp; Cleanup Status" points="454.669,245.54444444444445 442.669,245.54444444444445 442.669,353.75 299.12899999999996,353.75 299.12899999999996,346.0666666666667 190.0475,346.0666666666667" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<g class="edge-label" data-from="Customer" data-to="System" data-label="Browse Requests, Seat Selection,
+Order &amp; Refund Requests">
+  <rect x="685.855" y="177.95000000000002" width="175.05999999999997" height="44.6" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="773.385" y="200.25000000000003" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)"><tspan x="773.385" dy="-3.3000000000000007">Browse Requests, Seat Selection,</tspan><tspan x="773.385" dy="14.3">Order &amp; Refund Requests</tspan></text>
+</g>
+<g class="edge-label" data-from="System" data-to="Customer" data-label="Movie/Showtime Info, Seat Map,
+Order Status, QR E-Tickets">
+  <rect x="698.329" y="130.35000000000002" width="162.586" height="44.6" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="779.622" y="152.65000000000003" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)"><tspan x="779.622" dy="-3.3000000000000007">Movie/Showtime Info, Seat Map,</tspan><tspan x="779.622" dy="14.3">Order Status, QR E-Tickets</tspan></text>
+</g>
+<g class="edge-label" data-from="CinemaAdmin" data-to="System" data-label="Hall/Seat Config, Showtime Schedule,
+Showtime Cancel, Order Queries">
+  <rect x="245.947" y="35" width="188.72199999999998" height="44.6" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="340.308" y="57.3" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)"><tspan x="340.308" dy="-3.3000000000000007">Hall/Seat Config, Showtime Schedule,</tspan><tspan x="340.308" dy="14.3">Showtime Cancel, Order Queries</tspan></text>
+</g>
+<g class="edge-label" data-from="System" data-to="CinemaAdmin" data-label="Cinema-Scoped Orders,
+Schedule &amp; Operation Status">
+  <rect x="272.557" y="82.60000000000001" width="150.112" height="44.6" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="347.613" y="104.9" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)"><tspan x="347.613" dy="-3.3000000000000007">Cinema-Scoped Orders,</tspan><tspan x="347.613" dy="14.3">Schedule &amp; Operation Status</tspan></text>
+</g>
+<g class="edge-label" data-from="PlatformAdmin" data-to="System" data-label="Movie Catalog Updates,
+Role &amp; Cinema Assignments">
+  <rect x="265.30899999999997" y="130.20000000000002" width="145.35999999999999" height="44.6" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="337.989" y="152.50000000000003" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)"><tspan x="337.989" dy="-3.3000000000000007">Movie Catalog Updates,</tspan><tspan x="337.989" dy="14.3">Role &amp; Cinema Assignments</tspan></text>
+</g>
+<g class="edge-label" data-from="System" data-to="PlatformAdmin" data-label="Platform Catalog &amp; Audit Logs">
+  <rect x="245.587" y="177.8" width="153.082" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="322.128" y="192.95000000000002" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Platform Catalog &amp; Audit Logs</text>
+</g>
+<g class="edge-label" data-from="System" data-to="SupabaseAuth" data-label="JWKS Public Key Request">
+  <rect x="685.855" y="229.5" width="141.20200000000003" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="756.456" y="244.65" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">JWKS Public Key Request</text>
+</g>
+<g class="edge-label" data-from="SupabaseAuth" data-to="System" data-label="ES256 Public Keys (JWKS)">
+  <rect x="681.1030000000001" y="262.8" width="145.954" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="754.08" y="277.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">ES256 Public Keys (JWKS)</text>
+</g>
+<g class="edge-label" data-from="System" data-to="MockPay" data-label="Simulated Charge &amp; Refund Request">
+  <rect x="226.69899999999996" y="255.95000000000002" width="183.97000000000003" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="318.68399999999997" y="271.1" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Simulated Charge &amp; Refund Request</text>
+</g>
+<g class="edge-label" data-from="MockPay" data-to="System" data-label="Payment / Refund Result Callback">
+  <rect x="225.985" y="222.65" width="172.68399999999997" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="312.327" y="237.8" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Payment / Refund Result Callback</text>
+</g>
+<g class="edge-label" data-from="UptimeRobot" data-to="System" data-label="5-min Cleanup &amp; Keep-Alive Trigger">
+  <rect x="239.88700000000003" y="304.45000000000005" width="182.78199999999998" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="331.278" y="319.6" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">5-min Cleanup &amp; Keep-Alive Trigger</text>
+</g>
+<g class="edge-label" data-from="System" data-to="UptimeRobot" data-label="Health &amp; Cleanup Status">
+  <rect x="307.12899999999996" y="337.75" width="127.54" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="370.89899999999994" y="352.9" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Health &amp; Cleanup Status</text>
+</g>
+<g class="node" data-id="Customer" data-label="Customer
+(Flutter Mobile App)" data-shape="rectangle">
+  <rect x="904.915" y="150.25" width="155.32299999999998" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="982.5764999999999" y="177.15" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="982.5764999999999" dy="-3.9000000000000012">Customer</tspan><tspan x="982.5764999999999" dy="16.900000000000002">(Flutter Mobile App)</tspan></text>
+</g>
+<g class="node" data-id="CinemaAdmin" data-label="Cinema Admin
+(Admin Web Portal)" data-shape="rectangle">
+  <rect x="45.8395" y="55.82888888888891" width="150.877" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="121.278" y="82.72888888888892" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="121.278" dy="-3.9000000000000012">Cinema Admin</tspan><tspan x="121.278" dy="16.900000000000002">(Admin Web Portal)</tspan></text>
+</g>
+<g class="node" data-id="PlatformAdmin" data-label="Platform Admin
+(Admin Web Portal)" data-shape="rectangle">
+  <rect x="45.8395" y="146.6" width="150.877" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="121.278" y="173.5" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="121.278" dy="-3.9000000000000012">Platform Admin</tspan><tspan x="121.278" dy="16.900000000000002">(Admin Web Portal)</tspan></text>
+</g>
+<g class="node" data-id="SupabaseAuth" data-label="Supabase Auth
+(Identity Provider)" data-shape="rectangle">
+  <rect x="871.057" y="235.25" width="146.43099999999998" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="944.2725" y="262.15" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="944.2725" dy="-3.9000000000000012">Supabase Auth</tspan><tspan x="944.2725" dy="16.900000000000002">(Identity Provider)</tspan></text>
+</g>
+<g class="node" data-id="MockPay" data-label="Mock Payment
+Gateway Adapter" data-shape="rectangle">
+  <rect x="45.8395" y="228.4" width="141.985" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="116.83200000000001" y="255.3" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="116.83200000000001" dy="-3.9000000000000012">Mock Payment</tspan><tspan x="116.83200000000001" dy="16.900000000000002">Gateway Adapter</tspan></text>
+</g>
+<g class="node" data-id="UptimeRobot" data-label="UptimeRobot
+(5-min Scheduler)" data-shape="rectangle">
+  <rect x="45.8395" y="310.20000000000005" width="144.208" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="117.9435" y="337.1" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="117.9435" dy="-3.9000000000000012">UptimeRobot</tspan><tspan x="117.9435" dy="16.900000000000002">(5-min Scheduler)</tspan></text>
+</g>
+<g class="node" data-id="System" data-label="0.0
+Megacine Malaysia
+Cinema Ticketing System" data-shape="stadium">
+  <rect x="454.669" y="182.70000000000002" width="187.18599999999998" height="70.7" rx="35.35" ry="35.35" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="548.262" y="218.05" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="548.262" dy="-12.350000000000001">0.0</tspan><tspan x="548.262" dy="16.900000000000002">Megacine Malaysia</tspan><tspan x="548.262" dy="16.900000000000002">Cinema Ticketing System</tspan></text>
+</g>
+</svg>

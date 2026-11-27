@@ -1,0 +1,60 @@
+flowchart TD
+    Customer["Customer"]
+    CinemaAdmin["Cinema Admin"]
+    PlatformAdmin["Platform Admin"]
+    SupabaseAuth["Supabase Auth"]
+    MockPay["Mock Payment Gateway"]
+    UptimeRobot["UptimeRobot"]
+
+    P1(["1.0<br/>Authenticate User<br/>& Enforce RBAC"])
+    P2(["2.0<br/>Manage Movies, Halls<br/>& Showtimes"])
+    P3(["3.0<br/>Browse Catalog &<br/>Real-Time Seat Map"])
+    P4(["4.0<br/>Hold Seats &<br/>Create Booking Order"])
+    P5(["5.0<br/>Process Mock Payment<br/>& Issue E-Tickets"])
+    P6(["6.0<br/>Process Refunds &<br/>Expire Stale Holds"])
+
+    D1[("D1 Users & Roles")]
+    D2[("D2 Movies, Cinemas & Seats")]
+    D3[("D3 Showtimes & Showtime Seats")]
+    D4[("D4 Orders, Items & Tickets")]
+    D5[("D5 Payments & Refunds")]
+    D6[("D6 Audit Logs")]
+
+    Customer -->|"Bearer JWT"| P1
+    CinemaAdmin -->|"Bearer JWT"| P1
+    PlatformAdmin -->|"Bearer JWT"| P1
+    SupabaseAuth -->|"ES256 JWKS"| P1
+    P1 <-->|"Lazy Upsert & Role Check"| D1
+
+    PlatformAdmin -->|"Movie Metadata"| P2
+    CinemaAdmin -->|"Auditorium, Seats & Showtimes"| P2
+    P2 <-->|"Write Catalog & Layout"| D2
+    P2 <-->|"Schedule & Generate Seats"| D3
+    P2 -->|"Cancel Showtime Event"| D6
+
+    Customer -->|"Filter Movies & Showtimes"| P3
+    D2 -->|"Movie & Hall Info"| P3
+    D3 -->|"Live Seat Status"| P3
+    P3 -->|"Catalog & Real-Time Seat Map"| Customer
+
+    Customer -->|"Seat Selection + Idempotency Key"| P4
+    P4 <-->|"Atomic Lock (5-min Hold)"| D3
+    P4 -->|"Create PENDING_PAYMENT Order"| D4
+    P4 -->|"Order & Countdown"| Customer
+
+    Customer -->|"Payment Request"| P5
+    D4 -->|"Order Validation"| P5
+    P5 <-->|"Simulate Charge"| MockPay
+    P5 -->|"Record Payment"| D5
+    P5 -->|"Confirm Order & Generate QR Tickets"| D4
+    P5 -->|"Mark Seats SOLD"| D3
+    P5 -->|"E-Tickets & Receipt"| Customer
+
+    Customer -->|"Refund Request (>= 60m)"| P6
+    CinemaAdmin -->|"Cancel Showtime Refund"| P6
+    UptimeRobot -->|"5-min Cleanup Trigger"| P6
+    P6 <-->|"Release Seats"| D3
+    P6 <-->|"Update Order & Ticket Status"| D4
+    P6 <-->|"Record Refund"| D5
+    P6 -->|"Write Refund / Cancel Audit"| D6
+    P6 -->|"Refund Confirmation"| Customer

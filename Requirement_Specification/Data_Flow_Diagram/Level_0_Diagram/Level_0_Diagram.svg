@@ -1,0 +1,302 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2999.4567166666666 934.1999999999999" width="2999.4567166666666" height="934.1999999999999" style="--bg:#2c2c2c;--fg:#e3e3e3;--line:#9c9c9c;--accent:#3c90ff;--muted:hsla(0,0%,100%,.55);--border:#373737">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<polyline class="edge" data-from="Customer" data-to="P1" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Bearer JWT" points="1463.0296380952375,515 1463.0296380952375,564 824.4381380952377,564 824.4381380952377,644.3 816.0812380952377,644.3 816.0812380952377,656.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="CinemaAdmin" data-to="P1" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Bearer JWT" points="1635.5989166666664,82.9 1635.5989166666664,88.9 1251.6226666666664,88.9 1251.6226666666664,644.3 845.3674380952377,644.3 845.3674380952377,656.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="PlatformAdmin" data-to="P1" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Bearer JWT" points="605.3846666666665,82.9 605.3846666666665,151.30000000000007 459.1347339285717,151.30000000000007 459.1347339285717,408.8 605.3846666666664,408.8 605.3846666666664,632.3 786.7950380952377,632.3 786.7950380952377,656.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="SupabaseAuth" data-to="P1" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="ES256 JWKS" points="314.3224999999999,561.15 314.3224999999999,644.3 757.5088380952377,644.3 757.5088380952377,656.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P1" data-to="D1" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="Lazy Upsert &amp; Role Check" points="801.4381380952377,727 801.4381380952377,843.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="PlatformAdmin" data-to="P2" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Movie Metadata" points="647.7729999999998,82.9 647.7729999999998,100.9 2496.786666666666,100.9 2496.786666666666,242.10000000000002 2533.0059999999994,242.10000000000002 2533.0059999999994,265.00000000000006" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="CinemaAdmin" data-to="P2" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Auditorium, Seats &amp; Showtimes" points="1696.9584166666664,82.9 1696.9584166666664,88.9 2626.1866666666665,88.9 2626.1866666666665,242.10000000000002 2589.967333333333,242.10000000000002 2589.967333333333,265.00000000000006" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P2" data-to="D2" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="Write Catalog &amp; Layout" points="2604.2076666666662,335.70000000000005 2604.2076666666662,336.8 2856.601216666667,336.8 2856.601216666667,478.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="P2" data-to="D3" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="Schedule &amp; Generate Seats" points="2561.4866666666667,335.70000000000005 2561.4866666666667,453.1 2535.372970833333,453.1 2535.372970833333,478.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="P2" data-to="D6" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Cancel Showtime Event" points="2518.765666666666,335.70000000000005 2518.765666666666,384.8 2225.1766666666663,384.8 2225.1766666666663,509.4 2169.6494041666665,509.4 2169.6494041666665,524.25" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Customer" data-to="P3" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Filter Movies &amp; Showtimes" points="1487.5961380952376,515 1487.5961380952376,564 1483.6690708333329,564 1483.6690708333329,608.3 2077.501970833333,608.3 2077.501970833333,620.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="D2" data-to="P3" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Movie &amp; Hall Info" points="2856.601216666667,529 2856.601216666667,608.3 2172.0295708333324,608.3 2172.0295708333324,620.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="D3" data-to="P3" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Live Seat Status" points="2512.8011708333324,529 2512.8011708333324,596.3 2140.520370833333,596.3 2140.520370833333,620.3" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P3" data-to="Customer" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Catalog &amp; Real-Time Seat Map" points="2109.0111708333325,620.3 2109.0111708333325,596.3 1634.9950708333329,596.3 1634.9950708333329,552 1512.1626380952375,552 1512.1626380952375,515" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Customer" data-to="P4" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Seat Selection + Idempotency Key" points="1522.6911380952376,478.1 1522.6911380952376,479.1 1924.8206666666663,479.1 1924.8206666666663,434.8 1869.1900666666663,434.8 1869.1900666666663,335.70000000000005" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P4" data-to="D3" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="Atomic Lock (5-min Hold)" points="1903.3668666666663,335.70000000000005 1903.3668666666663,348.8 2703.3466666666664,348.8 2703.3466666666664,453.1 2580.5165708333325,453.1 2580.5165708333325,478.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="P4" data-to="D4" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Create PENDING_PAYMENT Order" points="1800.8364666666662,335.70000000000005 1800.8364666666662,384.8 1153.5586666666666,384.8 1153.5586666666666,477.1 919.6440708333328,477.1 919.6440708333328,478.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P4" data-to="Customer" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Order &amp; Countdown" points="1835.0132666666661,335.70000000000005 1835.0132666666661,422.8 1779.3826666666662,422.8 1779.3826666666662,467.1 1508.6531380952376,467.1 1508.6531380952376,478.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Customer" data-to="P5" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Payment Request" points="1466.5391380952376,478.1 1466.5391380952376,467.1 1421.1546666666663,467.1 1421.1546666666663,396.8 899.8884166666663,396.8 899.8884166666663,183.60000000000005" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="D4" data-to="P5" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Order Validation" points="841.8056708333328,478.1 841.8056708333328,477.1 854.3886666666664,477.1 854.3886666666664,183.60000000000005" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P5" data-to="MockPay" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="Simulate Charge" points="786.1390416666663,183.60000000000005 786.1390416666663,195.60000000000005 130.25849999999994,195.60000000000005 130.25849999999997,265.00000000000006" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="P5" data-to="D5" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Record Payment" points="808.8889166666663,183.60000000000005 808.8889166666663,336.8 449.6634999999998,336.8 449.6634999999998,569.4 467.80633333333316,569.4 467.80633333333316,581.4" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P5" data-to="D4" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Confirm Order &amp; Generate QR Tickets" points="831.6387916666663,183.60000000000005 831.6387916666663,408.8 707.8846666666664,408.8 707.8846666666664,477.1 802.8864708333329,477.1 802.8864708333329,478.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P5" data-to="D3" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Mark Seats SOLD" points="922.6382916666664,183.60000000000005 922.6382916666664,372.8 2343.434666666666,372.8 2343.434666666666,453.1 2445.0857708333324,453.1 2445.0857708333324,478.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P5" data-to="Customer" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="E-Tickets &amp; Receipt" points="877.1385416666664,183.60000000000005 877.1385416666664,408.8 1313.1226666666664,408.8 1313.1226666666664,479.1 1452.5011380952376,479.1 1452.5011380952376,478.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Customer" data-to="P6" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Refund Request (&gt;= 60m)" points="1494.6151380952376,478.1 1494.6151380952376,455.1 1655.5906666666663,455.1 1655.5906666666663,410.8 1603.6782380952377,410.8 1603.6782380952377,335.70000000000005" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="CinemaAdmin" data-to="P6" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Cancel Showtime Refund" points="1666.2786666666664,82.9 1666.2786666666664,254.10000000000002 1618.400333333333,254.10000000000002 1618.400333333333,265.00000000000006" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="UptimeRobot" data-to="P6" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="5-min Cleanup Trigger" points="1518.9946666666665,149.8 1518.9946666666665,254.10000000000002 1566.8729999999998,254.10000000000002 1566.8729999999998,265.00000000000006" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P6" data-to="D3" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="Release Seats" points="1647.8445238095235,335.70000000000005 1647.8445238095235,360.8 2441.5266666666666,360.8 2441.5266666666666,441.1 2490.2293708333327,441.1 2490.2293708333327,478.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="P6" data-to="D4" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="Update Order &amp; Ticket Status" points="1559.5119523809522,335.70000000000005 1559.5119523809522,360.8 981.1646666666664,360.8 981.1646666666664,465.1 880.7248708333328,465.1 880.7248708333328,478.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="P6" data-to="D5" data-style="solid" data-arrow-start="true" data-arrow-end="true" data-label="Record Refund" points="1537.4288095238092,335.70000000000005 1537.4288095238092,348.8 545.6274999999998,348.8 545.6274999999998,569.4 527.4846666666665,569.4 527.4846666666665,581.4" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" marker-start="url(#arrowhead-start)" />
+<polyline class="edge" data-from="P6" data-to="D6" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Write Refund / Cancel Audit" points="1625.7613809523807,335.70000000000005 1625.7613809523807,398.8 2087.286666666666,398.8 2087.286666666666,509.4 2128.496070833333,509.4 2128.496070833333,524.25" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="P6" data-to="Customer" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Refund Confirmation" points="1581.595095238095,335.70000000000005 1581.595095238095,398.8 1529.6826666666664,398.8 1529.6826666666664,443.1 1480.5771380952376,443.1 1480.5771380952376,478.1" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<g class="edge-label" data-from="Customer" data-to="P1" data-label="Bearer JWT">
+  <rect x="785.4381380952377" y="583" width="77.05000000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="823.9631380952377" y="598.15" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Bearer JWT</text>
+</g>
+<g class="edge-label" data-from="CinemaAdmin" data-to="P1" data-label="Bearer JWT">
+  <rect x="1212.6226666666664" y="311.5" width="77.05000000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1251.1476666666665" y="326.65" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Bearer JWT</text>
+</g>
+<g class="edge-label" data-from="PlatformAdmin" data-to="P1" data-label="Bearer JWT">
+  <rect x="420.1347339285717" y="158.30000000000007" width="77.05000000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="458.65973392857165" y="173.45000000000007" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Bearer JWT</text>
+</g>
+<g class="edge-label" data-from="SupabaseAuth" data-to="P1" data-label="ES256 JWKS">
+  <rect x="273.3224999999999" y="607" width="81.802" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="314.2234999999999" y="622.15" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">ES256 JWKS</text>
+</g>
+<g class="edge-label" data-from="P1" data-to="D1" data-label="Lazy Upsert &amp; Role Check">
+  <rect x="730.9381380952377" y="770" width="140.014" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="800.9451380952378" y="785.15" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Lazy Upsert &amp; Role Check</text>
+</g>
+<g class="edge-label" data-from="PlatformAdmin" data-to="P2" data-label="Movie Metadata">
+  <rect x="2450.786666666666" y="180.8" width="91.9" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="2496.7366666666658" y="195.95000000000002" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Movie Metadata</text>
+</g>
+<g class="edge-label" data-from="CinemaAdmin" data-to="P2" data-label="Auditorium, Seats &amp; Showtimes">
+  <rect x="2546.6866666666665" y="180.8" width="158.428" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="2625.9006666666664" y="195.95000000000002" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Auditorium, Seats &amp; Showtimes</text>
+</g>
+<g class="edge-label" data-from="P2" data-to="D2" data-label="Write Catalog &amp; Layout">
+  <rect x="2795.101216666667" y="403.8" width="122.19400000000003" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="2856.198216666667" y="418.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Write Catalog &amp; Layout</text>
+</g>
+<g class="edge-label" data-from="P2" data-to="D3" data-label="Schedule &amp; Generate Seats">
+  <rect x="2488.4866666666667" y="391.8" width="145.36" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="2561.1666666666665" y="406.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Schedule &amp; Generate Seats</text>
+</g>
+<g class="edge-label" data-from="P2" data-to="D6" data-label="Cancel Showtime Event">
+  <rect x="2162.1766666666663" y="448.09999999999997" width="125.75800000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="2225.055666666666" y="463.24999999999994" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Cancel Showtime Event</text>
+</g>
+<g class="edge-label" data-from="Customer" data-to="P3" data-label="Filter Movies &amp; Showtimes">
+  <rect x="1414.1690708333329" y="571" width="138.82600000000002" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1483.5820708333329" y="586.15" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Filter Movies &amp; Showtimes</text>
+</g>
+<g class="edge-label" data-from="D2" data-to="P3" data-label="Movie &amp; Hall Info">
+  <rect x="2810.101216666667" y="571" width="92.49400000000003" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="2856.3482166666668" y="586.15" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Movie &amp; Hall Info</text>
+</g>
+<g class="edge-label" data-from="D3" data-to="P3" data-label="Live Seat Status">
+  <rect x="2465.8011708333324" y="559" width="93.68200000000002" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="2512.6421708333323" y="574.15" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Live Seat Status</text>
+</g>
+<g class="edge-label" data-from="P3" data-to="Customer" data-label="Catalog &amp; Real-Time Seat Map">
+  <rect x="1556.9950708333329" y="559" width="155.458" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1634.724070833333" y="574.15" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Catalog &amp; Real-Time Seat Map</text>
+</g>
+<g class="edge-label" data-from="Customer" data-to="P4" data-label="Seat Selection + Idempotency Key">
+  <rect x="1837.3206666666663" y="441.8" width="174.46600000000004" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1924.5536666666662" y="456.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Seat Selection + Idempotency Key</text>
+</g>
+<g class="edge-label" data-from="P4" data-to="D3" data-label="Atomic Lock (5-min Hold)">
+  <rect x="2637.8466666666664" y="403.8" width="130.51000000000002" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="2703.1016666666665" y="418.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Atomic Lock (5-min Hold)</text>
+</g>
+<g class="edge-label" data-from="P4" data-to="D4" data-label="Create PENDING_PAYMENT Order">
+  <rect x="1061.0586666666663" y="439.8" width="184.56399999999996" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1153.3406666666663" y="454.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Create PENDING_PAYMENT Order</text>
+</g>
+<g class="edge-label" data-from="P4" data-to="Customer" data-label="Order &amp; Countdown">
+  <rect x="1725.3826666666662" y="429.8" width="107.938" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1779.3516666666662" y="444.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Order &amp; Countdown</text>
+</g>
+<g class="edge-label" data-from="Customer" data-to="P5" data-label="Payment Request">
+  <rect x="1371.1546666666663" y="417.8" width="99.02800000000002" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1420.6686666666665" y="432.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Payment Request</text>
+</g>
+<g class="edge-label" data-from="D4" data-to="P5" data-label="Order Validation">
+  <rect x="806.8886666666664" y="415.8" width="94.27600000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="854.0266666666664" y="430.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Order Validation</text>
+</g>
+<g class="edge-label" data-from="P5" data-to="MockPay" data-label="Simulate Charge">
+  <rect x="82.75849999999994" y="202.60000000000005" width="94.27600000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="129.89649999999995" y="217.75000000000006" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Simulate Charge</text>
+</g>
+<g class="edge-label" data-from="P5" data-to="D5" data-label="Record Payment">
+  <rect x="401.6634999999998" y="508.0999999999999" width="95.46400000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="449.3954999999998" y="523.2499999999999" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Record Payment</text>
+</g>
+<g class="edge-label" data-from="P5" data-to="D4" data-label="Confirm Order &amp; Generate QR Tickets">
+  <rect x="612.3846666666664" y="415.8" width="190.504" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="707.6366666666663" y="430.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Confirm Order &amp; Generate QR Tickets</text>
+</g>
+<g class="edge-label" data-from="P5" data-to="D3" data-label="Mark Seats SOLD">
+  <rect x="2291.934666666666" y="391.8" width="102.59199999999998" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="2343.230666666666" y="406.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Mark Seats SOLD</text>
+</g>
+<g class="edge-label" data-from="P5" data-to="Customer" data-label="E-Tickets &amp; Receipt">
+  <rect x="1258.6226666666664" y="441.8" width="108.53200000000002" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1312.8886666666665" y="456.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">E-Tickets &amp; Receipt</text>
+</g>
+<g class="edge-label" data-from="Customer" data-to="P6" data-label="Refund Request (&gt;= 60m)">
+  <rect x="1589.0906666666663" y="417.8" width="132.29200000000003" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1655.2366666666662" y="432.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Refund Request (&gt;= 60m)</text>
+</g>
+<g class="edge-label" data-from="CinemaAdmin" data-to="P6" data-label="Cancel Showtime Refund">
+  <rect x="1600.2786666666664" y="192.8" width="131.698" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1666.1276666666663" y="207.95000000000002" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Cancel Showtime Refund</text>
+</g>
+<g class="edge-label" data-from="UptimeRobot" data-to="P6" data-label="5-min Cleanup Trigger">
+  <rect x="1457.9946666666665" y="192.8" width="121.60000000000002" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1518.7946666666664" y="207.95000000000002" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">5-min Cleanup Trigger</text>
+</g>
+<g class="edge-label" data-from="P6" data-to="D3" data-label="Release Seats">
+  <rect x="2398.5266666666666" y="391.8" width="85.96000000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="2441.5066666666667" y="406.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Release Seats</text>
+</g>
+<g class="edge-label" data-from="P6" data-to="D4" data-label="Update Order &amp; Ticket Status">
+  <rect x="905.1646666666664" y="415.8" width="151.894" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="981.1116666666665" y="430.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Update Order &amp; Ticket Status</text>
+</g>
+<g class="edge-label" data-from="P6" data-to="D5" data-label="Record Refund">
+  <rect x="501.1274999999997" y="508.0999999999999" width="88.33600000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="545.2954999999997" y="523.2499999999999" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Record Refund</text>
+</g>
+<g class="edge-label" data-from="P6" data-to="D6" data-label="Write Refund / Cancel Audit">
+  <rect x="2015.7866666666662" y="448.09999999999997" width="142.39" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="2086.981666666666" y="463.24999999999994" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Write Refund / Cancel Audit</text>
+</g>
+<g class="edge-label" data-from="P6" data-to="Customer" data-label="Refund Confirmation">
+  <rect x="1474.1826666666664" y="405.8" width="110.90800000000002" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1529.6366666666663" y="420.95" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Refund Confirmation</text>
+</g>
+<g class="node" data-id="Customer" data-label="Customer" data-shape="rectangle">
+  <rect x="1438.4631380952376" y="478.1" width="98.26599999999999" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1487.5961380952376" y="496.55" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Customer</text>
+</g>
+<g class="node" data-id="CinemaAdmin" data-label="Cinema Admin" data-shape="rectangle">
+  <rect x="1604.9191666666663" y="46" width="122.71900000000001" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1666.2786666666664" y="64.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Cinema Admin</text>
+</g>
+<g class="node" data-id="PlatformAdmin" data-label="Platform Admin" data-shape="rectangle">
+  <rect x="562.996333333333" y="46" width="127.16499999999999" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="626.578833333333" y="64.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Platform Admin</text>
+</g>
+<g class="node" data-id="SupabaseAuth" data-label="Supabase Auth" data-shape="rectangle">
+  <rect x="248.51699999999988" y="524.25" width="131.611" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="314.3224999999999" y="542.7" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Supabase Auth</text>
+</g>
+<g class="node" data-id="MockPay" data-label="Mock Payment Gateway" data-shape="rectangle">
+  <rect x="40" y="265.00000000000006" width="180.51699999999997" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="130.25849999999997" y="283.45000000000005" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Mock Payment Gateway</text>
+</g>
+<g class="node" data-id="UptimeRobot" data-label="UptimeRobot" data-shape="rectangle">
+  <rect x="1461.7106666666664" y="112.9" width="114.568" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1518.9946666666665" y="131.35000000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">UptimeRobot</text>
+</g>
+<g class="node" data-id="P1" data-label="1.0
+Authenticate User
+&amp; Enforce RBAC" data-shape="stadium">
+  <rect x="728.2226380952377" y="656.3" width="146.43099999999998" height="70.7" rx="35.35" ry="35.35" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="801.4381380952377" y="691.65" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="801.4381380952377" dy="-12.350000000000001">1.0</tspan><tspan x="801.4381380952377" dy="16.900000000000002">Authenticate User</tspan><tspan x="801.4381380952377" dy="16.900000000000002">&amp; Enforce RBAC</tspan></text>
+</g>
+<g class="node" data-id="P2" data-label="2.0
+Manage Movies, Halls
+&amp; Showtimes" data-shape="stadium">
+  <rect x="2476.0446666666667" y="265.00000000000006" width="170.88399999999996" height="70.7" rx="35.35" ry="35.35" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="2561.4866666666667" y="300.3500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="2561.4866666666667" dy="-12.350000000000001">2.0</tspan><tspan x="2561.4866666666667" dy="16.900000000000002">Manage Movies, Halls</tspan><tspan x="2561.4866666666667" dy="16.900000000000002">&amp; Showtimes</tspan></text>
+</g>
+<g class="node" data-id="P3" data-label="3.0
+Browse Catalog &amp;
+Real-Time Seat Map" data-shape="stadium">
+  <rect x="2045.9927708333328" y="620.3" width="157.546" height="70.7" rx="35.35" ry="35.35" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="2124.7657708333327" y="655.65" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="2124.7657708333327" dy="-12.350000000000001">3.0</tspan><tspan x="2124.7657708333327" dy="16.900000000000002">Browse Catalog &amp;</tspan><tspan x="2124.7657708333327" dy="16.900000000000002">Real-Time Seat Map</tspan></text>
+</g>
+<g class="node" data-id="P4" data-label="4.0
+Hold Seats &amp;
+Create Booking Order" data-shape="stadium">
+  <rect x="1766.6596666666662" y="265.00000000000006" width="170.884" height="70.7" rx="35.35" ry="35.35" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1852.1016666666662" y="300.3500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="1852.1016666666662" dy="-12.350000000000001">4.0</tspan><tspan x="1852.1016666666662" dy="16.900000000000002">Hold Seats &amp;</tspan><tspan x="1852.1016666666662" dy="16.900000000000002">Create Booking Order</tspan></text>
+</g>
+<g class="node" data-id="P5" data-label="5.0
+Process Mock Payment
+&amp; Issue E-Tickets" data-shape="stadium">
+  <rect x="763.3891666666664" y="112.90000000000005" width="181.99899999999997" height="70.7" rx="35.35" ry="35.35" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="854.3886666666664" y="148.25000000000006" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="854.3886666666664" dy="-12.350000000000001">5.0</tspan><tspan x="854.3886666666664" dy="16.900000000000002">Process Mock Payment</tspan><tspan x="854.3886666666664" dy="16.900000000000002">&amp; Issue E-Tickets</tspan></text>
+</g>
+<g class="node" data-id="P6" data-label="6.0
+Process Refunds &amp;
+Expire Stale Holds" data-shape="stadium">
+  <rect x="1515.3456666666664" y="265.00000000000006" width="154.582" height="70.7" rx="35.35" ry="35.35" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1592.6366666666663" y="300.3500000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="1592.6366666666663" dy="-12.350000000000001">6.0</tspan><tspan x="1592.6366666666663" dy="16.900000000000002">Process Refunds &amp;</tspan><tspan x="1592.6366666666663" dy="16.900000000000002">Expire Stale Holds</tspan></text>
+</g>
+<g class="node" data-id="D1" data-label="D1 Users &amp; Roles" data-shape="cylinder">
+  <rect x="731.9276380952377" y="850.3" width="139.021" height="36.900000000000006" fill="var(--_node-fill)" stroke="none" />
+  <line x1="731.9276380952377" y1="850.3" x2="731.9276380952377" y2="887.1999999999999" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="870.9486380952377" y1="850.3" x2="870.9486380952377" y2="887.1999999999999" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="801.4381380952377" cy="887.1999999999999" rx="69.5105" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="801.4381380952377" cy="850.3" rx="69.5105" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="801.4381380952377" y="868.75" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">D1 Users &amp; Roles</text>
+</g>
+<g class="node" data-id="D2" data-label="D2 Movies, Cinemas &amp; Seats" data-shape="cylinder">
+  <rect x="2753.7457166666663" y="485.1" width="205.71099999999996" height="36.900000000000006" fill="var(--_node-fill)" stroke="none" />
+  <line x1="2753.7457166666663" y1="485.1" x2="2753.7457166666663" y2="522" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="2959.456716666666" y1="485.1" x2="2959.456716666666" y2="522" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="2856.6012166666665" cy="522" rx="102.85549999999998" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="2856.6012166666665" cy="485.1" rx="102.85549999999998" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="2856.6012166666665" y="503.55" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">D2 Movies, Cinemas &amp; Seats</text>
+</g>
+<g class="node" data-id="D3" data-label="D3 Showtimes &amp; Showtime Seats" data-shape="cylinder">
+  <rect x="2399.942170833333" y="485.1" width="225.71799999999996" height="36.900000000000006" fill="var(--_node-fill)" stroke="none" />
+  <line x1="2399.942170833333" y1="485.1" x2="2399.942170833333" y2="522" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="2625.660170833333" y1="485.1" x2="2625.660170833333" y2="522" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="2512.801170833333" cy="522" rx="112.85899999999998" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="2512.801170833333" cy="485.1" rx="112.85899999999998" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="2512.801170833333" y="503.55" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">D3 Showtimes &amp; Showtime Seats</text>
+</g>
+<g class="node" data-id="D4" data-label="D4 Orders, Items &amp; Tickets" data-shape="cylinder">
+  <rect x="763.9672708333328" y="485.1" width="194.59599999999998" height="36.900000000000006" fill="var(--_node-fill)" stroke="none" />
+  <line x1="763.9672708333328" y1="485.1" x2="763.9672708333328" y2="522" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="958.5632708333328" y1="485.1" x2="958.5632708333328" y2="522" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="861.2652708333328" cy="522" rx="97.29799999999999" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="861.2652708333328" cy="485.1" rx="97.29799999999999" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="861.2652708333328" y="503.55" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">D4 Orders, Items &amp; Tickets</text>
+</g>
+<g class="node" data-id="D5" data-label="D5 Payments &amp; Refunds" data-shape="cylinder">
+  <rect x="408.1279999999998" y="588.4" width="179.03499999999997" height="36.900000000000006" fill="var(--_node-fill)" stroke="none" />
+  <line x1="408.1279999999998" y1="588.4" x2="408.1279999999998" y2="625.3" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="587.1629999999998" y1="588.4" x2="587.1629999999998" y2="625.3" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="497.6454999999998" cy="625.3" rx="89.51749999999998" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="497.6454999999998" cy="588.4" rx="89.51749999999998" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="497.6454999999998" y="606.85" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">D5 Payments &amp; Refunds</text>
+</g>
+<g class="node" data-id="D6" data-label="D6 Audit Logs" data-shape="cylinder">
+  <rect x="2087.342737499999" y="531.25" width="123.46" height="36.900000000000006" fill="var(--_node-fill)" stroke="none" />
+  <line x1="2087.342737499999" y1="531.25" x2="2087.342737499999" y2="568.15" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <line x1="2210.8027374999992" y1="531.25" x2="2210.8027374999992" y2="568.15" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="2149.072737499999" cy="568.15" rx="61.73" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <ellipse cx="2149.072737499999" cy="531.25" rx="61.73" ry="7" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="2149.072737499999" y="549.7" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">D6 Audit Logs</text>
+</g>
+</svg>

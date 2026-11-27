@@ -1,0 +1,137 @@
+================================================================================
+MEGACINE MALAYSIA - PHASE 1 DATABASE NORMALIZATION DERIVATION (UNF TO 3NF)
+================================================================================
+Document Version : 1.0 (Aligned with Phase 1 Schema v1.1 & Data Dictionary v1.0)
+Database Engine  : Supabase PostgreSQL 15+
+Last Updated     : 2026-11-28
+Purpose          : Step-by-step relational normalization proof (UNF -> 1NF -> 2NF
+                   -> 3NF) across all 15 Phase 1 tables for AMCS2194 Chapter 2
+                   documentation and schema governance.
+
+--------------------------------------------------------------------------------
+1. UNNORMALIZED FORM (UNF)
+--------------------------------------------------------------------------------
+Before normalization, a combined booking, scheduling, and operations record
+contains repeating groups (enclosed in curly braces {}) and mixed entity facts:
+
+UNF_CINEMA_OPERATION_RECORD (
+    order_no, order_status, subtotal_amount, discount_amount, total_amount,
+    hold_expires_at, idempotency_key,
+    user_email, user_full_name, user_phone,
+    { role_code, role_name, scoped_cinema_name },
+    movie_title, synopsis, duration_minutes, rating, language, poster_url,
+    release_date, movie_status,
+    cinema_name, cinema_address, cinema_city, cinema_state,
+    auditorium_name, total_rows, total_cols,
+    showtime_start_time, showtime_end_time, base_price, showtime_status,
+    { row_label, seat_number, seat_zone, seat_type, seat_price, seat_status,
+      ticket_code, qr_payload, ticket_status, issued_at, used_at },
+    { payment_provider, provider_tx_id, payment_amount, payment_status,
+      payment_idempotency_key },
+    { refund_amount, refund_reason, refund_status },
+    { audit_action, audit_entity_type, audit_entity_id, audit_metadata }
+)
+
+Key Anomalies in UNF:
+- Insertion Anomaly : Cannot create a new Movie, Cinema, or Auditorium without
+                      creating a dummy customer Order.
+- Update Anomaly    : Renaming a Cinema or updating a Movie's rating requires
+                      updating thousands of historical Order rows.
+- Deletion Anomaly  : Deleting a cancelled Order could erase the only record of
+                      a Customer, Showtime, or physical Seat layout.
+
+--------------------------------------------------------------------------------
+2. FIRST NORMAL FORM (1NF) - ATOMICITY & REPEATING GROUP REMOVAL
+--------------------------------------------------------------------------------
+Rule Applied:
+1. Every column must hold atomic (indivisible) values.
+2. Eliminate all repeating groups into separate relations with explicit Primary Keys.
+3. Separate multi-valued attributes (roles per user, seats/tickets per order,
+   multiple payment attempts per order, refunds per payment, audit events).
+
+| UNF Repeating Group / Issue | 1NF Resolution | Resulting 1NF Relation(s) |
+|---|---|---|
+| Repeating `{role_code, role_name, scoped_cinema_name}` per user | Extracted into a dedicated role-assignment table linked by `user_id`. | `users`, `user_roles_1nf` |
+| Repeating `{row_label, seat_number, ..., ticket_code}` per order | Flattened so each row represents a single booked seat & ticket instance. | `orders_1nf`, `order_seat_tickets_1nf` |
+| Repeating `{payment_provider, provider_tx_id, ...}` per order | Extracted so one order can support multiple retry attempts cleanly. | `payments` |
+| Repeating `{refund_amount, refund_reason, ...}` | Extracted into a dedicated refund ledger linked to order and payment. | `refunds` |
+| Repeating `{audit_action, ...}` | Extracted into an immutable governance log table. | `audit_logs` |
+
+Result: All attributes are atomic and every relation has a defined Primary Key.
+However, composite/natural keys still exhibit Partial Dependencies.
+
+--------------------------------------------------------------------------------
+3. SECOND NORMAL FORM (2NF) - ELIMINATING PARTIAL DEPENDENCIES
+--------------------------------------------------------------------------------
+Rule Applied:
+1. Must already satisfy 1NF.
+2. Every non-key attribute must be fully functionally dependent on the ENTIRE
+   Primary Key (or candidate composite key), eliminating partial dependencies.
+
+| 1NF Relation & Composite/Natural Key | Partial Dependency Identified | 2NF Decomposition Action |
+|---|---|---|
+| `user_roles_1nf (user_id, role_id, cinema_id)` | `role_code, role_name` depend only on `role_id`; `cinema_name` depends only on `cinema_id`. | Extracted `roles (id PK, code, name)` and referenced `cinemas (id PK)`. Kept `user_roles` as pure associative table. |
+| `order_seat_tickets_1nf (order_id, showtime_id, seat_id)` | `row_label, seat_number, seat_zone, seat_type` depend only on `seat_id` (physical seat), not on `order_id` or `showtime_id`. | Separated physical `seats` from per-screening `showtime_seats (showtime_id, seat_id)` and line-item `order_items (order_id, showtime_seat_id)`. |
+| `order_seat_tickets_1nf (order_id, showtime_seat_id)` | `price, status, held_by_order_id, hold_expires_at, version` belong to `(showtime_id, seat_id)` inventory regardless of whether an order exists. | Isolated `showtime_seats` as the independent anti-overselling inventory table. |
+| `orders_1nf (order_id)` | `email, full_name, phone` depend on `user_id`, not on `order_id`. | Kept customer profile strictly in `users`, referenced via `orders.user_id (FK)`. |
+
+Result: All partial dependencies are removed. Master catalog entities (`users`,
+`roles`, `seats`) are cleanly decoupled from transactional entities.
+
+--------------------------------------------------------------------------------
+4. THIRD NORMAL FORM (3NF) - ELIMINATING TRANSITIVE DEPENDENCIES
+--------------------------------------------------------------------------------
+Rule Applied:
+1. Must already satisfy 2NF.
+2. No non-key attribute may depend transitively on the Primary Key through
+   another non-key attribute (i.e., if A -> B and B -> C, extract B -> C).
+
+| 2NF Relation | Transitive Dependency Identified | 3NF Decomposition Action |
+|---|---|---|
+| `orders_2nf` | `order_id -> showtime_id -> (movie_id, auditorium_id, start_time, end_time, base_price)` | Extracted `showtimes (id PK)` referenced by `orders.showtime_id (FK)`. |
+| `showtimes_2nf` | `showtime_id -> movie_id -> (title, synopsis, duration_minutes, rating, language, poster_url, release_date, status)` | Extracted `movies (id PK)` referenced by `showtimes.movie_id (FK)`. |
+| `showtimes_2nf` | `showtime_id -> auditorium_id -> (name, total_rows, total_cols, cinema_id)` | Extracted `auditoriums (id PK)` referenced by `showtimes.auditorium_id (FK)` and `seats.auditorium_id (FK)`. |
+| `auditoriums_2nf` | `auditorium_id -> cinema_id -> (name, address, city, state, is_active)` | Extracted `cinemas (id PK)` referenced by `auditoriums.cinema_id (FK)` and `user_roles.cinema_id (FK)`. |
+| `order_items_2nf` | `order_item_id -> ticket_code -> (qr_payload, status, issued_at, used_at)` (ticket only exists post-payment, nullable before `CONFIRMED`) | Extracted `tickets (id PK, order_item_id UNIQUE FK)` to eliminate nullable transitive attributes from `order_items`. |
+| `refunds_2nf` | `refund_id -> payment_id -> (provider, provider_tx_id, payment_status)` | Kept payment gateway details strictly in `payments`, referenced by `refunds.payment_id (FK)`. |
+
+Result: Every non-key attribute in all 15 tables depends ONLY on "the key, the
+whole key, and nothing but the key."
+
+--------------------------------------------------------------------------------
+5. FINAL 3NF RELATIONAL SCHEMA NOTATION (ALL 15 TABLES)
+--------------------------------------------------------------------------------
+Notation Legend:
+- PK  = Primary Key
+- FK  = Foreign Key
+- UK  = Unique Key / Natural Composite Key
+
+1.  USERS (id [PK], email [UK], full_name, phone, is_active, created_at, updated_at)
+2.  ROLES (id [PK], code [UK], name, created_at)
+3.  USER_ROLES (id [PK], user_id [FK->USERS, UK1], role_id [FK->ROLES, UK1], cinema_id [FK->CINEMAS, UK1, Nullable], created_at)
+4.  MOVIES (id [PK], title, synopsis, duration_minutes, rating, language, poster_url, release_date, status, created_at, updated_at)
+5.  CINEMAS (id [PK], name, address, city, state, is_active, created_at, updated_at)
+6.  AUDITORIUMS (id [PK], cinema_id [FK->CINEMAS, UK1], name [UK1], total_rows, total_cols, created_at, updated_at)
+7.  SEATS (id [PK], auditorium_id [FK->AUDITORIUMS, UK1], row_label [UK1], seat_number [UK1], seat_zone, seat_type, created_at)
+8.  SHOWTIMES (id [PK], movie_id [FK->MOVIES], auditorium_id [FK->AUDITORIUMS], start_time, end_time, base_price, status, created_at, updated_at)
+9.  SHOWTIME_SEATS (id [PK], showtime_id [FK->SHOWTIMES, UK1], seat_id [FK->SEATS, UK1], price, status, held_by_order_id [FK->ORDERS, Nullable], hold_expires_at, version, updated_at)
+10. ORDERS (id [PK], order_no [UK], user_id [FK->USERS], showtime_id [FK->SHOWTIMES], status, subtotal_amount, discount_amount, total_amount, hold_expires_at, idempotency_key [UK], created_at, updated_at)
+11. ORDER_ITEMS (id [PK], order_id [FK->ORDERS, UK1], showtime_seat_id [FK->SHOWTIME_SEATS, UK1], unit_price, created_at)
+12. TICKETS (id [PK], order_id [FK->ORDERS], order_item_id [FK->ORDER_ITEMS, UK], ticket_code [UK], qr_payload, status, issued_at, used_at)
+13. PAYMENTS (id [PK], order_id [FK->ORDERS], provider, provider_tx_id [UK], amount, status, idempotency_key [UK], created_at, updated_at)
+14. REFUNDS (id [PK], order_id [FK->ORDERS], payment_id [FK->PAYMENTS], amount, reason, status, created_at, updated_at)
+15. AUDIT_LOGS (id [PK], actor_user_id [FK->USERS, Nullable], action, entity_type, entity_id, metadata_json, created_at)
+
+--------------------------------------------------------------------------------
+6. ARCHITECTURAL JUSTIFICATION: HISTORICAL SNAPSHOTS VS. 3NF COMPLIANCE
+--------------------------------------------------------------------------------
+In enterprise financial & ticketing systems, four intentional snapshot/linkage
+columns are preserved without violating 3NF integrity:
+
+| Table & Column | Why It Is NOT a 3NF Violation / Engineering Rationale |
+|---|---|
+| `showtime_seats.price` | Represents the point-in-time zone price for that specific showtime (e.g., VIP surcharge or weekend pricing), independent of future edits to `showtimes.base_price`. |
+| `order_items.unit_price` | Immutable financial snapshot of the exact price paid at booking time; prevents retroactive distortion of customer receipts if an admin later modifies showtime prices. |
+| `orders.subtotal_amount` & `total_amount` | Immutable ledger totals committed at checkout time (with `discount_amount` reserved for Phase 2 promotions) to guarantee payment/refund reconciliation accuracy. |
+| `tickets.order_id` & `refunds.order_id` | Direct foreign-key ownership anchor enabling fast cinema-scoped queries and strict authorization checks without multi-hop joins, enforced atomically within the same DB transaction. |
+================================================================================

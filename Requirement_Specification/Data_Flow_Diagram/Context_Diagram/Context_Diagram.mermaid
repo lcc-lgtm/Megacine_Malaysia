@@ -1,0 +1,27 @@
+flowchart LR
+    Customer["Customer<br/>(Flutter Mobile App)"]
+    CinemaAdmin["Cinema Admin<br/>(Admin Web Portal)"]
+    PlatformAdmin["Platform Admin<br/>(Admin Web Portal)"]
+    SupabaseAuth["Supabase Auth<br/>(Identity Provider)"]
+    MockPay["Mock Payment<br/>Gateway Adapter"]
+    UptimeRobot["UptimeRobot<br/>(5-min Scheduler)"]
+
+    System(["0.0<br/>Megacine Malaysia<br/>Cinema Ticketing System"])
+
+    Customer -->|"Browse Requests, Seat Selection,<br/>Order & Refund Requests"| System
+    System -->|"Movie/Showtime Info, Seat Map,<br/>Order Status, QR E-Tickets"| Customer
+
+    CinemaAdmin -->|"Hall/Seat Config, Showtime Schedule,<br/>Showtime Cancel, Order Queries"| System
+    System -->|"Cinema-Scoped Orders,<br/>Schedule & Operation Status"| CinemaAdmin
+
+    PlatformAdmin -->|"Movie Catalog Updates,<br/>Role & Cinema Assignments"| System
+    System -->|"Platform Catalog & Audit Logs"| PlatformAdmin
+
+    System -->|"JWKS Public Key Request"| SupabaseAuth
+    SupabaseAuth -->|"ES256 Public Keys (JWKS)"| System
+
+    System -->|"Simulated Charge & Refund Request"| MockPay
+    MockPay -->|"Payment / Refund Result Callback"| System
+
+    UptimeRobot -->|"5-min Cleanup & Keep-Alive Trigger"| System
+    System -->|"Health & Cleanup Status"| UptimeRobot

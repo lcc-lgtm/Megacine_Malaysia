@@ -1,0 +1,182 @@
+classDiagram
+    class User {
+        +UUID id
+        +String email
+        +String full_name
+        +String phone
+        +Boolean is_active
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class Role {
+        +UUID id
+        +String code
+        +String name
+        +DateTime created_at
+    }
+
+    class UserRole {
+        +UUID id
+        +UUID user_id
+        +UUID role_id
+        +UUID cinema_id
+        +DateTime created_at
+    }
+
+    class Movie {
+        +UUID id
+        +String title
+        +String synopsis
+        +SmallInt duration_minutes
+        +String rating
+        +String language
+        +String poster_url
+        +Date release_date
+        +String status
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class Cinema {
+        +UUID id
+        +String name
+        +String address
+        +String city
+        +String state
+        +Boolean is_active
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class Auditorium {
+        +UUID id
+        +UUID cinema_id
+        +String name
+        +SmallInt total_rows
+        +SmallInt total_cols
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class Seat {
+        +UUID id
+        +UUID auditorium_id
+        +String row_label
+        +SmallInt seat_number
+        +String seat_zone
+        +String seat_type
+        +DateTime created_at
+    }
+
+    class Showtime {
+        +UUID id
+        +UUID movie_id
+        +UUID auditorium_id
+        +DateTime start_time
+        +DateTime end_time
+        +Decimal base_price
+        +String status
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class ShowtimeSeat {
+        +UUID id
+        +UUID showtime_id
+        +UUID seat_id
+        +Decimal price
+        +String status
+        +UUID held_by_order_id
+        +DateTime hold_expires_at
+        +Integer version
+        +DateTime updated_at
+    }
+
+    class Order {
+        +UUID id
+        +String order_no
+        +UUID user_id
+        +UUID showtime_id
+        +String status
+        +Decimal subtotal_amount
+        +Decimal discount_amount
+        +Decimal total_amount
+        +DateTime hold_expires_at
+        +String idempotency_key
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class OrderItem {
+        +UUID id
+        +UUID order_id
+        +UUID showtime_seat_id
+        +Decimal unit_price
+        +DateTime created_at
+    }
+
+    class Ticket {
+        +UUID id
+        +UUID order_id
+        +UUID order_item_id
+        +String ticket_code
+        +String qr_payload
+        +String status
+        +DateTime issued_at
+        +DateTime used_at
+    }
+
+    class Payment {
+        +UUID id
+        +UUID order_id
+        +String provider
+        +String provider_tx_id
+        +Decimal amount
+        +String status
+        +String idempotency_key
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class Refund {
+        +UUID id
+        +UUID order_id
+        +UUID payment_id
+        +Decimal amount
+        +String reason
+        +String status
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class AuditLog {
+        +UUID id
+        +UUID actor_user_id
+        +String action
+        +String entity_type
+        +UUID entity_id
+        +JSONB metadata_json
+        +DateTime created_at
+    }
+
+    User "1" --> "0..*" UserRole : assigned
+    Role "1" --> "0..*" UserRole : defines
+    Cinema "0..1" --> "0..*" UserRole : scopes
+    Cinema "1" --> "1..*" Auditorium : contains
+    Auditorium "1" --> "1..*" Seat : has
+    Movie "1" --> "0..*" Showtime : scheduled_in
+    Auditorium "1" --> "0..*" Showtime : hosts
+    Showtime "1" --> "1..*" ShowtimeSeat : generates
+    Seat "1" --> "0..*" ShowtimeSeat : mapped_to
+    User "1" --> "0..*" Order : places
+    Showtime "1" --> "0..*" Order : booked_for
+    Order "1" --> "1..*" OrderItem : consists_of
+    ShowtimeSeat "1" --> "0..*" OrderItem : referenced_by
+    Order "0..1" --> "0..*" ShowtimeSeat : holds
+    Order "1" --> "0..*" Ticket : issues
+    OrderItem "1" --> "0..1" Ticket : generates
+    Order "1" --> "0..*" Payment : paid_via
+    Order "1" --> "0..*" Refund : refunded_by
+    Payment "1" --> "0..*" Refund : reverses
+    User "0..1" --> "0..*" AuditLog : triggers

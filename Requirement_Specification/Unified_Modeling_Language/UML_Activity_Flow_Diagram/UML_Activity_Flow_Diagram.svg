@@ -1,0 +1,210 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2279.6396249999993 1243.6449999999998" width="2279.6396249999993" height="1243.6449999999998" style="--bg:#2c2c2c;--fg:#e3e3e3;--line:#9c9c9c;--accent:#3c90ff;--muted:hsla(0,0%,100%,.55);--border:#373737">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+  text { font-family: 'Inter', system-ui, sans-serif; }
+  svg {
+    /* Derived from --bg and --fg (overridable via --line, --accent, etc.) */
+    --_text:          var(--fg);
+    --_text-sec:      var(--muted, color-mix(in srgb, var(--fg) 60%, var(--bg)));
+    --_text-muted:    var(--muted, color-mix(in srgb, var(--fg) 40%, var(--bg)));
+    --_text-faint:    color-mix(in srgb, var(--fg) 25%, var(--bg));
+    --_line:          var(--line, color-mix(in srgb, var(--fg) 50%, var(--bg)));
+    --_arrow:         var(--accent, color-mix(in srgb, var(--fg) 85%, var(--bg)));
+    --_node-fill:     var(--surface, color-mix(in srgb, var(--fg) 3%, var(--bg)));
+    --_node-stroke:   var(--border, color-mix(in srgb, var(--fg) 20%, var(--bg)));
+    --_group-fill:    var(--bg);
+    --_group-hdr:     color-mix(in srgb, var(--fg) 5%, var(--bg));
+    --_inner-stroke:  color-mix(in srgb, var(--fg) 12%, var(--bg));
+    --_key-badge:     color-mix(in srgb, var(--fg) 10%, var(--bg));
+  }
+</style>
+<defs>
+  <marker id="arrowhead" markerWidth="8" markerHeight="5" refX="7" refY="2.5" orient="auto">
+    <polygon points="0 0, 8 2.5, 0 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+  <marker id="arrowhead-start" markerWidth="8" markerHeight="5" refX="1" refY="2.5" orient="auto-start-reverse">
+    <polygon points="8 0, 0 2.5, 8 5" fill="var(--_arrow)" stroke="var(--_arrow)" stroke-width="0.75" stroke-linejoin="round" />
+  </marker>
+</defs>
+<polyline class="edge" data-from="Start" data-to="Login" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="2084.5436249999993,438.30199999999996 2084.5436249999993,491.659" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Login" data-to="Browse" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="2084.5436249999993,528.559 2084.5436249999993,576.559" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Browse" data-to="ViewSeats" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="2084.5436249999993,613.459 2084.5436249999993,641.684 1868.9247083333328,641.684 1868.9247083333328,669.9089999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ViewSeats" data-to="SelectSeats" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1801.7507083333328,669.9089999999999 1801.7507083333328,649.459 1397.3031249999995,649.459 1397.3031249999995,112.9 1627.512583333333,112.9 1627.512583333333,76.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="SelectSeats" data-to="SubmitOrder" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1689.6609166666663,76.9 1689.6609166666663,124.9" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="SubmitOrder" data-to="CheckLock" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1689.6609166666663,161.8 1689.6609166666663,209.8" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="CheckLock" data-to="ShowConflict" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="No (Conflict 409)" points="1731.404083333333,418.51583333333343 1731.404083333333,496.259 1813.0416249999994,496.259 1813.0416249999994,576.559" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ShowConflict" data-to="ViewSeats" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1813.0416249999994,613.459 1813.0416249999994,641.684 1868.9247083333328,641.684 1868.9247083333328,669.9089999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="CheckLock" data-to="HoldCreated" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Yes" points="1647.9177499999996,418.5158333333333 1647.9177499999996,496.259 1540.7986249999994,496.259 1540.7986249999994,576.559" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="HoldCreated" data-to="PayAction" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1540.7986249999994,630.3589999999999 1540.7986249999994,666.3589999999999 1481.6838749999997,666.3589999999999 1481.6838749999997,705.1066666666666" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="PayAction" data-to="ExpireOrder" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="No (Timeout)" points="1481.6838749999997,845.8973333333331 1481.6838749999997,993.8449999999998 1459.161083333333,993.8449999999998 1459.161083333333,1005.8449999999998" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ExpireOrder" data-to="EndFail" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1416.4779166666663,1059.6449999999998 1416.4779166666663,1107.6449999999998" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="PayAction" data-to="MockPay" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Yes" points="1411.2885416666663,845.8973333333331 1411.2885416666663,901.5449999999998 1310.488208333333,901.5449999999998 1310.488208333333,945.8449999999998 1187.1650833333329,945.8449999999998 1187.1650833333329,969.8449999999998" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="MockPay" data-to="PayResult" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="1113.9017499999995,969.8449999999998 1113.9017499999995,957.8449999999998 1077.551583333333,957.8449999999998 1077.551583333333,957.8449999999998 1116.9524583333327,957.8449999999998 1116.9524583333327,252.64499999999973" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="PayResult" data-to="RetryCheck" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="FAILED / TIMEOUT" points="1157.707708333333,211.88974999999994 1157.707708333333,264.645 1278.7461249999997,264.645 1278.7461249999997,350.3020000000002" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="RetryCheck" data-to="PayAction" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Yes" points="1314.9317916666662,531.2303333333332 1314.9317916666662,598.059 1333.5527916666663,598.059 1333.5527916666663,666.3589999999999 1411.2885416666663,666.3589999999999 1411.2885416666663,705.1066666666666" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="RetryCheck" data-to="ExpireOrder" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="No" points="1242.560458333333,531.2303333333334 1242.560458333333,889.5449999999998 1242.9315416666664,889.5449999999998 1242.9315416666664,957.8449999999998 1373.7947499999996,957.8449999999998 1373.7947499999996,1005.8449999999998" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="PayResult" data-to="ConfirmTx" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="SUCCEEDED" points="1076.197208333333,211.88975000000005 1076.197208333333,689.9440000000001 934.315083333333,689.9440000000001 934.315083333333,754.694" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ConfirmTx" data-to="ViewTicket" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="934.315083333333,808.4939999999999 934.315083333333,826.4939999999999 591.3814999999998,826.4939999999999 591.3814999999998,844.4939999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ViewTicket" data-to="RefundChoice" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="528.6534999999999,844.4939999999999 528.6534999999999,828.944 40.039999999999964,828.944 40.039999999999964,376.23400000000004 426.45124999999985,376.23400000000004 426.45124999999985,213.95050000000015" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="RefundChoice" data-to="Attend" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="No" points="542.4182499999997,213.95050000000012 542.4182499999997,376.23400000000004 821.315083333333,376.23400000000004 821.3150833333332,541.344" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="Attend" data-to="EndOk" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="821.3150833333332,578.244 821.315083333333,626.244" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="RefundChoice" data-to="CheckCutoff" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Yes" points="484.4347499999999,271.93399999999997 484.43474999999967,388.2340000000001" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="CheckCutoff" data-to="RejectRefund" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="No" points="527.5364166666664,603.7423333333332 527.5364166666664,682.844 591.3814999999997,682.844 591.3814999999997,754.694" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="RejectRefund" data-to="ViewTicket" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="591.3814999999996,791.5939999999999 591.3814999999996,826.4939999999999 591.3814999999998,826.4939999999999 591.3814999999998,844.4939999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="CheckCutoff" data-to="ProcessRefund" data-style="solid" data-arrow-start="false" data-arrow-end="true" data-label="Yes" points="441.333083333333,603.7423333333334 441.333083333333,658.844 248.74349999999959,658.844 248.7434999999998,754.694" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<polyline class="edge" data-from="ProcessRefund" data-to="EndRefund" data-style="solid" data-arrow-start="false" data-arrow-end="true" points="248.7434999999998,808.4939999999999 248.7434999999998,816.944 219.75174999999967,816.944 219.75174999999967,844.4939999999999" fill="none" stroke="var(--_line)" stroke-width="1" marker-end="url(#arrowhead)" />
+<g class="edge-label" data-from="CheckLock" data-to="ShowConflict" data-label="No (Conflict 409)">
+  <rect x="1766.5416249999994" y="503.259" width="92.49400000000003" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1812.7886249999995" y="518.409" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">No (Conflict 409)</text>
+</g>
+<g class="edge-label" data-from="CheckLock" data-to="HoldCreated" data-label="Yes">
+  <rect x="1522.2986249999994" y="503.259" width="36.658" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1540.6276249999994" y="518.409" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Yes</text>
+</g>
+<g class="edge-label" data-from="PayAction" data-to="ExpireOrder" data-label="No (Timeout)">
+  <rect x="1443.6838749999997" y="932.5449999999998" width="75.26800000000001" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1481.3178749999997" y="947.6949999999998" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">No (Timeout)</text>
+</g>
+<g class="edge-label" data-from="PayAction" data-to="MockPay" data-label="Yes">
+  <rect x="1291.988208333333" y="908.5449999999998" width="36.658" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1310.317208333333" y="923.6949999999998" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Yes</text>
+</g>
+<g class="edge-label" data-from="PayResult" data-to="RetryCheck" data-label="FAILED / TIMEOUT">
+  <rect x="1223.7461249999997" y="271.645" width="109.126" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1278.3091249999998" y="286.79499999999996" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">FAILED / TIMEOUT</text>
+</g>
+<g class="edge-label" data-from="RetryCheck" data-to="PayAction" data-label="Yes">
+  <rect x="1315.0527916666663" y="605.059" width="36.658" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1333.3817916666662" y="620.209" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Yes</text>
+</g>
+<g class="edge-label" data-from="RetryCheck" data-to="ExpireOrder" data-label="No">
+  <rect x="1227.4315416666664" y="896.5449999999998" width="30.718000000000004" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="1242.7905416666663" y="911.6949999999998" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">No</text>
+</g>
+<g class="edge-label" data-from="PayResult" data-to="ConfirmTx" data-label="SUCCEEDED">
+  <rect x="893.315083333333" y="696.9440000000001" width="81.802" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="934.2160833333329" y="712.094" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">SUCCEEDED</text>
+</g>
+<g class="edge-label" data-from="RefundChoice" data-to="Attend" data-label="No">
+  <rect x="805.815083333333" y="468.0440000000001" width="30.718000000000004" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="821.174083333333" y="483.1940000000001" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">No</text>
+</g>
+<g class="edge-label" data-from="RefundChoice" data-to="CheckCutoff" data-label="Yes">
+  <rect x="465.9347499999999" y="314.9340000000001" width="36.658" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="484.2637499999999" y="330.08400000000006" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Yes</text>
+</g>
+<g class="edge-label" data-from="CheckCutoff" data-to="RejectRefund" data-label="No">
+  <rect x="575.8814999999997" y="689.844" width="30.718000000000004" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="591.2404999999998" y="704.994" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">No</text>
+</g>
+<g class="edge-label" data-from="CheckCutoff" data-to="ProcessRefund" data-label="Yes">
+  <rect x="230.24349999999959" y="665.844" width="36.658" height="30.3" rx="2" ry="2" fill="var(--bg)" stroke="var(--_inner-stroke)" stroke-width="1" />
+  <text x="248.5724999999996" y="680.994" text-anchor="middle" font-size="11" font-weight="400" fill="var(--_text-sec)" dy="3.8499999999999996">Yes</text>
+</g>
+<g class="node" data-id="Start" data-label="Start" data-shape="circle">
+  <circle cx="2084.5436249999993" cy="394.30199999999996" r="44" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="2084.5436249999993" y="394.30199999999996" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Start</text>
+</g>
+<g class="node" data-id="Login" data-label="User Logs In via Supabase Auth (ES256 JWT)" data-shape="rectangle">
+  <rect x="1929.4476249999993" y="491.659" width="310.19199999999995" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="2084.5436249999993" y="510.109" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">User Logs In via Supabase Auth (ES256 JWT)</text>
+</g>
+<g class="node" data-id="Browse" data-label="Browse Movies, Cinemas &amp; Showtimes" data-shape="rectangle">
+  <rect x="1952.7891249999993" y="576.559" width="263.50899999999996" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="2084.5436249999993" y="595.009" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Browse Movies, Cinemas &amp; Showtimes</text>
+</g>
+<g class="node" data-id="ViewSeats" data-label="View Real-Time Seat Map
+(Expired Holds Shown as AVAILABLE)" data-shape="rectangle">
+  <rect x="1734.5767083333328" y="669.9089999999999" width="268.6959999999999" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1868.9247083333328" y="696.8089999999999" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="1868.9247083333328" dy="-3.9000000000000012">View Real-Time Seat Map</tspan><tspan x="1868.9247083333328" dy="16.900000000000002">(Expired Holds Shown as AVAILABLE)</tspan></text>
+</g>
+<g class="node" data-id="SelectSeats" data-label="Select Seats (1 to 6 Seats)" data-shape="rectangle">
+  <rect x="1565.3642499999996" y="40" width="186.44499999999996" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1658.5867499999997" y="58.45" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Select Seats (1 to 6 Seats)</text>
+</g>
+<g class="node" data-id="SubmitOrder" data-label="Submit Order with Idempotency-Key" data-shape="rectangle">
+  <rect x="1566.427916666666" y="124.9" width="246.46599999999998" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1689.660916666666" y="143.35000000000002" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Submit Order with Idempotency-Key</text>
+</g>
+<g class="node" data-id="CheckLock" data-label="Atomic DB Lock Succeeded?
+(AVAILABLE or Expired HELD)" data-shape="diamond">
+  <polygon points="1689.6609166666663,209.8 1814.8904166666662,335.0295 1689.6609166666663,460.25899999999996 1564.4314166666663,335.0295" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1689.6609166666663" y="335.0295" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="1689.6609166666663" dy="-3.9000000000000012">Atomic DB Lock Succeeded?</tspan><tspan x="1689.6609166666663" dy="16.900000000000002">(AVAILABLE or Expired HELD)</tspan></text>
+</g>
+<g class="node" data-id="ShowConflict" data-label="Display Seat Unavailable Error" data-shape="rectangle">
+  <rect x="1701.2941249999994" y="576.559" width="223.49499999999998" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1813.0416249999994" y="595.009" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Display Seat Unavailable Error</text>
+</g>
+<g class="node" data-id="HoldCreated" data-label="Seats Marked HELD (5-min Timer)
+Order Created (PENDING_PAYMENT)" data-shape="rectangle">
+  <rect x="1408.3031249999995" y="576.559" width="264.9909999999999" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1540.7986249999994" y="603.459" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="1540.7986249999994" dy="-3.9000000000000012">Seats Marked HELD (5-min Timer)</tspan><tspan x="1540.7986249999994" dy="16.900000000000002">Order Created (PENDING_PAYMENT)</tspan></text>
+</g>
+<g class="node" data-id="PayAction" data-label="User Completes Payment
+Before 5-min Expiry?" data-shape="diamond">
+  <polygon points="1446.486208333333,669.9089999999999 1552.079208333333,775.5019999999998 1446.486208333333,881.0949999999998 1340.893208333333,775.5019999999998" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1446.486208333333" y="775.5019999999998" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="1446.486208333333" dy="-3.9000000000000012">User Completes Payment</tspan><tspan x="1446.486208333333" dy="16.900000000000002">Before 5-min Expiry?</tspan></text>
+</g>
+<g class="node" data-id="ExpireOrder" data-label="Order Marked EXPIRED &amp;
+Seats Released (Lazy / UptimeRobot)" data-shape="rectangle">
+  <rect x="1288.4284166666662" y="1005.8449999999998" width="256.09899999999993" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1416.4779166666663" y="1032.745" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="1416.4779166666663" dy="-3.9000000000000012">Order Marked EXPIRED &amp;</tspan><tspan x="1416.4779166666663" dy="16.900000000000002">Seats Released (Lazy / UptimeRobot)</tspan></text>
+</g>
+<g class="node" data-id="EndFail" data-label="End" data-shape="doublecircle">
+  <circle cx="1416.4779166666663" cy="1155.6449999999998" r="48" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <circle cx="1416.4779166666663" cy="1155.6449999999998" r="43" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1416.4779166666663" y="1155.6449999999998" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">End</text>
+</g>
+<g class="node" data-id="MockPay" data-label="Invoke Mock Payment Adapter" data-shape="rectangle">
+  <rect x="1040.6384166666662" y="969.8449999999998" width="219.78999999999994" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1150.5334166666662" y="988.2949999999998" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Invoke Mock Payment Adapter</text>
+</g>
+<g class="node" data-id="PayResult" data-label="Payment Status?" data-shape="diamond">
+  <polygon points="1116.952458333333,89.62399999999994 1198.462958333333,171.13449999999995 1116.952458333333,252.64499999999995 1035.4419583333329,171.13449999999995" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1116.952458333333" y="171.13449999999995" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Payment Status?</text>
+</g>
+<g class="node" data-id="RetryCheck" data-label="Within 5-min Hold Window?" data-shape="diamond">
+  <polygon points="1278.7461249999994,350.30199999999996 1387.3031249999995,458.859 1278.7461249999994,567.4159999999999 1170.1891249999994,458.859" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="1278.7461249999994" y="458.859" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Within 5-min Hold Window?</text>
+</g>
+<g class="node" data-id="ConfirmTx" data-label="Atomic TX: Order -&gt; CONFIRMED
+Seats -&gt; SOLD, Generate QR E-Tickets" data-shape="rectangle">
+  <rect x="801.078583333333" y="754.694" width="266.47299999999996" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="934.315083333333" y="781.5939999999999" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="934.315083333333" dy="-3.9000000000000012">Atomic TX: Order -&gt; CONFIRMED</tspan><tspan x="934.315083333333" dy="16.900000000000002">Seats -&gt; SOLD, Generate QR E-Tickets</tspan></text>
+</g>
+<g class="node" data-id="ViewTicket" data-label="Customer Views E-Ticket &amp; QR Code" data-shape="rectangle">
+  <rect x="465.92549999999983" y="844.4939999999999" width="250.91199999999995" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="591.3814999999998" y="862.944" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Customer Views E-Ticket &amp; QR Code</text>
+</g>
+<g class="node" data-id="RefundChoice" data-label="Customer Requests Refund?" data-shape="diamond">
+  <polygon points="484.4347499999998,40.000000000000085 600.4017499999998,155.96700000000007 484.4347499999998,271.9340000000001 368.4677499999998,155.96700000000007" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="484.4347499999998" y="155.96700000000007" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Customer Requests Refund?</text>
+</g>
+<g class="node" data-id="Attend" data-label="Attend Showtime (Ticket Scanned -&gt; USED)" data-shape="rectangle">
+  <rect x="676.5930833333332" y="541.344" width="289.44399999999996" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="821.3150833333332" y="559.7940000000001" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Attend Showtime (Ticket Scanned -&gt; USED)</text>
+</g>
+<g class="node" data-id="EndOk" data-label="End" data-shape="doublecircle">
+  <circle cx="821.315083333333" cy="674.244" r="48" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <circle cx="821.315083333333" cy="674.244" r="43" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="821.315083333333" y="674.244" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">End</text>
+</g>
+<g class="node" data-id="CheckCutoff" data-label="Showtime Start &gt;= 60 Mins Away?" data-shape="diamond">
+  <polygon points="484.4347499999996,388.234 613.7397499999996,517.539 484.4347499999996,646.844 355.1297499999996,517.539" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="484.4347499999996" y="517.539" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Showtime Start &gt;= 60 Mins Away?</text>
+</g>
+<g class="node" data-id="RejectRefund" data-label="Reject Refund (Past 60-min Cutoff)" data-shape="rectangle">
+  <rect x="474.44699999999966" y="754.694" width="233.86899999999994" height="36.900000000000006" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="591.3814999999996" y="773.144" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">Reject Refund (Past 60-min Cutoff)</text>
+</g>
+<g class="node" data-id="ProcessRefund" data-label="Atomic TX: Record Refund, Order -&gt; REFUNDED,
+Tickets -&gt; REFUNDED, Seats -&gt; AVAILABLE, Write Audit Log" data-shape="rectangle">
+  <rect x="51.039999999999964" y="754.694" width="395.40699999999987" height="53.800000000000004" rx="0" ry="0" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="248.7434999999999" y="781.5939999999999" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)"><tspan x="248.7434999999999" dy="-3.9000000000000012">Atomic TX: Record Refund, Order -&gt; REFUNDED,</tspan><tspan x="248.7434999999999" dy="16.900000000000002">Tickets -&gt; REFUNDED, Seats -&gt; AVAILABLE, Write Audit Log</tspan></text>
+</g>
+<g class="node" data-id="EndRefund" data-label="End" data-shape="doublecircle">
+  <circle cx="219.75174999999967" cy="892.4939999999999" r="48" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <circle cx="219.75174999999967" cy="892.4939999999999" r="43" fill="var(--_node-fill)" stroke="var(--_node-stroke)" stroke-width="0.75" />
+  <text x="219.75174999999967" y="892.4939999999999" text-anchor="middle" font-size="13" font-weight="500" fill="var(--_text)" dy="4.55">End</text>
+</g>
+</svg>

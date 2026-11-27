@@ -1,0 +1,489 @@
+================================================================================
+MEGACINE MALAYSIA - PHASE 1 REQUIREMENT SPECIFICATION DIAGRAMS SNAPSHOT
+================================================================================
+Document Version : 1.0 (Aligned with Phase 1 Schema v1.1 & Data Dictionary v1.0)
+Last Updated     : 2026-11-28
+Root Directory   : Requirement_Specification/
+Purpose          : Consolidated knowledge-base snapshot of all Phase 1 DFD, ERD,
+                   and UML modeling artifacts (Mermaid source + SVG references)
+                   for AMCS2194 Chapter 2 documentation and engineering alignment.
+
+--------------------------------------------------------------------------------
+1. DIRECTORY STRUCTURE
+--------------------------------------------------------------------------------
+Requirement_Specification/
+├── Data_Flow_Diagram/
+│   ├── Context_Diagram/
+│   │   ├── Context_Diagram.mermaid
+│   │   └── Context_Diagram.svg
+│   ├── Level_0_Diagram/
+│   │   ├── Level_0_Diagram.mermaid
+│   │   └── Level_0_Diagram.svg
+│   └── Level_1_Diagram/
+│       ├── Level_1_Diagram.mermaid
+│       └── Level_1_Diagram.svg
+├── Entity_Relationship_Diagram/
+│   ├── ERD.mermaid
+│   └── ERD.svg
+└── Unified_Modeling_Language/
+    ├── UML_Activity_Flow_Diagram/
+    │   ├── UML_Activity_Flow_Diagram.mermaid
+    │   └── UML_Activity_Flow_Diagram.svg
+    ├── UML_Class_Diagram/
+    │   ├── UML_Class.mermaid
+    │   └── UML_Class.svg
+    └── UML_Sequence_Diagram/
+        ├── UML_Sequence_Diagram.mermaid
+        └── UML_Sequence_Diagram.svg
+
+--------------------------------------------------------------------------------
+2. ARTIFACT INDEX TABLE
+--------------------------------------------------------------------------------
+| # | Diagram Category | Diagram Name | Mermaid Source Path | Rendered SVG Path | Scope & Purpose |
+|---|---|---|---|---|---|
+| 1 | Data Flow Diagram | DFD Context Diagram | Requirement_Specification/Data_Flow_Diagram/Context_Diagram/Context_Diagram.mermaid | Requirement_Specification/Data_Flow_Diagram/Context_Diagram/Context_Diagram.svg | Top-level system boundary showing external entities (Customer, Cinema Admin, Platform Admin, Supabase Auth, Mock Payment, UptimeRobot) and data flows. |
+| 2 | Data Flow Diagram | DFD Level 0 Diagram | Requirement_Specification/Data_Flow_Diagram/Level_0_Diagram/Level_0_Diagram.mermaid | Requirement_Specification/Data_Flow_Diagram/Level_0_Diagram/Level_0_Diagram.svg | Decomposition into 6 core processes (1.0 Auth/RBAC to 6.0 Refunds/Cleanup) and 6 data stores (D1 to D6). |
+| 3 | Data Flow Diagram | DFD Level 1 Diagram | Requirement_Specification/Data_Flow_Diagram/Level_1_Diagram/Level_1_Diagram.mermaid | Requirement_Specification/Data_Flow_Diagram/Level_1_Diagram/Level_1_Diagram.svg | Granular breakdown of Processes 4.0 & 5.0 covering atomic seat hold, idempotent order creation, mock payment, and QR e-ticket issuance. |
+| 4 | Entity Relationship Diagram | System ERD (Entities Only) | Requirement_Specification/Entity_Relationship_Diagram/ERD.mermaid | Requirement_Specification/Entity_Relationship_Diagram/ERD.svg | Full Phase 1 entity-relationship cardinality across all 15 3NF tables without field attributes. |
+| 5 | Unified Modeling Language | UML Activity Flow Diagram | Requirement_Specification/Unified_Modeling_Language/UML_Activity_Flow_Diagram/UML_Activity_Flow_Diagram.mermaid | Requirement_Specification/Unified_Modeling_Language/UML_Activity_Flow_Diagram/UML_Activity_Flow_Diagram.svg | End-to-end customer booking, 5-min seat hold, mock payment retry/expiry, QR e-ticket viewing, and 60-min cutoff refund workflow. |
+| 6 | Unified Modeling Language | UML Class Diagram | Requirement_Specification/Unified_Modeling_Language/UML_Class_Diagram/UML_Class.mermaid | Requirement_Specification/Unified_Modeling_Language/UML_Class_Diagram/UML_Class.svg | Full system domain classes (15 entities) with typed attributes and associations (operations intentionally omitted per AMCS2194 guideline). |
+| 7 | Unified Modeling Language | UML Sequence Diagram | Requirement_Specification/Unified_Modeling_Language/UML_Sequence_Diagram/UML_Sequence_Diagram.mermaid | Requirement_Specification/Unified_Modeling_Language/UML_Sequence_Diagram/UML_Sequence_Diagram.svg | Runtime interaction sequence across Flutter App, Supabase Auth (ES256 JWKS), FastAPI (Render), PostgreSQL, Mock Payment, and UptimeRobot. |
+
+--------------------------------------------------------------------------------
+3. EMBEDDED MERMAID SOURCE SNAPSHOTS
+--------------------------------------------------------------------------------
+
+=== FILE: Requirement_Specification/Data_Flow_Diagram/Context_Diagram/Context_Diagram.mermaid ===
+flowchart LR
+    Customer["Customer<br/>(Flutter Mobile App)"]
+    CinemaAdmin["Cinema Admin<br/>(Admin Web Portal)"]
+    PlatformAdmin["Platform Admin<br/>(Admin Web Portal)"]
+    SupabaseAuth["Supabase Auth<br/>(Identity Provider)"]
+    MockPay["Mock Payment<br/>Gateway Adapter"]
+    UptimeRobot["UptimeRobot<br/>(5-min Scheduler)"]
+
+    System(["0.0<br/>Megacine Malaysia<br/>Cinema Ticketing System"])
+
+    Customer -->|"Browse Requests, Seat Selection,<br/>Order & Refund Requests"| System
+    System -->|"Movie/Showtime Info, Seat Map,<br/>Order Status, QR E-Tickets"| Customer
+
+    CinemaAdmin -->|"Hall/Seat Config, Showtime Schedule,<br/>Showtime Cancel, Order Queries"| System
+    System -->|"Cinema-Scoped Orders,<br/>Schedule & Operation Status"| CinemaAdmin
+
+    PlatformAdmin -->|"Movie Catalog Updates,<br/>Role & Cinema Assignments"| System
+    System -->|"Platform Catalog & Audit Logs"| PlatformAdmin
+
+    System -->|"JWKS Public Key Request"| SupabaseAuth
+    SupabaseAuth -->|"ES256 Public Keys (JWKS)"| System
+
+    System -->|"Simulated Charge & Refund Request"| MockPay
+    MockPay -->|"Payment / Refund Result Callback"| System
+
+    UptimeRobot -->|"5-min Cleanup & Keep-Alive Trigger"| System
+    System -->|"Health & Cleanup Status"| UptimeRobot
+
+=== FILE: Requirement_Specification/Data_Flow_Diagram/Level_0_Diagram/Level_0_Diagram.mermaid ===
+flowchart TD
+    Customer["Customer"]
+    CinemaAdmin["Cinema Admin"]
+    PlatformAdmin["Platform Admin"]
+    SupabaseAuth["Supabase Auth"]
+    MockPay["Mock Payment Gateway"]
+    UptimeRobot["UptimeRobot"]
+
+    P1(["1.0<br/>Authenticate User<br/>& Enforce RBAC"])
+    P2(["2.0<br/>Manage Movies, Halls<br/>& Showtimes"])
+    P3(["3.0<br/>Browse Catalog &<br/>Real-Time Seat Map"])
+    P4(["4.0<br/>Hold Seats &<br/>Create Booking Order"])
+    P5(["5.0<br/>Process Mock Payment<br/>& Issue E-Tickets"])
+    P6(["6.0<br/>Process Refunds &<br/>Expire Stale Holds"])
+
+    D1[("D1 Users & Roles")]
+    D2[("D2 Movies, Cinemas & Seats")]
+    D3[("D3 Showtimes & Showtime Seats")]
+    D4[("D4 Orders, Items & Tickets")]
+    D5[("D5 Payments & Refunds")]
+    D6[("D6 Audit Logs")]
+
+    Customer -->|"Bearer JWT"| P1
+    CinemaAdmin -->|"Bearer JWT"| P1
+    PlatformAdmin -->|"Bearer JWT"| P1
+    SupabaseAuth -->|"ES256 JWKS"| P1
+    P1 <-->|"Lazy Upsert & Role Check"| D1
+
+    PlatformAdmin -->|"Movie Metadata"| P2
+    CinemaAdmin -->|"Auditorium, Seats & Showtimes"| P2
+    P2 <-->|"Write Catalog & Layout"| D2
+    P2 <-->|"Schedule & Generate Seats"| D3
+    P2 -->|"Cancel Showtime Event"| D6
+
+    Customer -->|"Filter Movies & Showtimes"| P3
+    D2 -->|"Movie & Hall Info"| P3
+    D3 -->|"Live Seat Status"| P3
+    P3 -->|"Catalog & Real-Time Seat Map"| Customer
+
+    Customer -->|"Seat Selection + Idempotency Key"| P4
+    P4 <-->|"Atomic Lock (5-min Hold)"| D3
+    P4 -->|"Create PENDING_PAYMENT Order"| D4
+    P4 -->|"Order & Countdown"| Customer
+
+    Customer -->|"Payment Request"| P5
+    D4 -->|"Order Validation"| P5
+    P5 <-->|"Simulate Charge"| MockPay
+    P5 -->|"Record Payment"| D5
+    P5 -->|"Confirm Order & Generate QR Tickets"| D4
+    P5 -->|"Mark Seats SOLD"| D3
+    P5 -->|"E-Tickets & Receipt"| Customer
+
+    Customer -->|"Refund Request (>= 60m)"| P6
+    CinemaAdmin -->|"Cancel Showtime Refund"| P6
+    UptimeRobot -->|"5-min Cleanup Trigger"| P6
+    P6 <-->|"Release Seats"| D3
+    P6 <-->|"Update Order & Ticket Status"| D4
+    P6 <-->|"Record Refund"| D5
+    P6 -->|"Write Refund / Cancel Audit"| D6
+    P6 -->|"Refund Confirmation"| Customer
+
+=== FILE: Requirement_Specification/Data_Flow_Diagram/Level_1_Diagram/Level_1_Diagram.mermaid ===
+flowchart TD
+    Customer["Customer"]
+    MockPay["Mock Payment Gateway"]
+
+    P41(["4.1<br/>Validate JWT, Role<br/>& Idempotency Key"])
+    P42(["4.2<br/>Atomic Reclaim Expired<br/>Holds & Lock Seats"])
+    P43(["4.3<br/>Calculate Pricing &<br/>Create Order Record"])
+    P51(["5.1<br/>Verify Order Window &<br/>Invoke Mock Payment"])
+    P52(["5.2<br/>Confirm Order, Mark SOLD<br/>& Generate QR E-Tickets"])
+    P53(["5.3<br/>Handle Payment Failure<br/>or Timeout"])
+
+    D1[("D1 Users & Roles")]
+    D3[("D3 Showtime Seats")]
+    D4[("D4 Orders & Order Items")]
+    D4T[("D4 Tickets")]
+    D5[("D5 Payments")]
+
+    Customer -->|"Order Request (seat_ids, Idempotency-Key)"| P41
+    D1 -->|"Verified Customer Identity"| P41
+    D4 -->|"Existing Idempotent Order Check"| P41
+    P41 -->|"Validated Seat List (<= 6)"| P42
+
+    P42 <-->|"SQL Atomic UPDATE + Optimistic Lock"| D3
+    P42 -->|"Seat Conflict Error (409)"| Customer
+    P42 -->|"Locked Seats Snapshot"| P43
+
+    P43 -->|"Insert Order & Order Items"| D4
+    P43 -->|"Order Summary + 5-min Timer"| Customer
+
+    Customer -->|"Pay Request (order_id, scenario)"| P51
+    D4 -->|"Order Status & hold_expires_at"| P51
+    P51 <-->|"Mock Charge Call"| MockPay
+    P51 -->|"Log Payment Attempt"| D5
+
+    P51 -->|"Payment SUCCEEDED"| P52
+    P51 -->|"Payment FAILED / TIMEOUT"| P53
+
+    P52 -->|"Update Order CONFIRMED"| D4
+    P52 -->|"Update Seats SOLD"| D3
+    P52 -->|"Insert QR E-Tickets"| D4T
+    P52 -->|"Confirmed Order & QR E-Tickets"| Customer
+
+    P53 -->|"Update Payment FAILED / UNKNOWN"| D5
+    P53 -->|"Retryable Error Response"| Customer
+
+=== FILE: Requirement_Specification/Entity_Relationship_Diagram/ERD.mermaid ===
+erDiagram
+    USERS ||--o{ USER_ROLES : "assigned"
+    ROLES ||--o{ USER_ROLES : "defines"
+    CINEMAS |o--o{ USER_ROLES : "scopes"
+
+    CINEMAS ||--|{ AUDITORIUMS : "contains"
+    AUDITORIUMS ||--|{ SEATS : "has"
+    MOVIES ||--o{ SHOWTIMES : "scheduled_in"
+    AUDITORIUMS ||--o{ SHOWTIMES : "hosts"
+    SHOWTIMES ||--|{ SHOWTIME_SEATS : "generates"
+    SEATS ||--o{ SHOWTIME_SEATS : "mapped_to"
+
+    USERS ||--o{ ORDERS : "places"
+    SHOWTIMES ||--o{ ORDERS : "booked_for"
+    ORDERS ||--|{ ORDER_ITEMS : "contains"
+    SHOWTIME_SEATS ||--o{ ORDER_ITEMS : "reserved_in"
+    ORDERS |o--o{ SHOWTIME_SEATS : "holds"
+
+    ORDERS ||--o{ TICKETS : "issues"
+    ORDER_ITEMS ||--o| TICKETS : "generates"
+    ORDERS ||--o{ PAYMENTS : "paid_via"
+    ORDERS ||--o{ REFUNDS : "refunded_by"
+    PAYMENTS ||--o{ REFUNDS : "reverses"
+
+    USERS |o--o{ AUDIT_LOGS : "triggers"
+
+=== FILE: Requirement_Specification/Unified_Modeling_Language/UML_Activity_Flow_Diagram/UML_Activity_Flow_Diagram.mermaid ===
+flowchart TD
+    Start(("Start")) --> Login["User Logs In via Supabase Auth (ES256 JWT)"]
+    Login --> Browse["Browse Movies, Cinemas & Showtimes"]
+    Browse --> ViewSeats["View Real-Time Seat Map<br/>(Expired Holds Shown as AVAILABLE)"]
+    ViewSeats --> SelectSeats["Select Seats (1 to 6 Seats)"]
+    SelectSeats --> SubmitOrder["Submit Order with Idempotency-Key"]
+    SubmitOrder --> CheckLock{"Atomic DB Lock Succeeded?<br/>(AVAILABLE or Expired HELD)"}
+
+    CheckLock -->|"No (Conflict 409)"| ShowConflict["Display Seat Unavailable Error"]
+    ShowConflict --> ViewSeats
+
+    CheckLock -->|"Yes"| HoldCreated["Seats Marked HELD (5-min Timer)<br/>Order Created (PENDING_PAYMENT)"]
+    HoldCreated --> PayAction{"User Completes Payment<br/>Before 5-min Expiry?"}
+
+    PayAction -->|"No (Timeout)"| ExpireOrder["Order Marked EXPIRED &<br/>Seats Released (Lazy / UptimeRobot)"]
+    ExpireOrder --> EndFail((("End")))
+
+    PayAction -->|"Yes"| MockPay["Invoke Mock Payment Adapter"]
+    MockPay --> PayResult{"Payment Status?"}
+
+    PayResult -->|"FAILED / TIMEOUT"| RetryCheck{"Within 5-min Hold Window?"}
+    RetryCheck -->|"Yes"| PayAction
+    RetryCheck -->|"No"| ExpireOrder
+
+    PayResult -->|"SUCCEEDED"| ConfirmTx["Atomic TX: Order -> CONFIRMED<br/>Seats -> SOLD, Generate QR E-Tickets"]
+    ConfirmTx --> ViewTicket["Customer Views E-Ticket & QR Code"]
+    ViewTicket --> RefundChoice{"Customer Requests Refund?"}
+
+    RefundChoice -->|"No"| Attend["Attend Showtime (Ticket Scanned -> USED)"]
+    Attend --> EndOk((("End")))
+
+    RefundChoice -->|"Yes"| CheckCutoff{"Showtime Start >= 60 Mins Away?"}
+    CheckCutoff -->|"No"| RejectRefund["Reject Refund (Past 60-min Cutoff)"]
+    RejectRefund --> ViewTicket
+
+    CheckCutoff -->|"Yes"| ProcessRefund["Atomic TX: Record Refund, Order -> REFUNDED,<br/>Tickets -> REFUNDED, Seats -> AVAILABLE, Write Audit Log"]
+    ProcessRefund --> EndRefund((("End")))
+
+=== FILE: Requirement_Specification/Unified_Modeling_Language/UML_Class_Diagram/UML_Class.mermaid ===
+classDiagram
+    class User {
+        +UUID id
+        +String email
+        +String full_name
+        +String phone
+        +Boolean is_active
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class Role {
+        +UUID id
+        +String code
+        +String name
+        +DateTime created_at
+    }
+
+    class UserRole {
+        +UUID id
+        +UUID user_id
+        +UUID role_id
+        +UUID cinema_id
+        +DateTime created_at
+    }
+
+    class Movie {
+        +UUID id
+        +String title
+        +String synopsis
+        +SmallInt duration_minutes
+        +String rating
+        +String language
+        +String poster_url
+        +Date release_date
+        +String status
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class Cinema {
+        +UUID id
+        +String name
+        +String address
+        +String city
+        +String state
+        +Boolean is_active
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class Auditorium {
+        +UUID id
+        +UUID cinema_id
+        +String name
+        +SmallInt total_rows
+        +SmallInt total_cols
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class Seat {
+        +UUID id
+        +UUID auditorium_id
+        +String row_label
+        +SmallInt seat_number
+        +String seat_zone
+        +String seat_type
+        +DateTime created_at
+    }
+
+    class Showtime {
+        +UUID id
+        +UUID movie_id
+        +UUID auditorium_id
+        +DateTime start_time
+        +DateTime end_time
+        +Decimal base_price
+        +String status
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class ShowtimeSeat {
+        +UUID id
+        +UUID showtime_id
+        +UUID seat_id
+        +Decimal price
+        +String status
+        +UUID held_by_order_id
+        +DateTime hold_expires_at
+        +Integer version
+        +DateTime updated_at
+    }
+
+    class Order {
+        +UUID id
+        +String order_no
+        +UUID user_id
+        +UUID showtime_id
+        +String status
+        +Decimal subtotal_amount
+        +Decimal discount_amount
+        +Decimal total_amount
+        +DateTime hold_expires_at
+        +String idempotency_key
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class OrderItem {
+        +UUID id
+        +UUID order_id
+        +UUID showtime_seat_id
+        +Decimal unit_price
+        +DateTime created_at
+    }
+
+    class Ticket {
+        +UUID id
+        +UUID order_id
+        +UUID order_item_id
+        +String ticket_code
+        +String qr_payload
+        +String status
+        +DateTime issued_at
+        +DateTime used_at
+    }
+
+    class Payment {
+        +UUID id
+        +UUID order_id
+        +String provider
+        +String provider_tx_id
+        +Decimal amount
+        +String status
+        +String idempotency_key
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class Refund {
+        +UUID id
+        +UUID order_id
+        +UUID payment_id
+        +Decimal amount
+        +String reason
+        +String status
+        +DateTime created_at
+        +DateTime updated_at
+    }
+
+    class AuditLog {
+        +UUID id
+        +UUID actor_user_id
+        +String action
+        +String entity_type
+        +UUID entity_id
+        +JSONB metadata_json
+        +DateTime created_at
+    }
+
+    User "1" --> "0..*" UserRole : assigned
+    Role "1" --> "0..*" UserRole : defines
+    Cinema "0..1" --> "0..*" UserRole : scopes
+    Cinema "1" --> "1..*" Auditorium : contains
+    Auditorium "1" --> "1..*" Seat : has
+    Movie "1" --> "0..*" Showtime : scheduled_in
+    Auditorium "1" --> "0..*" Showtime : hosts
+    Showtime "1" --> "1..*" ShowtimeSeat : generates
+    Seat "1" --> "0..*" ShowtimeSeat : mapped_to
+    User "1" --> "0..*" Order : places
+    Showtime "1" --> "0..*" Order : booked_for
+    Order "1" --> "1..*" OrderItem : consists_of
+    ShowtimeSeat "1" --> "0..*" OrderItem : referenced_by
+    Order "0..1" --> "0..*" ShowtimeSeat : holds
+    Order "1" --> "0..*" Ticket : issues
+    OrderItem "1" --> "0..1" Ticket : generates
+    Order "1" --> "0..*" Payment : paid_via
+    Order "1" --> "0..*" Refund : refunded_by
+    Payment "1" --> "0..*" Refund : reverses
+    User "0..1" --> "0..*" AuditLog : triggers
+
+=== FILE: Requirement_Specification/Unified_Modeling_Language/UML_Sequence_Diagram/UML_Sequence_Diagram.mermaid ===
+sequenceDiagram
+    actor Customer as Customer (Flutter App)
+    participant Auth as Supabase Auth
+    participant API as FastAPI Backend (Render)
+    participant DB as Supabase PostgreSQL
+    participant Pay as Mock Payment Adapter
+    participant Cron as UptimeRobot (5-min Ping)
+
+    Customer->>Auth: Login / Sign Up
+    Auth-->>Customer: Return ES256 JWT
+    Customer->>API: GET /api/v1/auth/me (Bearer JWT)
+    API->>Auth: Fetch & Cache JWKS (ES256)
+    API->>DB: Lazy Upsert public.users & Default CUSTOMER Role
+    API-->>Customer: User Profile & Roles
+
+    Customer->>API: GET /api/v1/showtimes/{id}/seats
+    API->>DB: Query showtime_seats (Project Expired HELD as AVAILABLE)
+    API-->>Customer: Real-Time Seat Map
+
+    Customer->>API: POST /api/v1/orders (Idempotency-Key, seat_ids <= 6)
+    API->>DB: BEGIN TX & Atomic UPDATE (AVAILABLE or Expired HELD -> HELD, +5 min)
+    alt Seat Conflict / Already Held
+        DB-->>API: Updated Rows < Requested Seats (ROLLBACK)
+        API-->>Customer: 409 Conflict (Seat Unavailable)
+    else Seats Locked Successfully
+        API->>DB: INSERT orders (PENDING_PAYMENT) & order_items (COMMIT)
+        API-->>Customer: 201 Created (Order + 5-min Countdown)
+    end
+
+    Customer->>API: POST /api/v1/orders/{id}/pay (Idempotency-Key, scenario)
+    API->>DB: Verify Order PENDING_PAYMENT & hold_expires_at > NOW()
+    API->>Pay: Execute Mock Payment (SUCCEEDED / FAILED / TIMEOUT)
+    alt Payment SUCCEEDED
+        Pay-->>API: Payment Confirmed (provider_tx_id)
+        API->>DB: UPDATE orders -> CONFIRMED, seats -> SOLD, INSERT tickets (QR)
+        API-->>Customer: 200 OK (Confirmed Order + E-Tickets)
+    else Payment FAILED / TIMEOUT
+        Pay-->>API: Payment Failed / Unknown
+        API->>DB: INSERT payments (FAILED / UNKNOWN)
+        API-->>Customer: 402 / 504 Payment Retryable Until Hold Expires
+    end
+
+    Cron->>API: GET /internal/jobs/cleanup-holds?token=CRON_SECRET
+    API->>DB: Batch Expire Unpaid Orders -> EXPIRED & Release Stale HELD Seats
+    API-->>Cron: 200 OK (Keep-Alive & Cleanup Summary)
+================================================================================
