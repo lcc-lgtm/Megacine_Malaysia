@@ -1,5 +1,6 @@
 ﻿import 'package:flutter/material.dart';
 import 'screens/auth_screen.dart';
+import 'theme/app_theme.dart';
 
 void main() {
   runApp(const MegacineApp());
@@ -13,10 +14,7 @@ class MegacineApp extends StatelessWidget {
     return MaterialApp(
       title: 'Megacine Malaysia',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(useMaterial3: true).copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0F172A),
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent, brightness: Brightness.dark),
-      ),
+      theme: AppTheme.lightTheme,
       home: const AuthScreen(),
     );
   }
