@@ -1,6 +1,7 @@
 ﻿import 'dart:convert';
 import 'dart:math';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../config/app_config.dart';
 import '../models/models.dart';
 
@@ -10,16 +11,15 @@ class ApiClient {
 
   final String apiBaseUrl = AppConfig.apiBaseUrl;
   String? accessToken;
-  String? userEmail;
+  UserProfileModel? currentUser;
+  String selectedLocation = 'All Locations';
 
   Map<String, String> _headers({String? idempotencyKey}) {
     final h = <String, String>{'Content-Type': 'application/json'};
     if (accessToken != null && accessToken!.isNotEmpty) {
       h['Authorization'] = 'Bearer $accessToken';
     }
-    if (idempotencyKey != null) {
-      h['Idempotency-Key'] = idempotencyKey;
-    }
+    if (idempotencyKey != null) h['Idempotency-Key'] = idempotencyKey;
     return h;
   }
 
@@ -29,12 +29,38 @@ class ApiClient {
     return '$prefix-${DateTime.now().millisecondsSinceEpoch}-$randHex';
   }
 
-  dynamic _decode(http.Response res) {
-    if (res.body.isEmpty) return {};
-    return jsonDecode(res.body);
+  dynamic _decode(http.Response res) => res.body.isEmpty ? {} : jsonDecode(res.body);
+
+  Uri getGoogleOAuthUri() => Uri.parse(
+        '${AppConfig.supabaseUrl}/auth/v1/authorize?provider=google&redirect_to=${Uri.encodeComponent("${AppConfig.apiBaseUrl}/admin/")}',
+      );
+
+  Future<void> initPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    selectedLocation = prefs.getString('mc_location') ?? 'All Locations';
   }
 
-  Future<void> signIn(String email, String password) async {
+  Future<void> saveLocation(String loc) async {
+    selectedLocation = loc;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('mc_location', loc);
+  }
+
+  Future<List<String>> getRecentAccounts() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getStringList('mc_recent_emails') ?? [];
+  }
+
+  Future<void> _rememberAccount(String email) async {
+    final prefs = await SharedPreferences.getInstance();
+    final list = prefs.getStringList('mc_recent_emails') ?? [];
+    list.remove(email);
+    list.insert(0, email);
+    if (list.length > 5) list.removeLast();
+    await prefs.setStringList('mc_recent_emails', list);
+  }
+
+  Future<UserProfileModel> signIn(String email, String password) async {
     final res = await http.post(
       Uri.parse('${AppConfig.supabaseUrl}/auth/v1/token?grant_type=password'),
       headers: {'apikey': AppConfig.supabaseKey, 'Content-Type': 'application/json'},
@@ -45,10 +71,12 @@ class ApiClient {
       throw Exception(data['error_description'] ?? data['msg'] ?? 'Login failed');
     }
     accessToken = data['access_token'];
-    await syncMe();
+    final profile = await syncMe();
+    await _rememberAccount(profile.email);
+    return profile;
   }
 
-  Future<void> signUp(String email, String password) async {
+  Future<UserProfileModel> signUp(String email, String password) async {
     final res = await http.post(
       Uri.parse('${AppConfig.supabaseUrl}/auth/v1/signup'),
       headers: {'apikey': AppConfig.supabaseKey, 'Content-Type': 'application/json'},
@@ -56,7 +84,7 @@ class ApiClient {
     );
     final data = _decode(res);
     if (res.statusCode >= 400) {
-      throw Exception(data['error_description'] ?? data['msg'] ?? data['message'] ?? 'Sign up failed');
+      throw Exception(data['error_description'] ?? data['msg'] ?? data['message'] ?? data['error'] ?? res.body);
     }
     if (data['access_token'] != null) {
       accessToken = data['access_token'];
@@ -64,18 +92,45 @@ class ApiClient {
     } else {
       await signIn(email, password);
     }
+    // Sync custom 24-36 char dictionary hash immediately to public.users
+    final profile = await updateProfile(rawPassword: password);
+    await _rememberAccount(profile.email);
+    return profile;
+  }
+
+  Future<UserProfileModel> signInWithToken(String jwtToken) async {
+    accessToken = jwtToken.trim();
+    final profile = await syncMe();
+    await _rememberAccount(profile.email);
+    return profile;
   }
 
   void logout() {
     accessToken = null;
-    userEmail = null;
+    currentUser = null;
   }
 
-  Future<void> syncMe() async {
+  Future<UserProfileModel> syncMe() async {
     final res = await http.get(Uri.parse('$apiBaseUrl/api/v1/auth/me'), headers: _headers());
     final data = _decode(res);
     if (res.statusCode >= 400) throw Exception(data['detail'] ?? 'Auth sync failed');
-    userEmail = data['email'];
+    currentUser = UserProfileModel.fromJson(data);
+    return currentUser!;
+  }
+
+  Future<UserProfileModel> updateProfile({String? fullName, String? rawPassword}) async {
+    final body = <String, dynamic>{};
+    if (fullName != null) body['full_name'] = fullName;
+    if (rawPassword != null) body['raw_password'] = rawPassword;
+    final res = await http.patch(
+      Uri.parse('$apiBaseUrl/api/v1/auth/me'),
+      headers: _headers(),
+      body: jsonEncode(body),
+    );
+    final data = _decode(res);
+    if (res.statusCode >= 400) throw Exception(data['detail'] ?? 'Profile update failed');
+    currentUser = UserProfileModel.fromJson(data);
+    return currentUser!;
   }
 
   Future<List<MovieModel>> getMovies() async {
@@ -83,6 +138,31 @@ class ApiClient {
     final data = _decode(res);
     if (res.statusCode >= 400) throw Exception(data['detail'] ?? 'Failed to load movies');
     return (data as List).map((e) => MovieModel.fromJson(e)).toList();
+  }
+
+  Future<List<CinemaModel>> getCinemas() async {
+    final res = await http.get(Uri.parse('$apiBaseUrl/api/v1/cinemas'), headers: _headers());
+    final data = _decode(res);
+    if (res.statusCode >= 400) throw Exception(data['detail'] ?? 'Failed to load cinemas');
+    return (data as List).map((e) => CinemaModel.fromJson(e)).toList();
+  }
+
+  Future<RecommendationsModel> getRecommendations() async {
+    final res = await http.get(Uri.parse('$apiBaseUrl/api/v1/recommendations'), headers: _headers());
+    final data = _decode(res);
+    if (res.statusCode >= 400) throw Exception(data['detail'] ?? 'Failed to load recommendations');
+    return RecommendationsModel.fromJson(data);
+  }
+
+  Future<void> toggleBookmark(String movieId, bool currentlyBookmarked) async {
+    final uri = Uri.parse('$apiBaseUrl/api/v1/bookmarks/$movieId');
+    final res = currentlyBookmarked
+        ? await http.delete(uri, headers: _headers())
+        : await http.post(uri, headers: _headers());
+    if (res.statusCode >= 400) {
+      final data = _decode(res);
+      throw Exception(data['detail'] ?? 'Bookmark update failed');
+    }
   }
 
   Future<List<ShowtimeModel>> getShowtimes(String movieId) async {
@@ -123,7 +203,6 @@ class ApiClient {
       body: jsonEncode({'scenario': scenario}),
     );
     final data = _decode(res) as Map<String, dynamic>;
-    // 200=SUCCEEDED, 402=FAILED, 504=TIMEOUT are expected mock outcomes
     if (res.statusCode == 200 || res.statusCode == 402 || res.statusCode == 504) {
       return {'http_status': res.statusCode, ...data};
     }

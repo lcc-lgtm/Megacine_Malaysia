@@ -8,9 +8,66 @@ String formatMYT(String? isoStr) {
   return '${dt.year}-${two(dt.month)}-${two(dt.day)} ${two(dt.hour)}:${two(dt.minute)} MYT';
 }
 
+class UserProfileModel {
+  final String id, email;
+  final String? fullName;
+  final bool hasCustomHash;
+
+  UserProfileModel({
+    required this.id,
+    required this.email,
+    this.fullName,
+    this.hasCustomHash = false,
+  });
+
+  factory UserProfileModel.fromJson(Map<String, dynamic> j) => UserProfileModel(
+        id: j['id'],
+        email: j['email'],
+        fullName: j['full_name'],
+        hasCustomHash: j['has_custom_hash'] == true,
+      );
+}
+
+class AuditoriumBriefModel {
+  final String id, name;
+  final int totalRows, totalCols;
+
+  AuditoriumBriefModel({required this.id, required this.name, required this.totalRows, required this.totalCols});
+
+  factory AuditoriumBriefModel.fromJson(Map<String, dynamic> j) => AuditoriumBriefModel(
+        id: j['id'],
+        name: j['name'],
+        totalRows: j['total_rows'] ?? 0,
+        totalCols: j['total_cols'] ?? 0,
+      );
+}
+
+class CinemaModel {
+  final String id, name, address, city, state;
+  final List<AuditoriumBriefModel> auditoriums;
+
+  CinemaModel({
+    required this.id,
+    required this.name,
+    required this.address,
+    required this.city,
+    required this.state,
+    required this.auditoriums,
+  });
+
+  factory CinemaModel.fromJson(Map<String, dynamic> j) => CinemaModel(
+        id: j['id'],
+        name: j['name'],
+        address: j['address'] ?? '',
+        city: j['city'] ?? '',
+        state: j['state'] ?? '',
+        auditoriums: (j['auditoriums'] as List? ?? []).map((e) => AuditoriumBriefModel.fromJson(e)).toList(),
+      );
+}
+
 class MovieModel {
   final String id, title, language, status;
-  final String? synopsis, rating, posterUrl, releaseDate;
+  final String? synopsis, rating, posterUrl, genre, trailerUrl, selectionWeek, releaseDate;
   final int durationMinutes;
 
   MovieModel({
@@ -22,6 +79,9 @@ class MovieModel {
     this.synopsis,
     this.rating,
     this.posterUrl,
+    this.genre,
+    this.trailerUrl,
+    this.selectionWeek,
     this.releaseDate,
   });
 
@@ -33,8 +93,29 @@ class MovieModel {
         rating: j['rating'],
         language: j['language'] ?? 'English',
         posterUrl: j['poster_url'],
+        genre: j['genre'],
+        trailerUrl: j['trailer_url'],
+        selectionWeek: j['selection_week'],
         releaseDate: j['release_date'],
         status: j['status'] ?? 'NOW_SHOWING',
+      );
+}
+
+class RecommendationsModel {
+  final List<String> preferredGenres;
+  final Set<String> bookmarkedMovieIds;
+  final List<MovieModel> movies;
+
+  RecommendationsModel({
+    required this.preferredGenres,
+    required this.bookmarkedMovieIds,
+    required this.movies,
+  });
+
+  factory RecommendationsModel.fromJson(Map<String, dynamic> j) => RecommendationsModel(
+        preferredGenres: List<String>.from(j['preferred_genres'] ?? []),
+        bookmarkedMovieIds: Set<String>.from(j['bookmarked_movie_ids'] ?? []),
+        movies: (j['movies'] as List? ?? []).map((e) => MovieModel.fromJson(e)).toList(),
       );
 }
 
