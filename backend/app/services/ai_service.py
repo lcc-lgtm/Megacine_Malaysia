@@ -78,6 +78,7 @@ class AIService:
                 status_code=status.HTTP_502_BAD_GATEWAY,
                 detail=f"Gemini API ({target_model}) error {last_status}: {last_err}",
             )
+
         data = resp.json()
         try:
             raw_text = data["candidates"][0]["content"]["parts"][0]["text"]
@@ -130,14 +131,14 @@ class AIService:
         ]
 
         system_prompt = (
-            "You are Megacine Malaysia's friendly Cinema AI Concierge. "
-            "Reply in the exact same language the user uses (Chinese or English). "
-            "Ground answers strictly in the provided real-time movies, user orders, and policies:\n"
+            "You are Megacine Malaysia's official Cinema AI Concierge. "
+            "Always respond strictly in clear, concise, professional English regardless of input language. "
+            "Ground all answers in the provided real-time movies, user orders, and official policies:\n"
             "- Seat hold timeout: 5 minutes.\n"
-            "- Max seats per order: 6 seats.\n"
-            "- Refund cutoff: full refund allowed up to 60 minutes before showtime.\n"
+            "- Maximum seats per order: 6 seats.\n"
+            "- Refund cutoff: full refund is allowed up to 60 minutes before showtime.\n"
             "Return STRICT JSON with exactly two keys:\n"
-            '{"reply": "concise helpful text", "config": {"recommended_movie_ids": ["uuid1"], "intent": "movie_recommendation|policy_support|order_help|general"}}'
+            '{"reply": "concise helpful English response", "config": {"recommended_movie_ids": ["uuid1"], "intent": "movie_recommendation|policy_support|order_help|general"}}'
         )
         user_payload = json.dumps(
             {
@@ -194,10 +195,11 @@ class AIService:
             )
 
         system_prompt = (
-            "You are a cinema seat-selection AI. Pick the best contiguous seats from the provided AVAILABLE list "
-            "matching the requested party_size and user preference (prefer middle-back center seats when unspecified). "
+            "You are a cinema seat-selection AI. Always respond strictly in English. "
+            "Pick the best contiguous seats from the provided AVAILABLE list matching the requested party_size "
+            "and user preference (prefer middle-back center seats when unspecified). "
             "Never invent seat IDs. Return STRICT JSON:\n"
-            '{"reply": "short explanation why these seats are great", "config": {"selected_seat_ids": ["uuid1", "uuid2"]}}'
+            '{"reply": "short English explanation why these seats are great", "config": {"selected_seat_ids": ["uuid1", "uuid2"]}}'
         )
         user_payload = json.dumps(
             {"party_size": party_size, "preference": preference, "available_seats": avail_list},
@@ -234,8 +236,9 @@ class AIService:
     async def autofill_movie(self, title: str, notes: str, model: str | None = None) -> AIResponseDTO:
         system_prompt = (
             "You are a cinema catalog assistant for Malaysia (FINAS ratings: U, P12, 13, 16, 18). "
-            "Given a movie title and optional notes, generate accurate catalog metadata. Return STRICT JSON:\n"
-            '{"reply": "short confirmation message", "config": {"synopsis": "2-sentence engaging plot", '
+            "Always respond strictly in English. Given a movie title and optional notes, generate accurate catalog metadata. "
+            "Return STRICT JSON:\n"
+            '{"reply": "short English confirmation message", "config": {"synopsis": "2-sentence engaging English plot", '
             '"genre": "Sci-Fi|Action|Drama|Comedy|Horror|Animation|Thriller", "rating": "P12", '
             '"language": "English", "duration_minutes": 120}}'
         )
