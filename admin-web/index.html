@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Megacine Malaysia — Cinema Admin Portal</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=2" />
 </head>
 <body>
   <header class="topbar">
@@ -71,7 +71,15 @@
               </select>
             </div>
             <div class="field" style="grid-column:1 / -1;"><label>Synopsis</label><input name="synopsis" placeholder="Short plot summary..." /></div>
-            <div><button type="submit" class="btn">+ Add Movie</button></div>
+            <div style="grid-column: 1 / -1; display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:4px;">
+              <button type="submit" class="btn">+ Add Movie</button>
+              <button type="button" id="aiAutofillBtn" class="btn btn-secondary">? AI Auto-Fill</button>
+              <select id="aiModelSelect" style="padding:8px 10px; font-size:0.85rem;">
+                <option value="gemini-3.5-flash-lite">gemini-3.5-flash-lite</option>
+                <option value="gemini-3.8-flash">gemini-3.8-flash</option>
+                <option value="gemini-4-hydrogen">gemini-4-hydrogen</option>
+              </select>
+            </div>
           </form>
         </div>
         <div class="card">
@@ -182,8 +190,8 @@
 
   <div id="toast" class="toast hidden"></div>
 
-  <script src="config.js"></script>
-  <script src="app.js"></script>
+  <script src="config.js?v=2"></script>
+  <script src="app.js?v=2"></script>
 </body>
 </html>
 

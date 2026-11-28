@@ -17,7 +17,7 @@ settings = get_settings()
 
 app = FastAPI(
     title="Megacine Malaysia API",
-    version="1.0.0",
+    version="1.1.0",
     docs_url="/docs",
     redoc_url="/redoc",
 )

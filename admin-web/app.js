@@ -261,6 +261,41 @@ document.addEventListener("DOMContentLoaded", () => {
     location.reload();
   });
 
+  $("aiAutofillBtn").addEventListener("click", async () => {
+    const form = $("createMovieForm");
+    const titleInput = form.querySelector('[name="title"]');
+    const title = titleInput ? titleInput.value.trim() : "";
+    if (!title) return showToast("Enter a Movie Title first, then click ? AI Auto-Fill!", "error");
+
+    const modelSel = $("aiModelSelect");
+    const model = modelSel ? modelSel.value : "gemini-3.5-flash-lite";
+    const btn = $("aiAutofillBtn");
+    btn.disabled = true;
+    btn.textContent = "? Thinking...";
+    try {
+      const res = await apiFetch("/api/v1/ai/admin/autofill-movie", {
+        method: "POST",
+        body: JSON.stringify({ title, model }),
+      });
+      const cfg = res.config || {};
+      const setVal = (name, val) => {
+        const el = form.querySelector(`[name="${name}"]`);
+        if (el && val !== undefined && val !== null) el.value = val;
+      };
+      setVal("synopsis", cfg.synopsis);
+      setVal("genre", cfg.genre);
+      setVal("rating", cfg.rating);
+      setVal("language", cfg.language);
+      setVal("duration_minutes", cfg.duration_minutes);
+      showToast(`? ${res.reply || "Auto-filled!"} (${res.model_used || model})`);
+    } catch (err) {
+      showToast(err.message, "error");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "? AI Auto-Fill";
+    }
+  });
+
   $("createMovieForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     const fd = new FormData(e.target);
