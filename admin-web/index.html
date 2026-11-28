@@ -265,6 +265,71 @@
     </div>
   </div>
 
+  <!-- Edit Movie Dialog -->
+  <dialog id="editMovieDialog" class="edit-dialog" aria-labelledby="editMovieDialogTitle">
+    <div class="edit-dialog-header">
+      <h3 id="editMovieDialogTitle">Edit Movie</h3>
+      <button type="button" id="closeEditMovieBtn" class="btn btn-secondary btn-sm" aria-label="Close edit movie dialog">Close</button>
+    </div>
+    <div class="edit-dialog-body">
+      <div id="editMovieError" class="edit-dialog-error hidden" role="alert"></div>
+      <form id="editMovieForm" class="edit-dialog-form" novalidate>
+        <div class="field">
+          <label for="editMovieTitle">Title *</label>
+          <input id="editMovieTitle" name="title" type="text" required maxlength="200" />
+        </div>
+        <div class="field">
+          <label for="editMovieDuration">Duration (mins) *</label>
+          <input id="editMovieDuration" name="duration_minutes" type="number" class="tabular" min="1" max="600" required />
+        </div>
+        <div class="field">
+          <label for="editMovieRating">Rating</label>
+          <input id="editMovieRating" name="rating" type="text" maxlength="15" placeholder="P12 / 16 / U" />
+        </div>
+        <div class="field">
+          <label for="editMovieLanguage">Language</label>
+          <input id="editMovieLanguage" name="language" type="text" maxlength="50" />
+        </div>
+        <div class="field">
+          <label for="editMovieGenre">Genre</label>
+          <input id="editMovieGenre" name="genre" type="text" maxlength="50" placeholder="Sci-Fi / Action / Drama" />
+        </div>
+        <div class="field">
+          <label for="editMovieStatus">Status</label>
+          <select id="editMovieStatus" name="status">
+            <option value="NOW_SHOWING">NOW_SHOWING</option>
+            <option value="COMING_SOON">COMING_SOON</option>
+            <option value="ARCHIVED">ARCHIVED</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="editMovieSelectionWeek">Selection Week</label>
+          <input id="editMovieSelectionWeek" name="selection_week" type="text" class="tabular" maxlength="20" placeholder="2026-W48" />
+        </div>
+        <div class="field">
+          <label for="editMovieReleaseDate">Release Date</label>
+          <input id="editMovieReleaseDate" name="release_date" type="date" class="tabular" />
+        </div>
+        <div class="field span-full">
+          <label for="editMoviePosterUrl">Poster URL</label>
+          <input id="editMoviePosterUrl" name="poster_url" type="url" maxlength="500" placeholder="https://..." />
+        </div>
+        <div class="field span-full">
+          <label for="editMovieTrailerUrl">YouTube Trailer URL</label>
+          <input id="editMovieTrailerUrl" name="trailer_url" type="url" maxlength="500" placeholder="https://youtu.be/..." />
+        </div>
+        <div class="field span-full">
+          <label for="editMovieSynopsis">Synopsis</label>
+          <textarea id="editMovieSynopsis" name="synopsis" rows="3" placeholder="Short plot summary..."></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="edit-dialog-footer">
+      <button type="button" id="cancelEditMovieBtn" class="btn btn-secondary">Cancel</button>
+      <button type="submit" form="editMovieForm" id="saveEditMovieBtn" class="btn btn-primary">Save Changes</button>
+    </div>
+  </dialog>
+
   <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
   <script src="config.js?v=3"></script>

@@ -113,7 +113,10 @@ async function loadMovies() {
       <td>${escapeHtml(m.language)}</td>
       <td>${escapeHtml(m.rating || "-")}</td>
       <td><span class="badge ${badge}">${escapeHtml(m.status)}</span></td>
-      <td style="text-align:right;"><button class="btn btn-secondary btn-sm" onclick="toggleMovieStatus('${m.id}','${nextStatus}')">Set ${nextStatus}</button></td>
+      <td style="text-align:right; white-space:nowrap;">
+        <button type="button" class="btn btn-secondary btn-sm" data-action="edit-movie" data-movie-id="${escapeHtml(m.id)}" aria-label="Edit ${escapeHtml(m.title)}">Edit</button>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="toggleMovieStatus('${m.id}','${nextStatus}')">Set ${nextStatus}</button>
+      </td>
     </tr>`;
   }).join("") || `<tr><td colspan="6" class="table-loading">No movies found.</td></tr>`;
 
@@ -359,6 +362,121 @@ document.addEventListener("DOMContentLoaded", () => {
   $("orderStatusFilter").addEventListener("change", loadOrders);
   $("refreshOrdersBtn").addEventListener("click", loadOrders);
   $("closeSeatModal").addEventListener("click", () => $("seatModal").classList.add("hidden"));
+
+  // ---------- Edit Movie Dialog ----------
+  let editingMovieId = null;
+  let isSavingMovie = false;
+  const editDialog = $("editMovieDialog");
+  const editErrorEl = $("editMovieError");
+  const saveEditBtn = $("saveEditMovieBtn");
+
+  function setEditDialogError(msg) {
+    if (!msg) {
+      editErrorEl.textContent = "";
+      editErrorEl.classList.add("hidden");
+    } else {
+      editErrorEl.textContent = msg;
+      editErrorEl.classList.remove("hidden");
+    }
+  }
+
+  function openEditMovieDialog(movieId) {
+    const movie = state.movies.find((m) => String(m.id) === String(movieId));
+    if (!movie) return showToast("Movie record not found", "error");
+    editingMovieId = movie.id;
+    setEditDialogError("");
+    $("editMovieTitle").value = movie.title ?? "";
+    $("editMovieDuration").value = movie.duration_minutes ?? "";
+    $("editMovieRating").value = movie.rating ?? "";
+    $("editMovieLanguage").value = movie.language ?? "";
+    $("editMovieGenre").value = movie.genre ?? "";
+    $("editMovieStatus").value = movie.status ?? "COMING_SOON";
+    $("editMovieSelectionWeek").value = movie.selection_week ?? "";
+    $("editMovieReleaseDate").value = movie.release_date ? String(movie.release_date).slice(0, 10) : "";
+    $("editMoviePosterUrl").value = movie.poster_url ?? "";
+    $("editMovieTrailerUrl").value = movie.trailer_url ?? "";
+    $("editMovieSynopsis").value = movie.synopsis ?? "";
+    editDialog.showModal();
+  }
+
+  function closeEditMovieDialog() {
+    if (isSavingMovie) return;
+    editingMovieId = null;
+    setEditDialogError("");
+    editDialog.close();
+  }
+
+  $("moviesTableBody").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-action='edit-movie']");
+    if (btn) openEditMovieDialog(btn.dataset.movieId);
+  });
+
+  $("closeEditMovieBtn").addEventListener("click", closeEditMovieDialog);
+  $("cancelEditMovieBtn").addEventListener("click", closeEditMovieDialog);
+  editDialog.addEventListener("cancel", (e) => {
+    if (isSavingMovie) e.preventDefault();
+  });
+
+  $("editMovieForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (isSavingMovie || !editingMovieId) return;
+
+    const title = $("editMovieTitle").value.trim();
+    const durationRaw = $("editMovieDuration").value.trim();
+    const durationNum = Number(durationRaw);
+    if (!title) {
+      setEditDialogError("Title is required.");
+      $("editMovieTitle").focus();
+      return;
+    }
+    if (!Number.isInteger(durationNum) || durationNum < 1 || durationNum > 600) {
+      setEditDialogError("Duration must be a whole number between 1 and 600 minutes.");
+      $("editMovieDuration").focus();
+      return;
+    }
+
+    const optStr = (val) => {
+      const trimmed = val.trim();
+      return trimmed === "" ? null : trimmed;
+    };
+
+    const payload = {
+      title,
+      duration_minutes: durationNum,
+      rating: optStr($("editMovieRating").value),
+      language: optStr($("editMovieLanguage").value),
+      genre: optStr($("editMovieGenre").value),
+      status: $("editMovieStatus").value,
+      selection_week: optStr($("editMovieSelectionWeek").value),
+      release_date: optStr($("editMovieReleaseDate").value),
+      poster_url: optStr($("editMoviePosterUrl").value),
+      trailer_url: optStr($("editMovieTrailerUrl").value),
+      synopsis: optStr($("editMovieSynopsis").value),
+    };
+
+    isSavingMovie = true;
+    saveEditBtn.disabled = true;
+    saveEditBtn.textContent = "Saving...";
+    setEditDialogError("");
+
+    try {
+      await apiFetch(`/api/v1/admin/movies/${editingMovieId}`, {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+      });
+      isSavingMovie = false;
+      saveEditBtn.disabled = false;
+      saveEditBtn.textContent = "Save Changes";
+      closeEditMovieDialog();
+      showToast("Movie updated successfully");
+      await loadMovies();
+    } catch (err) {
+      isSavingMovie = false;
+      saveEditBtn.disabled = false;
+      saveEditBtn.textContent = "Save Changes";
+      setEditDialogError(err.message || "Failed to update movie.");
+    }
+  });
 
   verifySessionAndLoad();
 });

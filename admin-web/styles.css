@@ -33,7 +33,7 @@
   --info-bg: rgba(2, 132, 199, 0.12);
   --gray-badge: #64748B;
   --gray-badge-bg: rgba(100, 116, 139, 0.12);
-  --vip: #8B5CF6;
+  --vip: #D4A853;
 
   /* Cinema Dark Stage (Auditorium Seat Map) */
   --stage-bg: #191918;
@@ -626,8 +626,8 @@ tbody tr:hover {
 }
 
 .seat-vip {
-  box-shadow: inset 0 -3px 0 var(--vip);
-  border-color: rgba(139, 92, 246, 0.6);
+  border-color: var(--vip);
+  border-width: 1.5px;
 }
 
 .legend {
@@ -743,5 +743,110 @@ tbody tr:hover {
   }
   .card {
     padding: 16px;
+  }
+  .edit-dialog {
+    width: calc(100vw - 24px);
+    max-height: calc(100vh - 24px);
+  }
+  .edit-dialog-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Edit Movie Dialog (<dialog>)
+   -------------------------------------------------------------------------- */
+.edit-dialog {
+  margin: auto;
+  width: min(680px, calc(100vw - 32px));
+  max-height: calc(100vh - 48px);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  padding: 0;
+  box-shadow: 0 20px 50px rgba(25, 25, 24, 0.18);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-dialog:not([open]) {
+  display: none;
+}
+
+.edit-dialog::backdrop {
+  background: rgba(25, 25, 24, 0.48);
+  backdrop-filter: blur(2px);
+  transition: opacity 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.edit-dialog[open] {
+  animation: dialogIn 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dialogIn {
+  from { opacity: 0; transform: translateY(6px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.edit-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.edit-dialog-header h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.edit-dialog-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.edit-dialog-error {
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(200, 62, 43, 0.35);
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.edit-dialog-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 16px;
+}
+
+.edit-dialog-form .span-full {
+  grid-column: 1 / -1;
+}
+
+.edit-dialog-form .tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.edit-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  background: var(--surface-alt);
+}
+
+@media (max-width: 640px) {
+  .edit-dialog-form {
+    grid-template-columns: 1fr;
   }
 }
