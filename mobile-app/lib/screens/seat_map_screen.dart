@@ -69,12 +69,115 @@ class _SeatMapScreenState extends State<SeatMapScreen> {
     }
   }
 
+  Future<void> _openAiSeatPicker() async {
+    int partySize = 2;
+    String selectedModel = 'gemini-3.5-flash-lite';
+    const models = ['gemini-3.5-flash-lite', 'gemini-3.8-flash', 'gemini-4-hydrogen'];
+    final prefCtrl = TextEditingController(text: 'Center back seats with best view');
+    bool picking = false;
+
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDlg) => AlertDialog(
+          title: const Text('? AI Smart Seat Picker'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Seats (1?6):'),
+                  DropdownButton<int>(
+                    value: partySize,
+                    items: [1, 2, 3, 4, 5, 6]
+                        .map((n) => DropdownMenuItem(value: n, child: Text('$n seat${n > 1 ? "s" : ""}')))
+                        .toList(),
+                    onChanged: picking ? null : (v) => setDlg(() { partySize = v ?? 2; }),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text('Model:'),
+                  DropdownButton<String>(
+                    value: selectedModel,
+                    items: models
+                        .map((m) => DropdownMenuItem(value: m, child: Text(m, style: const TextStyle(fontSize: 12))))
+                        .toList(),
+                    onChanged: picking ? null : (v) => setDlg(() { selectedModel = v ?? selectedModel; }),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: prefCtrl,
+                decoration: const InputDecoration(
+                  labelText: 'Preference prompt (e.g., VIP couple, aisle)',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: picking ? null : () => Navigator.pop(ctx), child: const Text('Cancel')),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.auto_awesome, size: 18),
+              label: Text(picking ? 'Picking...' : 'Pick Best Seats'),
+              onPressed: picking
+                  ? null
+                  : () async {
+                      setDlg(() { picking = true; });
+                      try {
+                        final res = await ApiClient.instance.aiPickSeats(
+                          widget.showtime.id,
+                          partySize,
+                          prefCtrl.text.trim(),
+                          model: selectedModel,
+                        );
+                        final cfg = (res['config'] as Map<String, dynamic>?) ?? {};
+                        final ids = List<String>.from(cfg['selected_seat_ids'] ?? []);
+                        if (!mounted) return;
+                        Navigator.pop(ctx);
+                        setState(() {
+                          _selectedIds
+                            ..clear()
+                            ..addAll(ids);
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('? ${res["reply"]}'), backgroundColor: Colors.blueAccent),
+                        );
+                      } catch (e) {
+                        setDlg(() { picking = false; });
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(e.toString().replaceFirst('Exception: ', '')), backgroundColor: Colors.redAccent),
+                          );
+                        }
+                      }
+                    },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.showtime.movieTitle} (${widget.showtime.auditoriumName})'),
-        actions: [IconButton(icon: const Icon(Icons.refresh), onPressed: _loadSeats)],
+        actions: [
+          TextButton.icon(
+            icon: const Icon(Icons.auto_awesome, color: Colors.amber, size: 18),
+            label: const Text('AI Pick', style: TextStyle(color: Colors.amber)),
+            onPressed: (_loading || _seatMap == null) ? null : _openAiSeatPicker,
+          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadSeats),
+        ],
       ),
       body: _loading || _seatMap == null
           ? const Center(child: CircularProgressIndicator())

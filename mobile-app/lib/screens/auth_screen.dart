@@ -1,5 +1,5 @@
 ﻿import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../services/google_oauth_helper.dart';
 import '../services/api_client.dart';
 import '../utils/password_helper.dart';
 import 'home_screen.dart';
@@ -81,44 +81,12 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Future<void> _googleSignIn() async {
-    final uri = ApiClient.instance.getGoogleOAuthUri();
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
-    if (!mounted) return;
-    final tokenCtrl = TextEditingController();
-    final token = await showDialog<String>(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Complete Google Sign-In'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Finish signing in with Google in your browser, then paste the access_token from the redirected URL:',
-              style: TextStyle(fontSize: 13),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              controller: tokenCtrl,
-              decoration: const InputDecoration(
-                labelText: 'Google / Supabase Access Token',
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
-          ElevatedButton(onPressed: () => Navigator.pop(context, tokenCtrl.text.trim()), child: const Text('Continue')),
-        ],
-      ),
-    );
-    if (token == null || token.isEmpty) return;
     setState(() {
       _loading = true;
       _errorText = null;
     });
     try {
+      final token = await GoogleOAuthHelper.signInWithGoogle();
       final profile = await ApiClient.instance.signInWithToken(token);
       if (!mounted) return;
       _routeAfterAuth(profile.email, profile.fullName);

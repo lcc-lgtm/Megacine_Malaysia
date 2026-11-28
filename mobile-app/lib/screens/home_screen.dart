@@ -1,6 +1,8 @@
 ﻿import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../services/api_client.dart';
+import '../utils/password_helper.dart';
+import 'ai_assistant_screen.dart';
 import 'auth_screen.dart';
 import 'film_detail_screen.dart';
 import 'my_tickets_screen.dart';
@@ -90,6 +92,82 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _showSetPasswordDialog() async {
+    final pwdCtrl = TextEditingController();
+    String suggested = PasswordHelper.generateRandom12();
+    bool saving = false;
+    String? errMsg;
+
+    await showDialog<void>(
+      context: context,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setDlgState) => AlertDialog(
+          title: const Text('Set / Update Login Password'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Link a password to your account so you can sign in with either Google or Email + Password using the same profile.',
+                style: TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: pwdCtrl,
+                maxLength: 12,
+                decoration: const InputDecoration(
+                  labelText: 'New Password (8?12 chars: a-z, A-Z, 0-9, #, \$)',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(child: Text('Suggested: $suggested', style: const TextStyle(fontSize: 12, fontFamily: 'monospace'))),
+                  TextButton(
+                    onPressed: () => setDlgState(() { pwdCtrl.text = suggested; }),
+                    child: const Text('Apply'),
+                  ),
+                ],
+              ),
+              if (errMsg != null)
+                Text(errMsg!, style: const TextStyle(color: Colors.redAccent, fontSize: 12)),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: saving ? null : () => Navigator.pop(ctx), child: const Text('Cancel')),
+            ElevatedButton(
+              onPressed: saving
+                  ? null
+                  : () async {
+                      final p = pwdCtrl.text;
+                      if (!PasswordHelper.isValid(p)) {
+                        setDlgState(() { errMsg = 'Must be 8?12 chars using only a-z, A-Z, 0-9, #, \$'; });
+                        return;
+                      }
+                      setDlgState(() { saving = true; errMsg = null; });
+                      try {
+                        await ApiClient.instance.setLoginPassword(p);
+                        if (!mounted) return;
+                        Navigator.pop(ctx);
+                        setState(() {});
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Password linked! Custom 24?36 char hash saved.'), backgroundColor: Colors.green),
+                        );
+                      } catch (e) {
+                        setDlgState(() {
+                          saving = false;
+                          errMsg = e.toString().replaceFirst('Exception: ', '');
+                        });
+                      }
+                    },
+              child: Text(saving ? 'Saving...' : 'Save Password'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,6 +184,20 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: _tabIndex == 0 ? _buildHomeTab() : _buildSettingsTab(),
+      floatingActionButton: _tabIndex == 0
+          ? FloatingActionButton.extended(
+              icon: const Icon(Icons.auto_awesome),
+              label: const Text('AI Concierge'),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => AiAssistantScreen(
+                    allMovies: _allMovies,
+                    bookmarkedIds: _recs?.bookmarkedMovieIds ?? {},
+                  ),
+                ),
+              ),
+            )
+          : null,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tabIndex,
         onDestinationSelected: (idx) => setState(() { _tabIndex = idx; }),
@@ -297,11 +389,34 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const Divider(height: 1),
               ListTile(
+                leading: const Icon(Icons.auto_awesome, color: Colors.cyanAccent),
+                title: const Text('AI Help & Policy Assistant'),
+                subtitle: const Text('Ask about refunds, seat holds & your orders'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => AiAssistantScreen(
+                      allMovies: _allMovies,
+                      bookmarkedIds: _recs?.bookmarkedMovieIds ?? {},
+                    ),
+                  ),
+                ),
+              ),
+              const Divider(height: 1),
+              ListTile(
                 leading: const Icon(Icons.theaters, color: Colors.amber),
                 title: const Text('Participating Theaters'),
                 subtitle: const Text('Explore Megacine locations & halls'),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ParticipatingTheatersScreen())),
+              ),
+              const Divider(height: 1),
+              ListTile(
+                leading: const Icon(Icons.key, color: Colors.purpleAccent),
+                title: const Text('Set / Update Login Password'),
+                subtitle: const Text('Enable Email + Password login on this same account'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: _showSetPasswordDialog,
               ),
               const Divider(height: 1),
               ListTile(

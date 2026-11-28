@@ -118,6 +118,25 @@ class ApiClient {
     return currentUser!;
   }
 
+  Future<UserProfileModel> setLoginPassword(String newPassword) async {
+    // 1. Bind password to the exact same Supabase user_id (merges Google + Email/Password login)
+    final sbRes = await http.put(
+      Uri.parse('${AppConfig.supabaseUrl}/auth/v1/user'),
+      headers: {
+        'apikey': AppConfig.supabaseKey,
+        'Authorization': 'Bearer $accessToken',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'password': newPassword}),
+    );
+    final sbData = _decode(sbRes);
+    if (sbRes.statusCode >= 400) {
+      throw Exception(sbData['msg'] ?? sbData['message'] ?? sbData['error_description'] ?? 'Failed to set password');
+    }
+    // 2. Sync 24-36 char custom dictionary hash to public.users
+    return await updateProfile(rawPassword: newPassword);
+  }
+
   Future<UserProfileModel> updateProfile({String? fullName, String? rawPassword}) async {
     final body = <String, dynamic>{};
     if (fullName != null) body['full_name'] = fullName;
@@ -221,6 +240,33 @@ class ApiClient {
     final data = _decode(res);
     if (res.statusCode >= 400) throw Exception(data['detail'] ?? 'Failed to load order');
     return OrderModel.fromJson(data);
+  }
+
+  Future<Map<String, dynamic>> aiChat(String prompt, {String? location, String? model}) async {
+    final res = await http.post(
+      Uri.parse('$apiBaseUrl/api/v1/ai/chat'),
+      headers: _headers(),
+      body: jsonEncode({'prompt': prompt, 'location': location, if (model != null) 'model': model}),
+    );
+    final data = _decode(res);
+    if (res.statusCode >= 400) throw Exception(data['detail'] ?? 'AI chat failed');
+    return data as Map<String, dynamic>;
+  }
+
+  Future<Map<String, dynamic>> aiPickSeats(String showtimeId, int partySize, String preference, {String? model}) async {
+    final res = await http.post(
+      Uri.parse('$apiBaseUrl/api/v1/ai/seat-pick'),
+      headers: _headers(),
+      body: jsonEncode({
+        'showtime_id': showtimeId,
+        'party_size': partySize,
+        'preference': preference,
+        if (model != null) 'model': model,
+      }),
+    );
+    final data = _decode(res);
+    if (res.statusCode >= 400) throw Exception(data['detail'] ?? 'AI seat pick failed');
+    return data as Map<String, dynamic>;
   }
 
   Future<void> refundOrder(String orderId, String reason) async {
