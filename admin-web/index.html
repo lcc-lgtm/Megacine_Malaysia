@@ -4,13 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Megacine Malaysia — Cinema Admin Portal</title>
-  <link rel="stylesheet" href="styles.css?v=2" />
+  <link rel="stylesheet" href="styles.css?v=3" />
 </head>
 <body>
   <header class="topbar">
-    <div class="brand">🎬 Megacine <span>Malaysia</span> Admin</div>
+    <div class="brand">
+      <span class="brand-badge">🎬</span> Megacine <span>Malaysia</span> <small class="brand-sub">Admin Console</small>
+    </div>
     <div class="topbar-right">
-      <span id="userBadge" class="hidden"></span>
+      <span id="userBadge" class="user-badge hidden" aria-live="polite"></span>
       <button id="logoutBtn" class="btn btn-secondary btn-sm hidden">Logout</button>
     </div>
   </header>
@@ -18,42 +20,49 @@
   <main class="container">
     <!-- Auth Gate -->
     <section id="authSection" class="card auth-card">
-      <h2>Admin Sign In</h2>
-      <p style="color:#94a3b8;font-size:0.85rem;margin-bottom:14px;">
-        Sign in with your Supabase account. Requires <strong>CINEMA_ADMIN</strong> or <strong>PLATFORM_ADMIN</strong> role.
-      </p>
-      <form id="loginForm">
+      <div class="auth-header">
+        <h2>Admin Sign In</h2>
+        <p class="auth-subtitle">
+          Sign in with your Supabase account. Requires <strong>CINEMA_ADMIN</strong> or <strong>PLATFORM_ADMIN</strong> role.
+        </p>
+      </div>
+      <form id="loginForm" novalidate>
         <div class="field">
-          <label>Email</label>
-          <input id="loginEmail" type="email" required placeholder="admin@megacine.my" />
+          <label for="loginEmail">Email Address</label>
+          <input id="loginEmail" type="email" required placeholder="admin@megacine.my" autocomplete="email" />
         </div>
         <div class="field">
-          <label>Password</label>
-          <input id="loginPassword" type="password" required minlength="6" placeholder="••••••••" />
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" required minlength="6" placeholder="••••••••" autocomplete="current-password" />
         </div>
-        <div style="display:flex;gap:10px;margin-top:12px;">
-          <button type="submit" class="btn" style="flex:1;">Sign In</button>
+        <div class="auth-actions">
+          <button type="submit" class="btn btn-primary" id="signInSubmitBtn">Sign In</button>
           <button type="button" id="signupBtn" class="btn btn-secondary">Register Test Account</button>
         </div>
       </form>
-      <p id="authHint" style="color:#fbbf24;font-size:0.82rem;margin-top:12px;"></p>
+      <div id="authHint" class="auth-hint" aria-live="polite"></div>
     </section>
 
     <!-- Main Dashboard -->
     <section id="appSection" class="hidden">
-      <nav class="tabs">
-        <button class="tab-btn active" data-tab="moviesTab">🎥 Movies</button>
-        <button class="tab-btn" data-tab="auditoriumsTab">🏛️ Cinemas & Halls</button>
-        <button class="tab-btn" data-tab="showtimesTab">🗓️ Showtimes & Seats</button>
-        <button class="tab-btn" data-tab="ordersTab">🧾 Cinema Orders</button>
+      <nav class="tabs" role="tablist" aria-label="Admin Navigation">
+        <button class="tab-btn active" role="tab" aria-selected="true" data-tab="moviesTab">🎥 Movies & AI</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="auditoriumsTab">🏛️ Cinemas & Halls</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="showtimesTab">🗓️ Showtimes & Seats</button>
+        <button class="tab-btn" role="tab" aria-selected="false" data-tab="ordersTab">🧾 Cinema Orders</button>
       </nav>
 
       <!-- TAB 1: MOVIES -->
-      <div id="moviesTab" class="tab-panel">
+      <div id="moviesTab" class="tab-panel" role="tabpanel">
         <div class="card">
-          <h3>Create New Movie</h3>
-          <form id="createMovieForm" class="form-grid">
-            <div class="field"><label>Title *</label><input name="title" required maxlength="200" /></div>
+          <div class="card-header-flex">
+            <div>
+              <h3>Create New Movie</h3>
+              <p class="section-desc">Add movies to the catalog or use AI auto-fill to populate metadata.</p>
+            </div>
+          </div>
+          <form id="createMovieForm" class="form-grid" novalidate>
+            <div class="field"><label>Title *</label><input name="title" required maxlength="200" placeholder="Movie title" /></div>
             <div class="field"><label>Duration (mins) *</label><input name="duration_minutes" type="number" min="1" max="600" value="120" required /></div>
             <div class="field"><label>Rating</label><input name="rating" placeholder="P12 / 16 / U" maxlength="15" /></div>
             <div class="field"><label>Language</label><input name="language" value="English" maxlength="50" /></div>
@@ -70,84 +79,140 @@
                 <option value="ARCHIVED">ARCHIVED</option>
               </select>
             </div>
-            <div class="field" style="grid-column:1 / -1;"><label>Synopsis</label><input name="synopsis" placeholder="Short plot summary..." /></div>
-            <div style="grid-column: 1 / -1; display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:4px;">
-              <button type="submit" class="btn">+ Add Movie</button>
-              <button type="button" id="aiAutofillBtn" class="btn btn-secondary">? AI Auto-Fill</button>
-              <select id="aiModelSelect" style="padding:8px 10px; font-size:0.85rem;">
-                <option value="gemini-3.5-flash-lite">gemini-3.5-flash-lite</option>
-                <option value="gemini-3.8-flash">gemini-3.8-flash</option>
-                <option value="gemini-4-hydrogen">gemini-4-hydrogen</option>
-              </select>
+            <div class="field span-full"><label>Synopsis</label><textarea name="synopsis" rows="2" placeholder="Short plot summary..."></textarea></div>
+            <div class="form-footer span-full">
+              <button type="submit" class="btn btn-primary">+ Add Movie</button>
+              <div class="ai-group">
+                <select id="aiModelSelect" aria-label="Select AI Model">
+                  <option value="gemini-3.5-flash-lite">gemini-3.5-flash-lite</option>
+                  <option value="gemini-3.8-flash">gemini-3.8-flash</option>
+                  <option value="gemini-4-hydrogen">gemini-4-hydrogen</option>
+                </select>
+                <button type="button" id="aiAutofillBtn" class="btn btn-ai">✨ AI Auto-Fill</button>
+              </div>
             </div>
           </form>
         </div>
         <div class="card">
-          <h3>Movie Catalog</h3>
+          <div class="card-header-flex">
+            <h3>Movie Catalog</h3>
+            <span class="badge badge-gray" id="movieCountBadge">0 movies</span>
+          </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Title</th><th>Duration</th><th>Language</th><th>Rating</th><th>Status</th><th>Quick Action</th></tr></thead>
-              <tbody id="moviesTableBody"></tbody>
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Duration</th>
+                  <th>Language</th>
+                  <th>Rating</th>
+                  <th>Status</th>
+                  <th style="text-align: right;">Quick Action</th>
+                </tr>
+              </thead>
+              <tbody id="moviesTableBody">
+                <tr><td colspan="6" class="table-loading">Loading movies catalog...</td></tr>
+              </tbody>
             </table>
           </div>
         </div>
       </div>
 
       <!-- TAB 2: AUDITORIUMS -->
-      <div id="auditoriumsTab" class="tab-panel hidden">
+      <div id="auditoriumsTab" class="tab-panel hidden" role="tabpanel">
         <div class="card">
-          <h3>Create Auditorium & Batch-Generate Seats</h3>
-          <form id="createAuditoriumForm" class="form-grid">
+          <div class="card-header-flex">
+            <div>
+              <h3>Create Auditorium & Batch-Generate Seats</h3>
+              <p class="section-desc">Configure screening halls and automatically generate seat grids with VIP row mapping.</p>
+            </div>
+          </div>
+          <form id="createAuditoriumForm" class="form-grid" novalidate>
             <div class="field"><label>Cinema *</label><select name="cinema_id" id="audCinemaSelect" required></select></div>
             <div class="field"><label>Hall Name *</label><input name="name" placeholder="Hall 2 / IMAX" required maxlength="60" /></div>
             <div class="field"><label>Rows (1-50) *</label><input name="total_rows" type="number" min="1" max="50" value="6" required /></div>
             <div class="field"><label>Cols (1-50) *</label><input name="total_cols" type="number" min="1" max="50" value="10" required /></div>
             <div class="field"><label>VIP Rows (comma separated)</label><input name="vip_rows" placeholder="E,F" /></div>
-            <div style="align-self:end;"><button type="submit" class="btn">+ Create Hall & Seats</button></div>
+            <div class="form-actions-inline">
+              <button type="submit" class="btn btn-primary">+ Create Hall & Seats</button>
+            </div>
           </form>
         </div>
         <div class="card">
-          <h3>Cinemas & Configured Halls</h3>
+          <div class="card-header-flex">
+            <h3>Cinemas & Configured Halls</h3>
+          </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Cinema</th><th>Location</th><th>Auditoriums</th></tr></thead>
-              <tbody id="cinemasTableBody"></tbody>
+              <thead>
+                <tr>
+                  <th>Cinema</th>
+                  <th>Location</th>
+                  <th>Auditoriums & Capacity</th>
+                </tr>
+              </thead>
+              <tbody id="cinemasTableBody">
+                <tr><td colspan="3" class="table-loading">Loading cinemas...</td></tr>
+              </tbody>
             </table>
           </div>
         </div>
       </div>
 
       <!-- TAB 3: SHOWTIMES -->
-      <div id="showtimesTab" class="tab-panel hidden">
+      <div id="showtimesTab" class="tab-panel hidden" role="tabpanel">
         <div class="card">
-          <h3>Schedule Showtime (Auto Overlap Check + Seat Generation)</h3>
-          <form id="createShowtimeForm" class="form-grid">
+          <div class="card-header-flex">
+            <div>
+              <h3>Schedule Showtime</h3>
+              <p class="section-desc">Publish showtimes with automatic overlap prevention and seat inventory generation.</p>
+            </div>
+          </div>
+          <form id="createShowtimeForm" class="form-grid" novalidate>
             <div class="field"><label>Movie *</label><select name="movie_id" id="stMovieSelect" required></select></div>
             <div class="field"><label>Auditorium *</label><select name="auditorium_id" id="stAudSelect" required></select></div>
             <div class="field"><label>Start Time (MYT) *</label><input name="start_time" type="datetime-local" required /></div>
             <div class="field"><label>Base Price (MYR) *</label><input name="base_price" type="number" step="0.50" min="0" value="20.00" required /></div>
-            <div class="field"><label>VIP Surcharge (MYR)</label><input name="vip_surcharge" type="number" step="0.50" min="0" value="5.00" required /></div>
-            <div style="align-self:end;"><button type="submit" class="btn">+ Publish Showtime</button></div>
+            <div class="field"><label>VIP Surcharge (MYR) *</label><input name="vip_surcharge" type="number" step="0.50" min="0" value="5.00" required /></div>
+            <div class="form-actions-inline">
+              <button type="submit" class="btn btn-primary">+ Publish Showtime</button>
+            </div>
           </form>
         </div>
         <div class="card">
-          <h3>Scheduled Showtimes</h3>
+          <div class="card-header-flex">
+            <h3>Scheduled Showtimes</h3>
+          </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Movie</th><th>Cinema / Hall</th><th>Start (MYT)</th><th>Base Price</th><th>Status</th><th>Actions</th></tr></thead>
-              <tbody id="showtimesTableBody"></tbody>
+              <thead>
+                <tr>
+                  <th>Movie</th>
+                  <th>Cinema / Hall</th>
+                  <th>Start (MYT)</th>
+                  <th>Base Price</th>
+                  <th>Status</th>
+                  <th style="text-align: right;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="showtimesTableBody">
+                <tr><td colspan="6" class="table-loading">Loading showtimes...</td></tr>
+              </tbody>
             </table>
           </div>
         </div>
       </div>
 
       <!-- TAB 4: ORDERS -->
-      <div id="ordersTab" class="tab-panel hidden">
+      <div id="ordersTab" class="tab-panel hidden" role="tabpanel">
         <div class="card">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:10px;">
-            <h3 style="margin:0;">Cinema-Scoped Orders</h3>
-            <div style="display:flex;gap:8px;align-items:center;">
-              <select id="orderStatusFilter">
+          <div class="card-header-flex" style="margin-bottom:16px;">
+            <div>
+              <h3>Cinema-Scoped Orders</h3>
+              <p class="section-desc">Audit financial transactions, booking holds, and order lifecycle statuses.</p>
+            </div>
+            <div class="order-filter-bar">
+              <select id="orderStatusFilter" aria-label="Filter Orders by Status">
                 <option value="">All Statuses</option>
                 <option value="PENDING_PAYMENT">PENDING_PAYMENT</option>
                 <option value="CONFIRMED">CONFIRMED</option>
@@ -160,8 +225,18 @@
           </div>
           <div class="table-wrap">
             <table>
-              <thead><tr><th>Order No</th><th>Status</th><th>Total (MYR)</th><th>Hold Expires (MYT)</th><th>Created (MYT)</th></tr></thead>
-              <tbody id="ordersTableBody"></tbody>
+              <thead>
+                <tr>
+                  <th>Order No</th>
+                  <th>Status</th>
+                  <th style="text-align: right;">Total (MYR)</th>
+                  <th>Hold Expires (MYT)</th>
+                  <th>Created (MYT)</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <tr><td colspan="5" class="table-loading">Loading orders...</td></tr>
+              </tbody>
             </table>
           </div>
         </div>
@@ -170,28 +245,29 @@
   </main>
 
   <!-- Live Seat Map Modal -->
-  <div id="seatModal" class="modal-backdrop hidden">
+  <div id="seatModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="seatModalTitle">
     <div class="modal">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div class="modal-header">
         <h3 id="seatModalTitle" style="margin:0;">Live Seat Map</h3>
         <button id="closeSeatModal" class="btn btn-secondary btn-sm">Close</button>
       </div>
-      <div class="screen-bar">SCREEN</div>
+      <div class="screen-stage-wrapper">
+        <div class="screen-bar">CINEMA SCREEN</div>
+      </div>
       <div id="seatGrid" class="seat-grid"></div>
       <div class="legend">
-        <span>🟩 AVAILABLE</span>
-        <span>🟨 HELD</span>
-        <span>🟥 SOLD</span>
-        <span>⬜ BLOCKED</span>
-        <span>🟪 Bottom bar = VIP</span>
+        <span class="legend-item"><i class="legend-dot seat-AVAILABLE"></i> AVAILABLE</span>
+        <span class="legend-item"><i class="legend-dot seat-HELD"></i> HELD</span>
+        <span class="legend-item"><i class="legend-dot seat-SOLD"></i> SOLD</span>
+        <span class="legend-item"><i class="legend-dot seat-BLOCKED"></i> BLOCKED</span>
+        <span class="legend-item"><i class="legend-dot seat-vip"></i> VIP Zone</span>
       </div>
     </div>
   </div>
 
-  <div id="toast" class="toast hidden"></div>
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
-  <script src="config.js?v=2"></script>
-  <script src="app.js?v=2"></script>
+  <script src="config.js?v=3"></script>
+  <script src="app.js?v=3"></script>
 </body>
 </html>
-

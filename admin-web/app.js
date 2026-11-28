@@ -101,6 +101,9 @@ async function loadMovies() {
   ]);
   state.movies = [...showing, ...coming, ...archived];
 
+  const countBadge = $("movieCountBadge");
+  if (countBadge) countBadge.textContent = `${state.movies.length} movies`;
+
   $("moviesTableBody").innerHTML = state.movies.map((m) => {
     const badge = m.status === "NOW_SHOWING" ? "badge-green" : m.status === "COMING_SOON" ? "badge-blue" : "badge-gray";
     const nextStatus = m.status === "NOW_SHOWING" ? "ARCHIVED" : "NOW_SHOWING";
@@ -110,9 +113,9 @@ async function loadMovies() {
       <td>${escapeHtml(m.language)}</td>
       <td>${escapeHtml(m.rating || "-")}</td>
       <td><span class="badge ${badge}">${escapeHtml(m.status)}</span></td>
-      <td><button class="btn btn-secondary btn-sm" onclick="toggleMovieStatus('${m.id}','${nextStatus}')">Set ${nextStatus}</button></td>
+      <td style="text-align:right;"><button class="btn btn-secondary btn-sm" onclick="toggleMovieStatus('${m.id}','${nextStatus}')">Set ${nextStatus}</button></td>
     </tr>`;
-  }).join("") || `<tr><td colspan="6">No movies found.</td></tr>`;
+  }).join("") || `<tr><td colspan="6" class="table-loading">No movies found.</td></tr>`;
 
   $("stMovieSelect").innerHTML = state.movies
     .filter((m) => m.status !== "ARCHIVED")
@@ -162,11 +165,11 @@ async function loadShowtimes() {
     <td>${formatMYT(st.start_time)}</td>
     <td>RM ${Number(st.base_price).toFixed(2)}</td>
     <td><span class="badge badge-green">${escapeHtml(st.status)}</span></td>
-    <td style="display:flex;gap:6px;">
+    <td style="display:flex;gap:6px;justify-content:flex-end;">
       <button class="btn btn-secondary btn-sm" onclick="openSeatMap('${st.id}','${escapeHtml(st.movie_title)}')">Seat Map</button>
       <button class="btn btn-danger btn-sm" onclick="cancelShowtime('${st.id}')">Cancel</button>
     </td>
-  </tr>`).join("") || `<tr><td colspan="6">No scheduled showtimes.</td></tr>`;
+  </tr>`).join("") || `<tr><td colspan="6" class="table-loading">No scheduled showtimes.</td></tr>`;
 }
 
 window.openSeatMap = async (showtimeId, title) => {
@@ -209,11 +212,11 @@ async function loadOrders() {
     return `<tr>
       <td><strong>${escapeHtml(o.order_no)}</strong></td>
       <td><span class="badge ${cls}">${escapeHtml(o.status)}</span></td>
-      <td>RM ${Number(o.total_amount).toFixed(2)}</td>
+      <td style="text-align:right;">RM ${Number(o.total_amount).toFixed(2)}</td>
       <td>${formatMYT(o.hold_expires_at)}</td>
       <td>${formatMYT(o.created_at)}</td>
     </tr>`;
-  }).join("") || `<tr><td colspan="5">No orders found.</td></tr>`;
+  }).join("") || `<tr><td colspan="5" class="table-loading">No orders found.</td></tr>`;
 }
 
 // ---------- Event Listeners ----------
