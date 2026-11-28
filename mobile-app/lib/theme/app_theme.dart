@@ -3,30 +3,31 @@ import 'package:flutter/material.dart';
 class AppTheme {
   AppTheme._();
 
-  // 60% Warm Paper Canvas & Tinted Surfaces
-  static const Color canvas = Color(0xFFFAF9F5);
-  static const Color canvasMuted = Color(0xFFF3F1EA);
+  // 60% Deep Charcoal Warm Black Canvas (Deep Charcoal Warm Black)
+  static const Color canvas = Color(0xFF121110);
+  static const Color canvasMuted = Color(0xFF191816);
 
   // 30% Crisp Ticket / Card Surfaces & Borders
-  static const Color surface = Color(0xFFFFFFFF);
-  static const Color border = Color(0xFFE2DFD7);
-  static const Color borderStrong = Color(0xFFD0CCC1);
+  static const Color surface = Color(0xFF1A1917);
+  static const Color surfaceAlt = Color(0xFF22201D);
+  static const Color border = Color(0xFF2E2C29);
+  static const Color borderStrong = Color(0xFF3E3B37);
 
-  // Ink Hierarchy (WCAG AA >= 4.5:1 on warm paper)
-  static const Color inkPrimary = Color(0xFF191918);
-  static const Color inkSecondary = Color(0xFF62605B);
-  static const Color inkMuted = Color(0xFF8C8982);
+  // Ink Hierarchy (WCAG AA >= 4.5:1 on dark charcoal)
+  static const Color inkPrimary = Color(0xFFF4F2EC);
+  static const Color inkSecondary = Color(0xFFA39E93);
+  static const Color inkMuted = Color(0xFF6E6A63);
 
-  // 10% Cinema Accent (Classic Crimson + Warm Amber Gold)
-  static const Color crimson = Color(0xFFC83E2B);
-  static const Color crimsonPressed = Color(0xFFA93221);
-  static const Color crimsonTint = Color(0xFFFDF2F0);
+  // 10% Cinema Accent (Cinema Crimson #D93829 + Warm Amber Gold #D4A853)
+  static const Color crimson = Color(0xFFD93829);
+  static const Color crimsonPressed = Color(0xFFC83E2B);
+  static const Color crimsonTint = Color(0x26D93829);
   static const Color amber = Color(0xFFD4A853);
-  static const Color amberTint = Color(0xFFFBF6EA);
+  static const Color amberTint = Color(0x26D4A853);
 
-  // Dark Screening Room (Trailer Player)
-  static const Color darkStage = Color(0xFF191918);
-  static const Color darkStageBorder = Color(0xFF2C2B29);
+  // Dark Screening Room (Auditorium & Trailer Player)
+  static const Color darkStage = Color(0xFF0C0B0A);
+  static const Color darkStageBorder = Color(0xFF2E2C29);
 
   // Motion & Radius Tokens
   static const Duration microDuration = Duration(milliseconds: 180);
@@ -54,31 +55,31 @@ class AppTheme {
     );
   }
 
-  static ThemeData get lightTheme {
-    final colorScheme = const ColorScheme.light(
+  static ThemeData get darkTheme {
+    final colorScheme = const ColorScheme.dark(
       primary: crimson,
-      onPrimary: Colors.white,
+      onPrimary: Color(0xFFFFFFFF),
       primaryContainer: crimsonTint,
-      onPrimaryContainer: crimsonPressed,
+      onPrimaryContainer: crimson,
       secondary: inkPrimary,
-      onSecondary: Colors.white,
-      secondaryContainer: canvasMuted,
+      onSecondary: Color(0xFF121110),
+      secondaryContainer: surfaceAlt,
       onSecondaryContainer: inkPrimary,
       tertiary: amber,
-      onTertiary: inkPrimary,
+      onTertiary: Color(0xFF121110),
       surface: surface,
       onSurface: inkPrimary,
-      surfaceContainerHighest: canvasMuted,
+      surfaceContainerHighest: surfaceAlt,
       onSurfaceVariant: inkSecondary,
       outline: border,
-      outlineVariant: border,
-      error: crimson,
-      onError: Colors.white,
+      outlineVariant: borderStrong,
+      error: Color(0xFFFCA5A5),
+      onError: Color(0xFF121110),
     );
 
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.light,
+      brightness: Brightness.dark,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: canvas,
       dividerColor: border,
@@ -88,7 +89,7 @@ class AppTheme {
         space: 1,
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: canvas,
+        backgroundColor: surface,
         foregroundColor: inkPrimary,
         elevation: 0,
         scrolledUnderElevation: 0,
@@ -148,68 +149,32 @@ class AppTheme {
           ),
           textStyle: const TextStyle(
             fontSize: 15,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.1,
-          ),
-        ),
-      ),
-      filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(
-          backgroundColor: crimson,
-          foregroundColor: Colors.white,
-          disabledBackgroundColor: border,
-          disabledForegroundColor: inkMuted,
-          elevation: 0,
-          minimumSize: const Size(48, 48),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radiusInner),
-          ),
-          textStyle: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.1,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: inkPrimary,
-          backgroundColor: surface,
+          backgroundColor: surfaceAlt,
           side: const BorderSide(color: border, width: 1),
           minimumSize: const Size(48, 48),
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radiusInner),
-          ),
-          textStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
           ),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: crimson,
-          minimumSize: const Size(44, 44),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radiusInner),
-          ),
-          textStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
-          ),
+          textStyle: const TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: surface,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-        labelStyle: const TextStyle(color: inkSecondary, fontSize: 14),
-        hintStyle: const TextStyle(color: inkMuted, fontSize: 14),
-        prefixIconColor: inkSecondary,
-        suffixIconColor: inkSecondary,
+        fillColor: surfaceAlt,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusInner),
           borderSide: const BorderSide(color: border, width: 1),
@@ -224,63 +189,29 @@ class AppTheme {
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(radiusInner),
-          borderSide: const BorderSide(color: crimson, width: 1.5),
+          borderSide: const BorderSide(color: Color(0xFFFCA5A5), width: 1),
         ),
-      ),
-      chipTheme: ChipThemeData(
-        backgroundColor: canvasMuted,
-        selectedColor: crimsonTint,
-        disabledColor: canvasMuted,
-        labelStyle: const TextStyle(color: inkPrimary, fontSize: 12, fontWeight: FontWeight.w500),
-        secondaryLabelStyle: const TextStyle(color: crimson, fontSize: 12, fontWeight: FontWeight.w600),
-        side: const BorderSide(color: border, width: 1),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(radiusInner),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      ),
-      segmentedButtonTheme: SegmentedButtonThemeData(
-        style: ButtonStyle(
-          backgroundColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.selected)) return crimsonTint;
-            return surface;
-          }),
-          foregroundColor: WidgetStateProperty.resolveWith((states) {
-            if (states.contains(WidgetState.selected)) return crimson;
-            return inkSecondary;
-          }),
-          side: WidgetStateProperty.all(const BorderSide(color: border, width: 1)),
-          shape: WidgetStateProperty.all(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusInner)),
-          ),
-          textStyle: WidgetStateProperty.all(
-            const TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-          ),
-        ),
+        labelStyle: const TextStyle(color: inkSecondary),
+        hintStyle: const TextStyle(color: inkMuted),
       ),
       dialogTheme: DialogThemeData(
         backgroundColor: surface,
         surfaceTintColor: Colors.transparent,
-        elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(radiusCard),
+          borderRadius: BorderRadius.circular(16),
           side: const BorderSide(color: border, width: 1),
         ),
       ),
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: surface,
         surfaceTintColor: Colors.transparent,
-        elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
-      ),
-      snackBarTheme: SnackBarThemeData(
-        backgroundColor: inkPrimary,
-        contentTextStyle: const TextStyle(color: canvas, fontSize: 13),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radiusInner)),
       ),
     );
   }
+
+  // Alias for backward compatibility if lightTheme was referenced
+  static ThemeData get lightTheme => darkTheme;
 }
