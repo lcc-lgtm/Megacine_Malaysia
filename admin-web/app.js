@@ -220,8 +220,8 @@ async function loadOrders() {
 
 // ---------- Event Listeners ----------
 document.addEventListener("DOMContentLoaded", () => {
-  const isLocal = ["localhost", "127.0.0.1", ""].includes(location.hostname);
-  $("apiBaseInput").value = localStorage.getItem("mc_api_base") || (isLocal ? CFG.LOCAL_API_URL : CFG.PROD_API_URL);
+  const savedApi = localStorage.getItem("mc_api_base");
+  $("apiBaseInput").value = (savedApi && !savedApi.includes("127.0.0.1")) ? savedApi : CFG.CLOUD_API_URL;
   $("apiBaseInput").addEventListener("change", () => localStorage.setItem("mc_api_base", getApiBase()));
 
   document.querySelectorAll(".tab-btn").forEach((btn) => {
@@ -325,3 +325,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
   verifySessionAndLoad();
 });
+
