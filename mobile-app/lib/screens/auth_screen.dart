@@ -1,5 +1,4 @@
 ﻿import 'package:flutter/material.dart';
-import '../config/app_config.dart';
 import '../services/api_client.dart';
 import 'home_screen.dart';
 
@@ -13,7 +12,6 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   final _emailCtrl = TextEditingController();
   final _pwdCtrl = TextEditingController();
-  final _apiCtrl = TextEditingController(text: ApiClient.instance.apiBaseUrl);
   bool _loading = false;
 
   Future<void> _submit({required bool isSignUp}) async {
@@ -27,7 +25,6 @@ class _AuthScreenState extends State<AuthScreen> {
     }
     setState(() => _loading = true);
     try {
-      ApiClient.instance.apiBaseUrl = _apiCtrl.text.trim().replaceAll(RegExp(r'/+$'), '');
       if (isSignUp) {
         await ApiClient.instance.signUp(email, pwd);
       } else {
@@ -70,19 +67,6 @@ class _AuthScreenState extends State<AuthScreen> {
                     const Text('Book tickets in 3 steps', textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.grey)),
                     const SizedBox(height: 20),
-                    TextField(
-                      controller: _apiCtrl,
-                      decoration: InputDecoration(
-                        labelText: 'Backend API URL',
-                        border: const OutlineInputBorder(),
-                        suffixIcon: IconButton(
-                          tooltip: 'Use Render Prod URL',
-                          icon: const Icon(Icons.cloud),
-                          onPressed: () => setState(() => _apiCtrl.text = AppConfig.prodApiUrl),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
                     TextField(
                       controller: _emailCtrl,
                       keyboardType: TextInputType.emailAddress,

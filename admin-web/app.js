@@ -9,9 +9,7 @@ const state = {
 
 const $ = (id) => document.getElementById(id);
 
-function getApiBase() {
-  return $("apiBaseInput").value.trim().replace(/\/+$/, "");
-}
+function getApiBase() { return CFG.API_BASE_URL; }
 
 function escapeHtml(str) {
   return String(str ?? "")
@@ -220,9 +218,6 @@ async function loadOrders() {
 
 // ---------- Event Listeners ----------
 document.addEventListener("DOMContentLoaded", () => {
-  const savedApi = localStorage.getItem("mc_api_base");
-  $("apiBaseInput").value = (savedApi && !savedApi.includes("127.0.0.1")) ? savedApi : CFG.CLOUD_API_URL;
-  $("apiBaseInput").addEventListener("change", () => localStorage.setItem("mc_api_base", getApiBase()));
 
   document.querySelectorAll(".tab-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -325,4 +320,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   verifySessionAndLoad();
 });
+
 

@@ -8,7 +8,7 @@ class ApiClient {
   ApiClient._();
   static final ApiClient instance = ApiClient._();
 
-  String apiBaseUrl = AppConfig.defaultApiBaseUrl;
+  final String apiBaseUrl = AppConfig.apiBaseUrl;
   String? accessToken;
   String? userEmail;
 
@@ -154,3 +154,4 @@ class ApiClient {
     if (res.statusCode >= 400) throw Exception(data['detail'] ?? 'Refund rejected');
   }
 }
+
