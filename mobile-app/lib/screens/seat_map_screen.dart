@@ -1,6 +1,7 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import '../models/models.dart';
 import '../services/api_client.dart';
+import '../theme/app_theme.dart';
 import 'checkout_screen.dart';
 
 class SeatMapScreen extends StatefulWidget {
@@ -35,7 +36,9 @@ class _SeatMapScreenState extends State<SeatMapScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString().replaceFirst('Exception: ', '')), backgroundColor: AppTheme.crimson),
+        );
       }
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -61,7 +64,10 @@ class _SeatMapScreenState extends State<SeatMapScreen> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString().replaceFirst('Exception: ', '')), backgroundColor: Colors.redAccent),
+        SnackBar(
+          content: Text(e.toString().replaceFirst('Exception: ', '')),
+          backgroundColor: AppTheme.crimson,
+        ),
       );
       await _loadSeats();
     } finally {
@@ -80,7 +86,18 @@ class _SeatMapScreenState extends State<SeatMapScreen> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDlg) => AlertDialog(
-          title: const Text('? AI Smart Seat Picker'),
+          backgroundColor: const Color(0xFF21201E),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppTheme.radiusCard),
+            side: const BorderSide(color: Color(0xFF2C2B29), width: 1),
+          ),
+          title: Row(
+            children: const [
+              Icon(Icons.auto_awesome, color: AppTheme.amber, size: 20),
+              SizedBox(width: 8),
+              Text('AI Smart Seat Picker', style: TextStyle(color: Color(0xFFFAF9F5), fontSize: 16)),
+            ],
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,9 +105,11 @@ class _SeatMapScreenState extends State<SeatMapScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Seats (1?6):'),
+                  const Text('Party Size (1–6):', style: TextStyle(color: Color(0xFFA3A09A), fontSize: 13)),
                   DropdownButton<int>(
                     value: partySize,
+                    dropdownColor: const Color(0xFF21201E),
+                    style: const TextStyle(color: Color(0xFFFAF9F5), fontSize: 14),
                     items: [1, 2, 3, 4, 5, 6]
                         .map((n) => DropdownMenuItem(value: n, child: Text('$n seat${n > 1 ? "s" : ""}')))
                         .toList(),
@@ -98,34 +117,57 @@ class _SeatMapScreenState extends State<SeatMapScreen> {
                   ),
                 ],
               ),
+              const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('Model:'),
+                  const Text('Gemini Model:', style: TextStyle(color: Color(0xFFA3A09A), fontSize: 13)),
                   DropdownButton<String>(
                     value: selectedModel,
+                    dropdownColor: const Color(0xFF21201E),
+                    style: const TextStyle(color: Color(0xFFFAF9F5), fontSize: 12),
                     items: models
-                        .map((m) => DropdownMenuItem(value: m, child: Text(m, style: const TextStyle(fontSize: 12))))
+                        .map((m) => DropdownMenuItem(value: m, child: Text(m, style: const TextStyle(color: Color(0xFFFAF9F5)))))
                         .toList(),
                     onChanged: picking ? null : (v) => setDlg(() { selectedModel = v ?? selectedModel; }),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
               TextField(
                 controller: prefCtrl,
-                decoration: const InputDecoration(
-                  labelText: 'Preference prompt (e.g., VIP couple, aisle)',
-                  border: OutlineInputBorder(),
+                style: const TextStyle(color: Color(0xFFFAF9F5), fontSize: 13),
+                decoration: InputDecoration(
+                  labelText: 'Preference prompt',
+                  labelStyle: const TextStyle(color: Color(0xFFA3A09A), fontSize: 12),
+                  filled: true,
+                  fillColor: const Color(0xFF191918),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppTheme.radiusInner),
+                    borderSide: const BorderSide(color: Color(0xFF2C2B29), width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppTheme.radiusInner),
+                    borderSide: const BorderSide(color: AppTheme.amber, width: 1.5),
+                  ),
                 ),
               ),
             ],
           ),
           actions: [
-            TextButton(onPressed: picking ? null : () => Navigator.pop(ctx), child: const Text('Cancel')),
+            TextButton(
+              onPressed: picking ? null : () => Navigator.pop(ctx),
+              child: const Text('Cancel', style: TextStyle(color: Color(0xFFA3A09A))),
+            ),
             ElevatedButton.icon(
-              icon: const Icon(Icons.auto_awesome, size: 18),
-              label: Text(picking ? 'Picking...' : 'Pick Best Seats'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.amber,
+                foregroundColor: AppTheme.inkPrimary,
+              ),
+              icon: picking
+                  ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.inkPrimary))
+                  : const Icon(Icons.auto_awesome, size: 18),
+              label: Text(picking ? 'AI Analyzing...' : 'Pick Best Seats'),
               onPressed: picking
                   ? null
                   : () async {
@@ -139,21 +181,26 @@ class _SeatMapScreenState extends State<SeatMapScreen> {
                         );
                         final cfg = (res['config'] as Map<String, dynamic>?) ?? {};
                         final ids = List<String>.from(cfg['selected_seat_ids'] ?? []);
-                        if (!mounted) return;
+                        final modelUsed = res['model_used'] ?? selectedModel;
+                        if (!ctx.mounted) return;
                         Navigator.pop(ctx);
+                        if (!mounted) return;
                         setState(() {
                           _selectedIds
                             ..clear()
                             ..addAll(ids);
                         });
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('? ${res["reply"]}'), backgroundColor: Colors.blueAccent),
+                          SnackBar(
+                            content: Text('✨ ${res["reply"]} ($modelUsed)'),
+                            backgroundColor: AppTheme.inkPrimary,
+                          ),
                         );
                       } catch (e) {
                         setDlg(() { picking = false; });
                         if (mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(e.toString().replaceFirst('Exception: ', '')), backgroundColor: Colors.redAccent),
+                            SnackBar(content: Text(e.toString().replaceFirst('Exception: ', '')), backgroundColor: AppTheme.crimson),
                           );
                         }
                       }
@@ -168,42 +215,99 @@ class _SeatMapScreenState extends State<SeatMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF191918),
       appBar: AppBar(
-        title: Text('${widget.showtime.movieTitle} (${widget.showtime.auditoriumName})'),
+        backgroundColor: const Color(0xFF191918),
+        foregroundColor: const Color(0xFFFAF9F5),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              widget.showtime.movieTitle,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Color(0xFFFAF9F5)),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              '${widget.showtime.cinemaName} • ${widget.showtime.auditoriumName}',
+              style: const TextStyle(fontSize: 12, color: Color(0xFFA3A09A)),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
         actions: [
           TextButton.icon(
-            icon: const Icon(Icons.auto_awesome, color: Colors.amber, size: 18),
-            label: const Text('AI Pick', style: TextStyle(color: Colors.amber)),
+            style: TextButton.styleFrom(foregroundColor: AppTheme.amber),
+            icon: const Icon(Icons.auto_awesome, size: 16),
+            label: const Text('AI Pick', style: TextStyle(fontWeight: FontWeight.w600)),
             onPressed: (_loading || _seatMap == null) ? null : _openAiSeatPicker,
           ),
-          IconButton(icon: const Icon(Icons.refresh), onPressed: _loadSeats),
+          IconButton(
+            icon: const Icon(Icons.refresh, color: Color(0xFFFAF9F5)),
+            onPressed: _loadSeats,
+            tooltip: 'Refresh Seats',
+          ),
         ],
       ),
       body: _loading || _seatMap == null
-          ? const Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator(color: AppTheme.amber))
           : Column(
               children: [
+                // Micro-curve Cinema Screen Indicator
                 Container(
                   width: double.infinity,
-                  margin: const EdgeInsets.all(14),
+                  margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white10,
-                    borderRadius: BorderRadius.circular(8),
+                    color: const Color(0xFF21201E),
+                    border: Border.all(color: const Color(0xFF2C2B29), width: 1),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  child: const Text('SCREEN', textAlign: TextAlign.center,
-                      style: TextStyle(letterSpacing: 4, color: Colors.grey, fontWeight: FontWeight.bold)),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 140,
+                        height: 3,
+                        decoration: BoxDecoration(
+                          color: AppTheme.amber.withValues(alpha: 0.8),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      const Text(
+                        'CINEMA SCREEN — FRONT STAGE',
+                        style: TextStyle(
+                          fontSize: 11,
+                          letterSpacing: 3,
+                          color: Color(0xFFA3A09A),
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+                // Interactive Seat Map Grid
                 Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: _buildGrid(_seatMap!),
+                  child: InteractiveViewer(
+                    boundaryMargin: const EdgeInsets.all(20),
+                    minScale: 0.7,
+                    maxScale: 2.2,
+                    child: Center(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: _buildGrid(_seatMap!),
+                        ),
+                      ),
                     ),
                   ),
                 ),
+                // 5-state Legend Bar
                 _buildLegend(),
+                // Bottom Floating Tray
                 _buildBottomBar(),
               ],
             ),
@@ -216,29 +320,55 @@ class _SeatMapScreenState extends State<SeatMapScreen> {
       byRow.putIfAbsent(s.rowLabel, () => []).add(s);
     }
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: byRow.entries.map((entry) {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.symmetric(vertical: 3),
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(width: 24, child: Text(entry.key, style: const TextStyle(color: Colors.grey))),
+              SizedBox(
+                width: 26,
+                child: Text(
+                  entry.key,
+                  style: const TextStyle(
+                    color: Color(0xFFA3A09A),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(width: 4),
               ...entry.value.map((s) {
                 final selected = _selectedIds.contains(s.showtimeSeatId);
                 final isAvail = s.status == 'AVAILABLE';
-                Color bg = Colors.grey.shade800;
-                Color border = Colors.grey;
+                final isVip = s.seatZone == 'VIP';
+
+                Color bg = const Color(0xFF2C2B29);
+                Color border = const Color(0xFF3F3E3B);
+                Color textColor = const Color(0xFFA3A09A);
+
                 if (selected) {
-                  bg = Colors.blueAccent;
-                  border = Colors.lightBlueAccent;
+                  bg = AppTheme.crimson;
+                  border = const Color(0xFFE05A47);
+                  textColor = Colors.white;
                 } else if (isAvail) {
-                  bg = Colors.green.withOpacity(0.22);
-                  border = s.seatZone == 'VIP' ? Colors.purpleAccent : Colors.greenAccent;
+                  bg = const Color(0xFF262523);
+                  border = isVip ? AppTheme.amber : const Color(0xFF4A4845);
+                  textColor = isVip ? AppTheme.amber : const Color(0xFFFAF9F5);
                 } else if (s.status == 'HELD') {
-                  bg = Colors.amber.withOpacity(0.25);
-                  border = Colors.amber;
+                  bg = AppTheme.amber.withValues(alpha: 0.18);
+                  border = AppTheme.amber.withValues(alpha: 0.6);
+                  textColor = AppTheme.amber;
                 } else if (s.status == 'SOLD') {
-                  bg = Colors.red.withOpacity(0.25);
-                  border = Colors.redAccent;
+                  bg = const Color(0xFF1E1D1B);
+                  border = const Color(0xFF252422);
+                  textColor = const Color(0xFF55534F);
+                } else if (s.status == 'BLOCKED') {
+                  bg = const Color(0xFF191918);
+                  border = const Color(0xFF2C2B29);
+                  textColor = const Color(0xFF3F3E3B);
                 }
 
                 return GestureDetector(
@@ -250,7 +380,10 @@ class _SeatMapScreenState extends State<SeatMapScreen> {
                               _selectedIds.remove(s.showtimeSeatId);
                             } else if (_selectedIds.length >= 6) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Maximum 6 seats per order.')),
+                                const SnackBar(
+                                  content: Text('Maximum 6 seats per order limit reached.'),
+                                  backgroundColor: AppTheme.inkPrimary,
+                                ),
                               );
                             } else {
                               _selectedIds.add(s.showtimeSeatId);
@@ -258,16 +391,28 @@ class _SeatMapScreenState extends State<SeatMapScreen> {
                           });
                         },
                   child: Container(
-                    width: 40,
-                    height: 36,
-                    margin: const EdgeInsets.symmetric(horizontal: 3),
+                    width: 38,
+                    height: 34,
+                    margin: const EdgeInsets.symmetric(horizontal: 2.5, vertical: 2),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: bg,
-                      border: Border.all(color: border, width: s.seatZone == 'VIP' ? 2 : 1),
+                      border: Border.all(
+                        color: border,
+                        width: isVip && isAvail && !selected ? 1.5 : 1,
+                      ),
                       borderRadius: BorderRadius.circular(6),
                     ),
-                    child: Text(s.label, style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                    child: Text(
+                      '${s.seatNumber}',
+                      style: AppTheme.tabular(
+                        TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: textColor,
+                        ),
+                      ),
+                    ),
                   ),
                 );
               }),
@@ -279,16 +424,20 @@ class _SeatMapScreenState extends State<SeatMapScreen> {
   }
 
   Widget _buildLegend() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
-      child: Wrap(
-        spacing: 12,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      color: const Color(0xFF21201E),
+      child: const Wrap(
+        spacing: 14,
+        runSpacing: 6,
+        alignment: WrapAlignment.center,
         children: [
-          Text('🟩 Available', style: TextStyle(fontSize: 12)),
-          Text('🟦 Selected', style: TextStyle(fontSize: 12)),
-          Text('🟨 Held', style: TextStyle(fontSize: 12)),
-          Text('🟥 Sold', style: TextStyle(fontSize: 12)),
-          Text('🟪 Border = VIP', style: TextStyle(fontSize: 12)),
+          _LegendItem(color: Color(0xFF262523), border: Color(0xFF4A4845), label: 'Standard'),
+          _LegendItem(color: Color(0xFF262523), border: AppTheme.amber, label: 'VIP Seat'),
+          _LegendItem(color: AppTheme.crimson, border: Color(0xFFE05A47), label: 'Selected'),
+          _LegendItem(color: Color(0xFF3B2F16), border: AppTheme.amber, label: 'Held'),
+          _LegendItem(color: Color(0xFF1E1D1B), border: Color(0xFF252422), label: 'Sold'),
         ],
       ),
     );
@@ -296,31 +445,86 @@ class _SeatMapScreenState extends State<SeatMapScreen> {
 
   Widget _buildBottomBar() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
       decoration: const BoxDecoration(
-        color: Color(0xFF1E293B),
-        border: Border(top: BorderSide(color: Colors.white12)),
+        color: Color(0xFF21201E),
+        border: Border(top: BorderSide(color: Color(0xFF2C2B29), width: 1)),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('${_selectedIds.length} / 6 seats selected', style: const TextStyle(color: Colors.grey)),
-              Text('RM ${_totalPrice.toStringAsFixed(2)}',
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            ],
-          ),
-          ElevatedButton(
-            onPressed: (_selectedIds.isEmpty || _submitting) ? null : _lockSeatsAndCheckout,
-            style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14)),
-            child: _submitting
-                ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2))
-                : const Text('Lock Seats (5m)'),
-          ),
-        ],
+      child: SafeArea(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '${_selectedIds.length} / 6 seats selected',
+                    style: const TextStyle(color: Color(0xFFA3A09A), fontSize: 12, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    'MYR ${_totalPrice.toStringAsFixed(2)}',
+                    style: AppTheme.tabular(
+                      const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFFFAF9F5),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            ElevatedButton(
+              onPressed: (_selectedIds.isEmpty || _submitting) ? null : _lockSeatsAndCheckout,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.crimson,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppTheme.radiusInner)),
+              ),
+              child: _submitting
+                  ? const SizedBox(
+                      height: 18,
+                      width: 18,
+                      child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                    )
+                  : const Text('Lock Seats & Checkout'),
+            ),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class _LegendItem extends StatelessWidget {
+  final Color color;
+  final Color border;
+  final String label;
+
+  const _LegendItem({required this.color, required this.border, required this.label});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            color: color,
+            border: Border.all(color: border, width: 1),
+            borderRadius: BorderRadius.circular(3),
+          ),
+        ),
+        const SizedBox(width: 5),
+        Text(label, style: const TextStyle(color: Color(0xFFA3A09A), fontSize: 11)),
+      ],
     );
   }
 }
