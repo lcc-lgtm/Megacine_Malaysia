@@ -23,12 +23,12 @@ class AIService:
 
     def _resolve_endpoint(self, model_name: str) -> tuple[str, dict[str, str]]:
         headers = {"Content-Type": "application/json"}
+        base = self.custom_base_url or "https://generativelanguage.googleapis.com/v1beta"
+        url = f"{base}/models/{model_name}:generateContent"
 
-        # 优先支持前端透传的 Google 账户 OAuth 凭证；否则使用服务器配置的 API Key
         if self.google_oauth_token:
             headers["Authorization"] = f"Bearer {self.google_oauth_token}"
-            base = self.custom_base_url or "https://generativelanguage.googleapis.com/v1beta"
-            return f"{base}/models/{model_name}:generateContent", headers
+            return url, headers
 
         if not self.api_key:
             raise HTTPException(
@@ -36,17 +36,8 @@ class AIService:
                 detail="Neither GEMINI_API_KEY nor Google OAuth token is available.",
             )
 
-        if self.custom_base_url:
-            headers["x-goog-api-key"] = self.api_key
-            return f"{self.custom_base_url}/models/{model_name}:generateContent", headers
-
-        # 自动适配 AQ. 开头（Vertex AI Express / 新版 Key）与传统 AI Studio Key
-        if self.api_key.startswith("AQ."):
-            url = f"https://aiplatform.googleapis.com/v1/publishers/google/models/{model_name}:generateContent?key={self.api_key}"
-            return url, headers
-
         headers["x-goog-api-key"] = self.api_key
-        return f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent", headers
+        return url, headers
 
     async def _call_gemini_json(
         self, system_instruction: str, user_prompt: str, model: str | None = None
