@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+from pathlib import Path
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
@@ -17,7 +17,7 @@ settings = get_settings()
 
 app = FastAPI(
     title="Megacine Malaysia API",
-    version="1.1.0",
+    version="1.1.1",
     docs_url="/docs",
     redoc_url="/redoc",
 )
@@ -47,4 +47,4 @@ if ADMIN_WEB_DIR.is_dir():
 
 @app.get("/", include_in_schema=False)
 async def root_redirect() -> RedirectResponse:
-    return RedirectResponse(url="/admin/" if ADMIN_WEB_DIR.is_dir() else "/docs")
+    return RedirectResponse(url="/admin/?v=3" if ADMIN_WEB_DIR.is_dir() else "/docs")
