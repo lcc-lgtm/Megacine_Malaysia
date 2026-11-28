@@ -13,6 +13,9 @@ class MovieCreateDTO(BaseModel):
     rating: str | None = Field(default=None, max_length=15)
     language: str = Field(default="English", max_length=50)
     poster_url: str | None = Field(default=None, max_length=500)
+    genre: str | None = Field(default=None, max_length=50)
+    trailer_url: str | None = Field(default=None, max_length=500)
+    selection_week: str | None = Field(default=None, max_length=20)
     release_date: date | None = None
     status: Literal["COMING_SOON", "NOW_SHOWING", "ARCHIVED"] = "COMING_SOON"
 
@@ -24,6 +27,9 @@ class MovieUpdateDTO(BaseModel):
     rating: str | None = Field(default=None, max_length=15)
     language: str | None = Field(default=None, max_length=50)
     poster_url: str | None = Field(default=None, max_length=500)
+    genre: str | None = Field(default=None, max_length=50)
+    trailer_url: str | None = Field(default=None, max_length=500)
+    selection_week: str | None = Field(default=None, max_length=20)
     release_date: date | None = None
     status: Literal["COMING_SOON", "NOW_SHOWING", "ARCHIVED"] | None = None
 
@@ -38,6 +44,9 @@ class MovieDTO(BaseModel):
     rating: str | None = None
     language: str
     poster_url: str | None = None
+    genre: str | None = None
+    trailer_url: str | None = None
+    selection_week: str | None = None
     release_date: date | None = None
     status: str
     created_at: datetime
@@ -134,3 +143,15 @@ class AdminOrderSummaryDTO(BaseModel):
     total_amount: Decimal
     hold_expires_at: datetime
     created_at: datetime
+
+
+# ---------- Bookmarks & Recommendations ----------
+class BookmarkToggleResponseDTO(BaseModel):
+    movie_id: uuid.UUID
+    bookmarked: bool
+
+
+class RecommendedMoviesResponseDTO(BaseModel):
+    preferred_genres: list[str]
+    bookmarked_movie_ids: list[uuid.UUID]
+    movies: list[MovieDTO]

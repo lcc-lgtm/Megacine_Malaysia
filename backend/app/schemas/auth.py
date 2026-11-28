@@ -1,6 +1,5 @@
-# backend/app/schemas/auth.py
-import uuid
-from pydantic import BaseModel
+﻿import uuid
+from pydantic import BaseModel, Field
 
 
 class RoleAssignmentDTO(BaseModel):
@@ -14,3 +13,7 @@ class CurrentUserDTO(BaseModel):
     full_name: str | None = None
     is_active: bool
     roles: list[RoleAssignmentDTO]
+
+
+class UserProfileUpdateDTO(BaseModel):
+    full_name: str = Field(..., min_length=1, max_length=120)

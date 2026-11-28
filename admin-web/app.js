@@ -269,6 +269,10 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!body.release_date) delete body.release_date;
     if (!body.rating) delete body.rating;
     if (!body.synopsis) delete body.synopsis;
+    if (!body.genre) delete body.genre;
+    if (!body.poster_url) delete body.poster_url;
+    if (!body.trailer_url) delete body.trailer_url;
+    if (!body.selection_week) delete body.selection_week;
     try {
       await apiFetch("/api/v1/admin/movies", { method: "POST", body: JSON.stringify(body) });
       e.target.reset();
