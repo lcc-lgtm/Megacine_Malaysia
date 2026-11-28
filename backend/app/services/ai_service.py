@@ -42,8 +42,10 @@ class AIService:
     async def _call_gemini_json(
         self, system_instruction: str, user_prompt: str, model: str | None = None
     ) -> tuple[dict[str, Any], str]:
-        target_model = model if model in SUPPORTED_MODELS else self.default_model
-        url, headers = self._resolve_endpoint(target_model)
+        primary = model if model in SUPPORTED_MODELS else self.default_model
+        if primary not in SUPPORTED_MODELS:
+            primary = "gemini-3.5-flash-lite"
+        fallback_chain = [primary] + [m for m in SUPPORTED_MODELS if m != primary]
 
         payload = {
             "system_instruction": {"parts": [{"text": system_instruction}]},
@@ -53,13 +55,28 @@ class AIService:
                 "responseMimeType": "application/json",
             },
         }
-        async with httpx.AsyncClient(timeout=30.0) as client:
-            resp = await client.post(url, headers=headers, json=payload)
 
-        if resp.status_code >= 400:
+        last_status = 502
+        last_err = ""
+        target_model = primary
+        resp = None
+
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            for candidate in fallback_chain:
+                target_model = candidate
+                url, headers = self._resolve_endpoint(candidate)
+                resp = await client.post(url, headers=headers, json=payload)
+                if resp.status_code < 400:
+                    break
+                last_status = resp.status_code
+                last_err = resp.text[:300]
+                if resp.status_code not in (429, 500, 503):
+                    break
+
+        if resp is None or resp.status_code >= 400:
             raise HTTPException(
                 status_code=status.HTTP_502_BAD_GATEWAY,
-                detail=f"Gemini API ({target_model}) error {resp.status_code}: {resp.text[:300]}",
+                detail=f"Gemini API ({target_model}) error {last_status}: {last_err}",
             )
         data = resp.json()
         try:
