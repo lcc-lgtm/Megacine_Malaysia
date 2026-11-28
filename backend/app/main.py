@@ -4,6 +4,7 @@ from app.api.internal.ops import router as ops_router
 from app.api.v1.admin import router as admin_router
 from app.api.v1.auth import router as auth_router
 from app.api.v1.catalog import router as catalog_router
+from app.api.v1.cinemas import router as cinemas_router
 from app.api.v1.orders import router as orders_router
 from app.core.config import get_settings
 
@@ -27,5 +28,6 @@ app.add_middleware(
 app.include_router(ops_router)
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(catalog_router, prefix="/api/v1")
+app.include_router(cinemas_router, prefix="/api/v1")
 app.include_router(admin_router, prefix="/api/v1")
 app.include_router(orders_router, prefix="/api/v1")
